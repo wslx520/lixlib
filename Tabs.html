@@ -1,0 +1,237 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+ <HEAD>
+  <TITLE>LixTabs切换类示例页---lixlib</TITLE>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <META NAME="Generator" CONTENT="EditPlus">
+  <META NAME="Author" CONTENT="">
+  <META NAME="Keywords" CONTENT="">
+  <META NAME="Description" CONTENT="">
+  <link rel="stylesheet" type="text/css" href="Tabs.css" media="all" />
+  <script type="text/javascript" src="Tabs0.5.js"></script>
+  <style type="text/css">
+  img{border:none;}
+  h1,h2,h3,h4,h5,h6{font-size:18px;font-family:'微软雅黑';}
+  </style>
+ </HEAD>
+
+ <BODY>
+	<h1>Lix Tabs,javascript TAB切换类，由<a href="http://www.cnblogs.com/lixlib/" title="">十年灯</a>首发于博客园</h1>
+	<hr />
+	以下两个点击触发，并且非自动
+	<div class="inner" id="tabLite">
+		<div class="tablite"><a class="now" title="" href="#">城市指数</a><a title="" href="#" class="">名牌指数</a><a title="" href="#" class="">网上百货</a></div>
+		<div class="tabcon">
+			<div class="no cur">
+			<ul>
+				<li>·<a title="" href="#">0上海起火楼工程多萨斯附属卡</a></li>
+				<li>·<a title="" href="#">损失达5亿 忠犬不吃了快速扩大解放</a></li>
+				<li>·<a title="" href="#">发改委要求各地制定阿斯蒂芬接口</a></li>
+				<li>·<a title="" href="#">广西隆安违 囚禁精神病是富我卡拉</a></li>
+				<li>·<a title="" href="#">水管网7年来第10次爆裂啊加拉塞克</a></li>
+			</ul>
+			</div>
+			<div class="no">
+			<ul>
+				<li>·<a title="" href="#">1上海起火楼工程多</a></li>
+				<li>·<a title="" href="#">损失达5亿 忠犬不吃</a></li>
+				<li>·<a title="" href="#">发改委要求各地制定</a></li>
+				<li>·<a title="" href="#">广西隆安违 囚禁精神病</a></li>
+				<li>·<a title="" href="#">水管网7年来第10次爆裂</a></li>
+			</ul>
+			</div>
+			<div class="no">
+			<ul>
+				<li>·<a title="" href="#">2上海起火楼工程多</a></li>
+				<li>·<a title="" href="#">损失达5亿 忠犬不吃</a></li>
+				<li>·<a title="" href="#">发改委要求各地制定</a></li>
+				<li>·<a title="" href="#">广西隆安违 囚禁精神病</a></li>
+				<li>·<a title="" href="#">水管网7年来第10次爆裂</a></li>
+			</ul>
+			</div>
+		</div>
+	</div>
+	<div class="inner" id="tab2">
+		<div class="tabhead"><a class="cur" title="" href="#">城市</a><a title="" href="#" class="">名牌</a><a title="" href="#" class="">网络</a><a title="" href="#" class="">购物</a></div>
+		<div class="tabcon">
+			<div class="show">
+			<ul>
+				<li>·<a title="" href="#">0上海起火楼工程多萨斯附属卡</a></li>
+				<li>·<a title="" href="#">损失达5亿 忠犬不吃了快速扩大解放</a></li>
+				<li>·<a title="" href="#">发改委要求各地制定阿斯蒂芬接口</a></li>
+				<li>·<a title="" href="#">广西隆安违 囚禁精神病是富我卡拉</a></li>
+				<li>·<a title="" href="#">水管网7年来第10次爆裂啊加拉塞克</a></li>
+			</ul>
+			</div>
+			<div class="hide">
+			<ul>
+				<li>·<a title="" href="#">1上海起火楼工程多</a></li>
+				<li>·<a title="" href="#">损失达5亿 忠犬不吃</a></li>
+				<li>·<a title="" href="#">发改委要求各地制定</a></li>
+				<li>·<a title="" href="#">广西隆安违 囚禁精神病</a></li>
+				<li>·<a title="" href="#">水管网7年来第10次爆裂</a></li>
+			</ul>
+			</div>
+			<div class="hide">
+			<ul>
+				<li>·<a title="" href="#">2当你的正则表达式不能正常工作的时候</a></li>
+				<li>·<a title="" href="#">他应该工作还是你觉得他应该工作</a></li>
+				<li>·<a title="" href="#">你真想把头发都扯掉</a></li>
+				<li>·<a title="" href="#">这个工具很有意思</a></li>
+				<li>·<a title="" href="#">RegExr Desktop app，不光可以实时</a></li>
+			</ul>
+			</div>
+			<div class="hide">
+			<ul>
+				<li>·<a title="" href="#">3他应该工作还是你觉得他应该工作</a></li>
+				<li>·<a title="" href="#">当你的正则表达式不能正常工作的时候</a></li>
+				<li>·<a title="" href="#">你真想把头发都扯掉</a></li>
+				<li>·<a title="" href="#">这个工具很有意思</a></li>
+				<li>·<a title="" href="#">RegExr Desktop app，不光可以实时</a></li>
+			</ul>
+			</div>
+		</div>
+	</div>
+			<div class="mod wgt-tab" id="blog">
+				这个鼠标经过时触发，且自动
+				<div class="tab-hd tab-u-10 clearfix">
+					<span class="tab-u current"><a href="http://blog.163.com/">博客</a></span>
+					<span class="tab-u"><a href="http://blog.163.com/">草根</a></span>
+					<span class="tab-u"><a href="http://blog.163.com/">读图</a></span>
+					<span class="tab-u"><a href="http://huodong.163.com/">活动</a></span>
+				</div>
+				<div class="bd tab-bd display-control">
+					<div class="tab-con current">
+						<div class="imgText-temp-1 dotline clearfix">
+							<div class="mod-img main-img">
+								<a href="http://blog.163.com/?blog"><img width="120" height="90" title="日本震后英国海港干涸" alt="日本震后英国海港干涸" src="http://img2.cache.netease.com/cnews/2011/3/17/20110317083552ca786.jpg"><cite>日本震后英国海港干涸</cite></a>
+							</div>
+							<h3 class="main-title"><a href="http://mikesakai.blog.163.com/blog/static/1353354892011216112041564/?blog">日本核电安全神话破灭原因(图)</a></h3>
+							<ul class="mod-list main-list">
+									<li><a href="http://ssnly100.blog.163.com/blog/static/1156339201121711440405/?blog">宋石男：各地疯抢盐皆因无知(图)</a></li>
+									<li><a href="http://liao.xinbo.blog.163.com/blog/static/11195067920112161120660/?blog">广东卫生厅副厅长：抢购盐大可不必</a></li>
+									<li><a href="http://mkxblog.blog.163.com/blog/static/13576850820112163400402/?blog">博友：日本灾区外生活仍悠闲(图)</a></li>
+									<li><a href="http://panshiyisoho.blog.163.com/blog/static/11756303201121653921585/?blog">潘石屹：中日的建筑质量差距较大</a></li>
+								</ul>
+						</div>
+						<ul class="mod-list main-list">
+							<li><a href="http://fengyusunce.blog.163.com/blog/static/150333408201121693231305/?blog">博友:该死的盐卖断货了</a> <a href="http://tang-xinzi.blog.163.com/blog/static/12708933920112171430130/">唐辛子:日本人很淡定国人倒慌了</a></li>
+							<li><a href="http://hyreporternews.blog.163.com/blog/static/177647174201121683828731/?blog">日本球迷赛场感谢中国援助</a> <a href="http://zqguanjianbin.blog.163.com/blog/static/13566475820112162838551/">日本会重演前苏联核灾难吗？</a></li>
+							<li><a href="http://shishusivip.blog.163.com/blog/static/16761894320112163540533/?blog">石述思:何以阻击日本核谣言？</a> <a href="http://zft2000.blog.163.com/blog/static/105336823201121793458581/">食品色香味俱全要不得！</a></li>
+							<li><a href="http://blog.163.com/blog_youcai/blog/static/1166387322011217103140205/?blog">良少:超给力的滑板少年</a> <a href="http://huuu258.blog.163.com/blog/static/119694751201121711349145/">非2里葛优泡舒淇的房每晚1万2</a></li>
+							<li><a href="http://com633966.blog.163.com/blog/static/182152312201121135418514/?blog">创世西游:孙悟空的爱情</a> <a href="http://blog.163.com/special/0012rt/xyzw.html"><em class="cDRed">有奖征文</em></a> <a href="http://csxy.163.com/fab/">体验《创世西游》</a></li>
+						</ul>
+					</div>
+					<div class="tab-con">
+						<div class="imgText-temp-1 dotline clearfix">
+							<div class="mod-img main-img">
+								<a href="http://bingrongglasses.blog.163.com/blog/static/168977637201121605910858/?caogen"><img width="120" height="90" title="呆在盒子里好舒服哦" alt="呆在盒子里好舒服哦" src="http://img2.cache.netease.com/cnews/2011/3/17/201103171724580f1cd.jpg"><cite>呆在盒子里好舒服哦</cite></a>
+							</div>
+							<h3 class="main-title"><a href="http://yujuanfudan.blog.163.com/blog/static/182424119201121685015648/?caogen">治癌遇见神医 在黄山的村里治病</a></h3>
+							<ul class="mod-list main-list">
+								<li><a href="http://fengyusunce.blog.163.com/blog/static/150333408201121693231305/?caogen">疯了 各大超市的盐都被抢光了</a></li>
+								<li><a href="http://mkxblog.blog.163.com/blog/static/13576850820112163400402/?caogen">到了日本 大阪的生活依旧很热闹</a></li>
+								<li><a href="http://beimeigulang.blog.163.com/blog/static/179888015201121641615957/?caogen">自己改装的山寨95式步枪(图) </a></li>
+								<li><a href="http://jtzyzz.blog.163.com/blog/static/181027079201121625345334/?caogen">嫁鸡随鸡是出于对失败婚姻的无奈</a></li>
+							</ul>
+						</div>
+						<ul class="mod-list main-list">
+							<li><a href="http://lm08953.blog.163.com/blog/static/99638720201121784955930/?caogen">桃花随年龄涨的星女</a> <a href="http://manyubao8.blog.163.com/blog/static/162424374201121610134245/" target="_blank">要是葫芦娃都猥琐成这样…</a></li>
+							<li><a href="http://qktx007.blog.163.com/blog/static/16995771720112171550971/?caogen">直击食盐疯抢现场(图)</a> <a href="http://blog.163.com/xiongy_l/blog/static/17182320220112164346754/" target="_blank">内衣女模后台“春光”尽泄</a></li>
+							<li><a href="http://huuu258.blog.163.com/blog/static/119694751201121711349145/?caogen">非2里葛优泡舒淇的房每晚1万2</a> <a href="http://lixinycbk.blog.163.com/blog/static/124361382201121685629654/" target="_blank">戴安娜最喜爱的散步之地</a></li>
+							<li><a href="http://chonglychang.blog.163.com/blog/static/8827747620112167455723/?caogen">常吃八种食物可以预防核辐射</a> <a href="http://bushenti.blog.163.com/blog/static/165685770201121701317840/" target="_blank">地震来了准妈妈该如何应对</a></li>
+							<li><a href="http://imsuqin.blog.163.com/blog/static/303854142011216515528/?caogen">老婆利用楼市限购令骗了我260万</a> <a href="http://cankudejimo.blog.163.com/blog/static/335619720112179922389/" target="_blank">和情人决裂他竟强暴我</a></li>
+						</ul>
+					</div>
+					<div class="tab-con">
+						<ul class="mod-imgList imgList-w120 clearfix">
+									<li><a href="http://picture007.blog.163.com/album/?saitu#m=2&amp;aid=220278948&amp;pid=6829242301"><img width="120" height="90" title="核武器爆炸解禁照" alt="核武器爆炸解禁照" src="http://img2.cache.netease.com/cnews/2011/3/18/20110318090536f5b32.jpg"></a><p><a href="http://picture007.blog.163.com/album/?saitu#m=2&amp;aid=220278948&amp;pid=6829242301">核武器爆炸解禁照</a></p></li>
+									<li><a href="http://blog.163.com/xiongy_l/album/?saitu#m=2&amp;aid=220260544&amp;pid=6828956481"><img width="120" height="90" title="印度富豪超奢华婚礼" alt="印度富豪超奢华婚礼" src="http://img2.cache.netease.com/cnews/2011/3/18/20110318081059dc814.jpg"></a><p><a href="http://blog.163.com/xiongy_l/album/?saitu#m=2&amp;aid=220260544&amp;pid=6828956481">印度富豪超奢华婚礼</a></p></li>
+									<li><a href="http://image007.blog.163.com/album/?saitu#m=2&amp;aid=220278905&amp;pid=6829180376"><img width="120" height="90" title="穷小子自制风力发电" alt="穷小子自制风力发电" src="http://img1.cache.netease.com/cnews/2011/3/18/201103180820312ae8f.jpg"></a><p><a href="http://image007.blog.163.com/album/?saitu#m=2&amp;aid=220278905&amp;pid=6829180376">穷小子自制风力发电</a></p></li>
+									<li><a href="http://fortune007.blog.163.com/album/?saitu#m=2&amp;aid=220271350&amp;pid=6828718007"><img width="120" height="90" title="极具诱惑力的艺术" alt="极具诱惑力的艺术" src="http://img2.cache.netease.com/cnews/2011/3/17/20110317174701b87f5.jpg"></a><p><a href="http://fortune007.blog.163.com/album/?saitu#m=2&amp;aid=220271350&amp;pid=6828718007">极具诱惑力的艺术</a></p></li>
+									<li><a href="http://fortune007.blog.163.com/album/?saitu#m=2&amp;aid=220216918&amp;pid=6826634682"><img width="120" height="90" title="那些被解救失足妇女" alt="那些被解救失足妇女" src="http://img1.cache.netease.com/cnews/2011/3/17/2011031711142644c46.jpg"></a><p><a href="http://fortune007.blog.163.com/album/?saitu#m=2&amp;aid=220216918&amp;pid=6826634682">那些被解救失足妇女</a></p></li>
+									<li><a href="http://image007.blog.163.com/blog/static/178223463201121611812516/?saitu"><img width="120" height="90" title="拿着标枪跳海里捕鲸" alt="拿着标枪跳海里捕鲸" src="http://img1.cache.netease.com/cnews/2011/3/17/20110317082956c344a.jpg"></a><p><a href="http://image007.blog.163.com/blog/static/178223463201121611812516/?saitu">拿着标枪跳海里捕鲸</a></p></li>
+						</ul>
+</div>
+<div class="tab-con">
+							<a href="http://fm.163.com/activities/fmzhcd/index.html?act=fmzhcd_20110314_02?id_2010?huodong"><img width="370" height="90" class="main-bn-blog" title="智慧充电" alt="智慧充电" src="http://imgrc.ph.126.net/BQnG4ADuPsuK7Jk_ztxGsQ==/4222969075589980869.jpg"></a>
+					<ul class="mod-list main-list">
+							<li><a href="http://blog.163.com/ht/37?id_2020?huodong">【有奖征文】同桌的你</a></li>
+							<li><a href="http://mhxx.dream.163.com?mail=mhxx_20110316_05?id_2021?huodong">梦幻修仙新服火爆开启</a></li>
+							<li><a href="http://fm.163.com/activities/fmyhq/fmyhq.do?act=fmyhq_20110117_06?id_2022?huodong">闪电邮优惠券给力派送中！</a></li>
+							<li><a href="http://dream.163.com/honeylady?act=mhhd_20110307_02?id_2023?huodong">非诚勿扰，赶快寻找心动女生！</a></li>
+							<li><a href="http://yxp.163.com/h/action/ssnxj.html?sss=fromsyehdwz&amp;act=yxp0301_20110301_42?id_2024?huodong">时尚女性季，创意饰品10元起！</a></li>
+							<li><a href="http://fm.163.com/activities/fmzhcd/index.html?act=fmzhcd_20110314_03?id_2025?huodong">智能版闪电邮来给你的智慧充电啦，体验更有itouch送！</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+	<!-- 图片切换示例-->
+	<div class="r1">自动切换，mouseover触发
+	<div id="f_div">
+		<!--图片区域-->
+		<div id="imgDiv" class="imgDiv">
+			<a href="#1" title="" class="now"><img src="s1.jpg" alt=""/></a>
+			<a href="#2" title=""><img src="s2.jpg" alt=""/></a>
+			<a href="#3" title=""><img src="s3.jpg" alt=""/></a>
+			<a href="#4" title=""><img src="s4.jpg" alt=""/></a>
+		</div>	
+		<!--数字按钮区域-->
+		<ul id="buttonDiv" class="buttonDiv">
+			<li title="" class="on">1</li>
+			<li title="">2</li>
+			<li title="">3</li>
+			<li title="">4</li>
+		</ul>
+	</div>
+	</div>
+	<!-- 图片切换结束 -->
+	<div class="r2">自动切换，click触发
+	<div class="ads" id="ads">
+		
+		<div class="imgs">
+			<p><a href="#" title=""><img src="s4.jpg" alt=""></a><span>2新闻标题一个2</span><i></i></p>
+			<p><a href="#" title=""><img src="s2.jpg" alt=""></a><span>3新闻标题一个3</span><i></i></p>
+		</div>
+		<ul class="sn"><li class="now">1</li><li>2</li></ul>
+	</div>
+	</div>
+	<h2>以下两个是批量实现的实例,mouseover触发，非自动</h2>
+	<div class="ads as">
+		<div class="imgs">
+			<p class="cur"><a href="#" title=""><img src="s2.jpg" alt=""></a><span>1新闻标题一个1</span><i></i></p>
+			<p><a href="#" title=""><img src="s4.jpg" alt=""></a><span>2新闻标题一个2</span><i></i></p>
+			<p><a href="#" title=""><img src="s3.jpg" alt=""></a><span>3新闻标题一个3</span><i></i></p>
+		</div>
+		<ul class="sn"><li class="now">1</li><li>2</li><li>3</li></ul>
+	</div>
+	<div class="ads as">
+		<div class="imgs">
+			<p class="cur"><a href="#" title=""><img src="s1.jpg" alt=""></a><span>1新闻标题一个1</span><i></i></p>
+			<p><a href="#" title=""><img src="s4.jpg" alt=""></a><span>2新闻标题一个2</span><i></i></p>
+			<p><a href="#" title=""><img src="s3.jpg" alt=""></a><span>3新闻标题一个3</span><i></i></p>
+			<p><a href="#" title=""><img src="s2.jpg" alt=""></a><span>4新闻标题一个4</span><i></i></p>
+		</div>
+		<ul class="sn"><li class="now">1</li><li>2</li><li>3</li><li>4</li></ul>
+	</div>
+	<br />
+	<br />
+	<br />
+	<h1>以上效果全由tab切换类LixTabs.js实现</h1>
+ <SCRIPT LANGUAGE="JavaScript">
+ <!--
+	Tabs($id('tabLite'),{hdcn:'tablite',hdtagcur:'now',bdcn:'tabcon',evt:'click'});
+	var t2=Tabs($id('tab2'),{hdcn:'tabhead',bdcn:'tabcon',bdtagcur:'show'});
+	var blog=Tabs($id('blog'),{hdcn:'tab-hd',hdtagcur:'current',bdcn:'tab-bd',bdtagcur:'current',auto:4000});
+	var pic = Tabs($id('f_div'),{hdtag:'UL',hdcn:'buttonDiv',hdtagcur:'on',bdcn:'imgDiv',bdtagcur:'now',auto:3000});
+	var ads = Tabs($id('ads'),{hdtag:'UL',hdcn:'sn',hdtagcur:'now',bdcn:'imgs',bdtagcur:'cur',auto:4000,evt:'click'});
+	/* 批量定义 */
+	var as = $C('as','DIV',document);
+	for(var i=0,l=as.length;i<l;i++){
+		as[i].tab = Tabs(as[i],{hdtag:'UL',hdcn:'sn',hdtagcur:'now',bdcn:'imgs',bdtagcur:'cur'});
+	}
+ //-->
+ </SCRIPT>
+  
+ </BODY>
+</HTML>
