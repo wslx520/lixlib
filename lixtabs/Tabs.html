@@ -10,15 +10,21 @@
   <link rel="stylesheet" type="text/css" href="Tabs.css" media="all" />
   <script type="text/javascript" src="Tabs0.5.js"></script>
   <style type="text/css">
-  img{border:none;}
-  h1,h2,h3,h4,h5,h6{font-size:18px;font-family:'微软雅黑';}
+ul,li{margin:0;padding:0;}
+img {border:none;}
+pre {padding:1em; background-color:#f0f0f0; border:1px solid #ccc; font-size:12px;margin:1em 0; display: inline-block; *zoom:1;}
+ul li {list-style:none;}
+h1,h2 {font-family:'微软雅黑';font-size:16px;}
+h2{border-left:5px solid #abc; padding-left:1em;}
   </style>
  </HEAD>
 
  <BODY>
 	<h1>Lix Tabs,javascript TAB切换类，由<a href="http://www.cnblogs.com/lixlib/" title="">十年灯</a>首发于博客园</h1>
 	<hr />
-	以下两个点击触发，并且非自动
+	以下点击触发，并且非自动.
+	代码：<br />
+	<pre>Tabs($id('tabLite'),{hdcn:'tablite',hdtagcur:'now',bdcn:'tabcon',event:'click'});</pre>
 	<div class="inner" id="tabLite">
 		<div class="tablite"><a class="now" title="" href="#">城市指数</a><a title="" href="#" class="">名牌指数</a><a title="" href="#" class="">网上百货</a></div>
 		<div class="tabcon">
@@ -51,6 +57,8 @@
 			</div>
 		</div>
 	</div>
+	非自动，鼠标经过触发。代码：<br />
+	<pre>var t2=Tabs($id('tab2'),{hdcn:'tabhead',bdcn:'tabcon',bdtagcur:'show'});</pre>
 	<div class="inner" id="tab2">
 		<div class="tabhead"><a class="cur" title="" href="#">城市</a><a title="" href="#" class="">名牌</a><a title="" href="#" class="">网络</a><a title="" href="#" class="">购物</a></div>
 		<div class="tabcon">
@@ -93,7 +101,8 @@
 		</div>
 	</div>
 			<div class="mod wgt-tab" id="blog">
-				这个鼠标经过时触发，且自动
+				鼠标经过时触发，且自动.代码：<br />
+				<pre>var blog=Tabs($id('blog'),{hdcn:'tab-hd',hdtagcur:'current',bdcn:'tab-bd',bdtagcur:'current',auto:4000});</pre>
 				<div class="tab-hd tab-u-10 clearfix">
 					<span class="tab-u current"><a href="http://blog.163.com/">博客</a></span>
 					<span class="tab-u"><a href="http://blog.163.com/">草根</a></span>
@@ -167,7 +176,9 @@
 				</div>
 			</div>
 	<!-- 图片切换示例-->
-	<div class="r1">自动切换，mouseover触发
+	<div class="r1">图片自动切换，mouseover触发。代码：<br />
+		<pre>var pic = Tabs($id('f_div'),{hdtag:'UL',hdcn:'buttonDiv',hdtagcur:'on',
+			bdcn:'imgDiv',bdtagcur:'now',auto:3000});</pre>
 	<div id="f_div">
 		<!--图片区域-->
 		<div id="imgDiv" class="imgDiv">
@@ -185,18 +196,13 @@
 		</ul>
 	</div>
 	</div>
-	<!-- 图片切换结束 -->
-	<div class="r2">自动切换，click触发
-	<div class="ads" id="ads">
-		
-		<div class="imgs">
-			<p><a href="#" title=""><img src="images/s4.jpg" alt=""></a><span>2新闻标题一个2</span><i></i></p>
-			<p><a href="#" title=""><img src="images/s2.jpg" alt=""></a><span>3新闻标题一个3</span><i></i></p>
-		</div>
-		<ul class="sn"><li class="now">1</li><li>2</li></ul>
-	</div>
-	</div>
+	
 	<h2>以下两个是批量实现的实例,mouseover触发，非自动</h2>
+	代码：<br />
+	<pre>var as = $C('as','DIV',document);
+	for(var i=0,l=as.length;i&lt;l;i++){
+		as[i].tab = Tabs(as[i],{hdtag:'UL',hdcn:'sn',hdtagcur:'now',bdcn:'imgs',bdtagcur:'cur'});
+	}</pre>
 	<div class="ads as">
 		<div class="imgs">
 			<p class="cur"><a href="#" title=""><img src="images/s2.jpg" alt=""></a><span>1新闻标题一个1</span><i></i></p>
@@ -220,11 +226,11 @@
 	<h1>以上效果全由tab切换类LixTabs.js实现</h1>
  <SCRIPT LANGUAGE="JavaScript">
  <!--
-	Tabs($id('tabLite'),{hdcn:'tablite',hdtagcur:'now',bdcn:'tabcon',evt:'click'});
+	Tabs($id('tabLite'),{hdcn:'tablite',hdtagcur:'now',bdcn:'tabcon',event:'click'});
 	var t2=Tabs($id('tab2'),{hdcn:'tabhead',bdcn:'tabcon',bdtagcur:'show'});
 	var blog=Tabs($id('blog'),{hdcn:'tab-hd',hdtagcur:'current',bdcn:'tab-bd',bdtagcur:'current',auto:4000});
 	var pic = Tabs($id('f_div'),{hdtag:'UL',hdcn:'buttonDiv',hdtagcur:'on',bdcn:'imgDiv',bdtagcur:'now',auto:3000});
-	var ads = Tabs($id('ads'),{hdtag:'UL',hdcn:'sn',hdtagcur:'now',bdcn:'imgs',bdtagcur:'cur',auto:4000,evt:'click'});
+	
 	/* 批量定义 */
 	var as = $C('as','DIV',document);
 	for(var i=0,l=as.length;i<l;i++){
