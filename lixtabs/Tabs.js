@@ -7,11 +7,11 @@
 */	
 var $id=function(id){
 	return (typeof id == "object") ? id : document.getElementById(id);
-};
-var $$=function(tag,elm){
+},
+$$=function(tag,elm){
 	return elm.getElementsByTagName(tag);
-};
-var $C=function(cn,tag,elm){
+},
+$C=function(cn,tag,elm){
 	if(!tag) tag='*';
 	var ts = $$(tag,elm);
 	var classArr = [];
@@ -22,8 +22,8 @@ var $C=function(cn,tag,elm){
 		}
 	}
 	return classArr;
-}
-var cutover=function(arr,cur,cls){
+},
+cutover=function(arr,cur,cls){
 	for(var i=0,l=arr.length;i<l;i++){
 		if(i==cur){
 			var t=arr[i].className.indexOf(cls);
@@ -36,18 +36,18 @@ var cutover=function(arr,cur,cls){
 		}
 		
 	}
-}
-var Bind = function(object, fun) {
+},
+Bind = function(object, fun) {
 	return function() {
 		return fun.apply(object);
 	}
-}
-var addEvent = function(eType,eFunc,eObj){
+},
+addEvent = function(eType,eFunc,eObj){
 	eObj = eObj || document;
-	if(window.attachEvent) eObj.attachEvent("on"+eType,eFunc);
 	if(window.addEventListener) eObj.addEventListener(eType,eFunc,false);
-}
-var Tabs = function (elm,items){
+	else eObj.attachEvent("on"+eType,eFunc);
+},
+Tabs = function (elm,items){
 	if(elm == null){return false;}
 	return new Tabs.prototype.ini(elm,items);
 }
