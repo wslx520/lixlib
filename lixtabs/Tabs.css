@@ -147,7 +147,7 @@ overflow: hidden;list-style:none;
 }
 
 /*图片切换CSS*/
-.r1{position:absolute;top:24px;right:12px;}
+
 #f_div{width:320px;height:200px;padding:5px;border:1px solid #ccc;}
 #imgDiv{width:320px; height:200px; overflow:hidden;}
 #imgDiv a{display:none;}
