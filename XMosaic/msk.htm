@@ -1,0 +1,201 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>马赛克遮罩切换效果</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="author" content="脚儿网" />
+<meta name="keywords" content="javascript图片切换，焦点图效果，滚动，幻灯片，马赛克，遮罩，仿flash" />
+<meta name="description" content="XMosaic.js是脚儿网写的一个图片切换类，效果为各种马赛克遮罩" />
+<style type="text/css">
+
+ul,li{margin:0;padding:0;}
+img {border:none;}
+pre {padding:1em; background-color:#f0f0f0; border:1px solid #ccc; font-size:12px;width:600px;margin:1em 0; white-space:normal; word-break:break-all; display:block;}
+ul li {list-style:none;}
+h1,h2 {font-family:'微软雅黑';font-size:16px;}
+h2{border-left:5px solid #abc; padding-left:1em;}
+.about {border:1px solid #000; float:right; padding:1em; width:300px;}
+.about ol {}
+span.red {color:#f00;}
+#jsF {position:relative;margin:0;width:480px;height:320px; margin:2em 0 0;}
+#jsF ul {position:absolute;top:0;left:0;list-style-type:none;z-index:1;}
+#jsF li {display:block;position:absolute;top:0;margin:0;padding:0;overflow:hidden;}
+#jsF img{width:480px;height:320px;}
+
+#pager {background-color:#888; padding:9px 0; width:480px; text-align:center; margin:;}
+#pager li {display:inline-block;*display:inline;*zoom:1;*margin-left:5px;width:20px; height:20px; background-color:#ccc;  font-size:12px; line-height:20px;}
+#pager li.on {background-color:#f80; color:#fff;}
+#change {width:480px; margin:2em 0 0; padding:1em; background-color:#f5f5f5; border:1px solid #ccc;}
+</style>
+<script type="text/javascript" src="XMosaic.js"></script>
+</head>
+<body>
+<div class="about" >
+<h2>XMosaic.js使用说明：</h2>
+<ol>
+	<li>参数how指定切换效果,针对每一个分块
+		<ul>
+			<li>0,依次淡入</li>
+			<li>1,依次左至右滚动并淡入</li>
+			<li>2,依次上至下滚动并淡入</li>
+			<li>3,依次右至左滚动并淡入</li>
+			<li>4,依次下至上滚动并淡入</li>
+			<li>5,依次右至左交错滚动并淡入</li>
+			<li>6,依次上至下交错滚动并淡入</li>
+			<li>7,依次宽度由0加至100%并淡入</li>
+			<li>8,依次高度由0加至100%并淡入</li>
+			<li>9,宽高同时由0加至100%并淡入</li>
+		</ul>
+	</li>
+	<li>countX:横向分块个数，默认5</li>
+	<li>countY:纵向分块个数，默认1</li>
+	<li>order:动画执行顺序，共6种，默认0
+		<ul>
+			<li>0,从第一个执行到最后一个</li>
+			<li>1,从最后一个执行到第一个</li>
+			<li>2,从中间执行到两头</li>
+			<li>3,从两头执行到中间</li>
+			<li>4,随机</li>
+			<li>5,同时执行</li>
+		</ul>
+	</li>
+	<li>delay:暂停时间，默认4000</li>
+	<li>pager:页码块的id</li>
+	<li>event:触发页码切换的事件，默认mouseover</li>
+</ol>
+</div>
+<h2>XMosaic.js,javascript版马赛克遮罩切换效果,原文：<a href="http://www.jo2.org/archives/330.htm" title="" target="_blank">脚儿网</a></h2>
+初始实现代码：
+<pre>
+var msk = XMosaic('jsF',{pager:'pager',delay:3000,countX:10,countY:1,how:2,order:0 });
+</pre>
+<div id="jsF">
+<a href="#" title=""><img src="../images/s1.jpg" alt="" /></a>
+<a href="#" title=""><img src="../images/s2.jpg" alt="" /></a>
+<a href="#" title=""><img src="../images/s3.jpg" alt="" /></a>
+<a href="#" title=""><img src="../images/s4.jpg" alt="" /></a>
+</div>
+<ul id="pager">
+	<li class="on">1</li>
+	<li>2</li>
+	<li>3</li>
+	<li>4</li>
+</ul>
+<div id="debug"></div>
+<div id="change">
+<strong>切换参数查看更多效果</strong><br />
+	how:<select name="" id="how" onload="">
+		<option value="0">0</option>
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="7">7</option>
+		<option value="8">8</option>
+		<option value="9">9</option>
+	
+	</select>
+	countX:
+	<select name="" id="countX">
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="8">8</option>
+		<option value="10">10</option>
+	</select>
+	countY:
+	<select name="" id="countY">
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+		<option value="6">6</option>
+		<option value="8">8</option>
+		<option value="10">10</option>
+	
+	</select>
+	order:
+	<select name="" id="order">
+		<option value="0">0</option>
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+		<option value="5">5</option>
+	
+	</select>
+</div>
+
+<script>
+var t = new Date().getTime();
+var msk = XMosaic('jsF',{pager:'pager',delay:3000,countX:5,countY:1,how:7,order:5 });
+var t1 = new Date().getTime();
+//alert(t1-t);
+//console.log(msk.how);
+document.onload = function (){
+	//alert('sdjkl');
+	var show = _.id('how'),scountX = _.id('countX'),scountY = _.id('countY'),order= _.id('order');
+	//alert(show.options.length);
+	show.options[msk.how].selected = true;
+	order.options[msk.order].selected = true;
+	for(var i=0,l=scountX.options.length;i<l;i++) {
+		if(scountX.options[i].value == msk.options.countX) {
+			scountX.options[i].selected = true;
+			break;
+		}
+	}
+	for(var i=0,l=scountY.options.length;i<l;i++) {
+		if(scountY.options[i].value == msk.options.countY) {
+			scountY.options[i].selected = true;
+			break;
+		}
+	}
+	
+	show.onchange = function(){
+		msk.Die();
+		clearTimeout(msk.timer);
+		msk.how = this.value;
+		msk.initial();
+		msk.Cont();
+	}
+	scountX.onchange = function(){
+		msk.Die();
+		msk.options.countX = this.value;
+		msk.count = msk.options.countX * msk.options.countY;
+		msk.initial();
+		msk.Cont();
+	}
+	scountY.onchange = function(){
+		msk.Die();
+		clearTimeout(msk.timer);
+		msk.options.countY = this.value;
+		msk.count = msk.options.countX * msk.options.countY;
+		msk.initial();
+		msk.Cont();
+	}
+	order.onchange = function(){
+		msk.Die();
+		clearTimeout(msk.timer);
+		msk.order= this.value;
+		msk.initial();
+		msk.Cont();
+	}
+	
+	
+}();
+</script>
+
+<div id="footer">
+&copy;版权所有：<a href="http://jo2.org" target="_blank">脚儿网</a>
+</div>
+<!-- -->
+<script language="javascript" type="text/javascript" src="http://js.users.51.la/3654312.js"></script>
+
+</body>
+</html>
