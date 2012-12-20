@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>XScroll.js:JavaScript单张图片幻灯片切换函数</title>
+<meta name="author" content="脚儿网" />
+<meta name="keywords" content="javascript图片切换，焦点图效果，滚动，幻灯片，17种切换效果" />
+<meta name="description" content="XScroll.js是脚儿网写的一个图片切换类，有5种基本切换效果，且各带上下左右四个方向" />
+<style type="text/css">
+ul,li{margin:0;padding:0;}
+img {border:none;}
+pre {padding:1em; background-color:#f0f0f0; border:1px solid #ccc; font-size:12px;width:600px;margin:1em 0; white-space:normal; word-break:break-all; display:block;}
+ul li {list-style:none;}
+h1,h2 {font-family:'微软雅黑';font-size:16px;}
+h2{border-left:5px solid #abc; padding-left:1em;}
+span.red {color:#f00;}
+.about {border:1px solid #000; float:right; padding:1em; width:300px;}
+.XScrollContaner {overflow:hidden; position:relative;}
+.XScrollContaner .XScrollItems {position:absolute;z-index:5; display:none; top:0; left:0 }
+.XScrollContaner .XScrollNow { display:block; z-index:10; }
+#idSlider2 { width:450px;height:296px;}
+#idSlider2 img { width:450px;height:296px;}
+#idSlider3,#idSlider3 img {width:350px; height:230px;}
+#idSlider4,#idSlider4 img {width:480px; height:280px;}
+#idSlider2,#idSlider3,#idSlider4 {overflow:hidden; position:relative;}
+</style>
+</head>
+<body>
+
+<style type="text/css">
+.num{ position:absolute; right:5px; bottom:5px; z-index:20;}
+.num li{
+	float: left;
+	list-style:none;
+	color: #fff;
+	text-align: center;
+	line-height: 20px;
+	width: 20px;
+	height: 20px;
+	font-family: Arial;
+	font-size: 12px;
+	cursor: pointer;
+	margin: 1px;
+	background-color: #060a0b;
+}
+.num li.on{
+	font-size: 14px;
+	background-color: #ce0609;
+	font-weight: bold;
+}
+#idContainer2 {
+width:450px; height:296px;
+overflow:hidden; position:relative;
+}
+#change {width:480px; margin:2em 0; padding:1em; background-color:#f5f5f5; border:1px solid #ccc;}
+</style>
+<h1 style="background-color:#234;color:#fff;padding:0.5em">
+XScroll.js，是一个用来实现单张图片幻灯片切换效果（焦点图切换）的Javascript类，作者：<a href="http://jo2.org" target="_blank" style="color:#f78">jo2.org</a></h1>
+<br />
+支持<span class="red">17种</span>切换效果 <br />
+<div class="about">
+<h1>切换效果参数：</h1>
+<ol>
+<li>支持5种基本切换效果，但后4种效果分别有上下左右4个方向</li>
+<li>how:切换效果。0淡入淡出，1两张图片同时滚动，2当前图片不动，下一张图片覆盖上来，3当前图片飞走，显示出下一张；4当前图片与下一张图片反向拉伸，然后回切，完成切换. </li>
+<li>direct:方向，值为0123，分别表示左上右下，默认为0.在how参数<span class="red">不为0</span>时有效</li>
+<li>delay:自动滚动间隔时间。默认为4000</li>
+<li>step:滚动步长。当滚动方向是水平时，step会默认为slider元素的offsetWidth；当滚动方向是垂直时，则默认为offsetHeight。当然，也可以自己设置</li>
+<li>pager:值应该是一个元素的id,指定slider的页码翻页元素。指定后XScroll会为此标签的第一层子元素添加跳转函数</li>
+<li>how与direct搭配使用. </li>
+</ol>
+<h2><a href="http://www.jo2.org/archives/303.htm" title="XScroll.js更新日志">更新日志</a></h2>
+<ol>
+	<li>2012-4-23:大幅改进了动画函数，大幅提升了动画执行效率</li>
+	<li>2012-4-19:bug修复。以前如果快速依次划过页码，则会把路过的图片都动画一次。比如你只是路过2，然后跳到3，此时他还会坚持把2的动画执行完。现在改成，马上中断2的动画，开始3的动画</li>
+	<li>2012-4-13:更新至0.2版，实现了how参数值为4的切换效果，并优化了代码效率，总代码量：10.2KB。更新日志</li>
+</ol>
+<!-- 
+-1: 无效果，直接切换 <br />
+0：淡入淡出<br />
+1: 前一张下一张同时滚动<br />
+2：前一张不动，下一张覆盖上来 <br />
+3：前一张飞出，显示出下一张 <br />
+4：前后反向运动，然后回切 <br />
+5：同1，带0 <br />
+6：同2，带0 <br />
+7：同3，带0 <br />
+8：同4，带0 <br />
+-->
+</div>
+<br />
+由于一屏内同时进行几个图片切换实在是对显卡有不小的考验，所以我加大了各图片区之间的间隔。见谅。
+<br />
+<h2>新的图片切换效果：交错切换，方向：向上，自动，带页码翻页，不带上下页，鼠标经过时暂停</h2>
+代码：
+<pre>
+var xscroll = XScroll('idSlider2',{delay:3000,how:4, direct:1,Tween:Tween.CircOut,pager:'slider2p'});
+</pre>
+<div class="container" id="idContainer2">
+	
+	<ul id="idSlider2">
+		<li><a href="http://jo2.org/"><img src="../images/s1.jpg"/></a></li>
+		<li><a href="http://jo2.org/"><img src="../images/s2.jpg"/></a></li>
+		<li><a href="http://jo2.org/"><img src="../images/s3.jpg"/></a></li>
+		<li><a href="http://jo2.org/"><img src="../images/s4.jpg"/></a></li>
+	</ul>
+	<ul id="slider2p" class="num">
+		<li class="on">1</li>
+		<li>2</li>
+		<li>3</li>
+		<li>4</li>
+	</ul>
+</div>
+
+
+<br />
+<div id="change">
+<strong>切换参数查看更多效果</strong><br />
+	how:<select name="" id="how" onload="">
+		<option value="0">0</option>
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="4">4</option>
+	
+	</select>
+	direct:
+	<select name="" id="direct">
+		<option value="0">0</option>
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+	</select>
+</div>
+<script type="text/javascript" src="Tween.js"></script>
+<script type="text/javascript" src="XScroll.js"></script>
+<script type="text/javascript">
+var xscroll = XScroll('idSlider2',{delay:3000,how:4,direct:1,Tween:Tween.QuartOut,pager:'slider2p'});
+
+document.onload = function (){
+	//alert('sdjkl');
+	var show = _.id('how'),direct = _.id('direct');
+	//alert(show.options.length);
+	show.options[xscroll.how].selected = true;
+	direct.options[xscroll.defaults.direct].selected = true;
+	
+	show.onchange = function(){
+		xscroll.Pause();
+		clearTimeout(xscroll.timer);
+		xscroll.how = this.value;
+		xscroll.init();
+		xscroll.Cont();
+	}
+	direct.onchange = function(){
+		xscroll.Pause();
+		xscroll.defaults.direct = this.value;
+		xscroll.direct
+		xscroll.init();
+		xscroll.Cont();
+	}
+	
+	
+}();
+
+</script>
+<div id="footer">
+&copy;版权所有：<a href="http://jo2.org" target="_blank">脚儿网</a>
+</div>
+<script language="javascript" type="text/javascript" src="http://js.users.51.la/3654312.js"></script>
+</body>
+</html>
