@@ -316,7 +316,7 @@ XMosaic.prototype = {
 						_.setAlpha(elm,0);
 						//console.log(elm.b);
 						elm.style[what] = elm.b + 'px';
-						elm.style.backgroundPositionX = -elm.w*i + 'px';
+						// elm.style.backgroundPositionX = -elm.w*i + 'px';
 						//console.log(elm.b+elm.c);
 						//console.log(i);
 						//elm.c = elm.style.top
@@ -325,13 +325,13 @@ XMosaic.prototype = {
 							if((elm.end+=5) < 100 ){
 								_.setAlpha(elm,elm.end);
 								
-									// elm.style[what] = Math.floor(QuadOut(elm.end,elm.b,elm.c,100)) + 'px';
-									elm.style[what] = Math.floor(elm.b + easeOutStrong(elm.end/100) * elm.c) + 'px';
-									//elm.style.backgroundPositionX = Math.floor(-elm.w*i + easeOutStrong(elm.end/100) * -elm.w*i) + 'px';
-									if(how ==9) {
-										//elm.style.height = Math.floor(QuadOut(elm.end,0,elm.h,100)) + 'px';
-										elm.style.height = Math.floor(easeOutStrong(elm.end/100)*elm.h) + 'px';
-									}
+								// elm.style[what] = Math.floor(QuadOut(elm.end,elm.b,elm.c,100)) + 'px';
+								elm.style[what] = Math.floor(elm.b + easeOutStrong(elm.end/100) * elm.c) + 'px';
+								//elm.style.backgroundPositionX = Math.floor(-elm.w*i + easeOutStrong(elm.end/100) * -elm.w*i) + 'px';
+								if(how ==9) {
+									//elm.style.height = Math.floor(QuadOut(elm.end,0,elm.h,100)) + 'px';
+									elm.style.height = Math.floor(easeOutStrong(elm.end/100)*elm.h) + 'px';
+								}
 								
 								elm.timer = setTimeout(elm.todo,20);
 							} else {
