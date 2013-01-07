@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>javascript仿拍拍网首页图片切换效果-XScroll2.js</title>
+<META NAME="Author" CONTENT="脚儿网">
+  <META NAME="Keywords" CONTENT="xscroll2.js,javascript图片切换,幻灯片切换效果， 仿拍拍网，脚儿网，高性能web前端优化，javascript,wordpress">
+  <META NAME="Description" CONTENT="这是脚儿网的XScroll2.js制作的一个仿拍拍网首页图片切换的效果">
+<style type="text/css">
+ul,li{margin:0;padding:0;}
+img {border:none;}
+pre {padding:1em; background-color:#f0f0f0; border:1px solid #ccc; font-size:12px;width:600px;margin:1em 0;}
+ul li {list-style:none;}
+h1,h2 {font-family:'微软雅黑';font-size:16px;}
+h2{border-left:5px solid #abc; padding-left:1em;}
+.about {border:1px solid #000; float:right; padding:1em; width:300px;}
+.red { color:#f00;}
+#idSlider4,#idSlider4 img,#idSlider4 li {width:505px; height:250px;}
+#idSlider4 li {overflow:hidden;}
+
+#taobaolike {position:relative;width:505px;height:277px; overflow:hidden;}
+#taobaolike #taobaopage {position:absolute;height:27px; bottom:0; left:0; width:505px;z-index:19; background-color:#4c4c4c;}
+#taobaolike #taobaopage a {display:block;float:left; width:101px;font-size:12px;text-align:center; text-decoration:none;line-height:27px;color:#fff;}
+#taobaolike #taobaopage a.on {background-color:#fff; color:#333;}
+</style>
+</head>
+<body>
+
+
+<h1 style="background-color:#234;color:#fff;padding:0.5em">
+XScroll2.js，又一个用来实现单张图片幻灯片切换效果（焦点图切换）的Javascript类，作者：<a href="http://www.jo2.org/archives/324.htm" target="_blank" style="color:#f78">jo2.org</a></h1>
+<div class="about">
+<h2>XScroll2.js说明</h2>
+<ol>
+	<li>从任意序号跳转到任意序号，都只有一次滚动,不过会切换方向。如，从1到3，只需向左滚动一步；从4到1，向右滚动1步。</li>
+	<li>代码简练，对系统消耗少</li>
+	<li>如果嫌效果少，可以使用XScroll.js</li>
+</ol>
+<h2>切换效果参数：</h2>
+<ol>
+<li>how:切换效果。0(默认)淡入淡出，1滚动;</li>
+<li>direct:方向，值为0左1上，默认为0.在how参数不为0时有效</li>
+<li>delay:自动滚动间隔时间。默认为4000</li>
+<li>step:滚动步长。当滚动方向是水平时，step会默认为slider元素的offsetWidth；当滚动方向是垂直时，则默认为高度。当然，也可以自己设置</li>
+<li>pager:值应该是一个元素的id,指定slider的页码翻页元素。指定后XScroll2会为此标签的第一层子元素添加跳转函数</li>
+<li>how与direct搭配使用. </li>
+</ol>
+<h2>使用注意：</h2>
+<p>进行切换的那个元素<span style="color:#f00">一定</span>要有一个父标签包围。例如：XScroll2('idSlider2'),则你的idSlider2必须有个父标签</p>
+</div>
+
+
+参考拍拍网首页<span class="red">2012-4-17</span>的效果实现，过期太久可能已改版，不要对号入座。
+
+
+
+
+
+<h2>使用XScroll2.js实现仿拍拍网首页图片切换效果</h2>
+<pre>var paipai = XScroll2('idSlider4',{direct:1,how:1,pager:'taobaopage'});</pre>
+<div id="taobaolike">
+<ul id="idSlider4">
+	<li><a href="http://www.jo2.org/archives/324.htm"><img src="http://img7.paipaiimg.com/4f876319/boss-4f767c6f-00000000185d69610001333165167000.1.jpg"/></a></li>
+	<li><a href="http://www.jo2.org/archives/324.htm"><img src="http://img4.paipaiimg.com/a74a7499/boss-4f84085c-00000000185d69610001334052956000.1.jpg"/></a></li>
+	<li><a href="http://www.jo2.org/archives/324.htm"><img src="http://img4.paipaiimg.com/eb635e45/boss-4f505514-00000000185d69610001330664724000.1.jpg"/></a></li>
+	<li><a href="http://www.jo2.org/archives/324.htm"><img src="http://img2.paipaiimg.com/d07522dd/boss-4f8bee8a-00000000185d69610001334570634000.1.jpg"/></a></li>
+	<li><a href="http://www.jo2.org/archives/324.htm"><img src="http://img6.paipaiimg.com/1620a711/boss-4f7d5d8e-00000000185d69610001333616014000.1.jpg"/></a></li>
+</ul>
+<div id="taobaopage">
+	<a href="#" class="on">仿拍拍切换0</a>
+	<a href="#">拍拍网图片切换</a>
+	<a href="#">包邮</a>
+	<a href="#">度假</a>
+	<a href="#">品牌运动会</a>
+</div>
+</div>
+
+<br />
+<script type="text/javascript" src="XScroll2.js"></script>
+<script type="text/javascript">
+var paipai = XScroll2('idSlider4',{direct:1,how:1,pager:'taobaopage'});
+</script>
+<div id="footer">
+&copy;版权所有：<a href="http://jo2.org" target="_blank">脚儿网</a>
+</div>
+<script language="javascript" type="text/javascript" src="http://js.users.51.la/3654312.js"></script>
+</body>
+</html>
