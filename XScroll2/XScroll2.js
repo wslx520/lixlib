@@ -5,6 +5,8 @@
 	使用说明：
 	从任意序号跳转到任意序号，都只有一次滚动,不过会切换方向
 	欢迎使用，欢迎转载，但请勿据为己有
+	更新记录：
+	2013/1/9:减少变量
 */
 var _ = {
 	id:function (id) {
@@ -65,30 +67,21 @@ XScroll2.main = function(elm,option) {
 	this.count = this.items.length;
 	/* 初始化选项 */
 	this.reset(option);
-	//console.log(this.defaults);
-	this.how = this.defaults.how;
-	//this.
-	this.delay = this.defaults.delay;
-	this.ing = 25;
 	
 	var drt = this.defaults.direct;
 	this.direct = ['left','top'][drt % 2];
 	//console.log(this.direct)
 	this.step = this.defaults.step || (drt % 2 ? this.slider.offsetHeight : this.slider.offsetWidth);
-	this.speed = 20;
-	this.tween = this.defaults.Tween;
+	this.speed = Math.ceil(1000/this.defaults.fps);
+	this.ing = this.defaults.ing/this.speed;
 	this.auto = this.defaults.auto;
 	/* 页码翻页功能 */
 	this.pager = _.id(this.defaults.pager);
-	this.event = this.defaults.event;
-	this.pause = this.defaults.pause;
-	this.past = this.defaults.past;
 	this.next = this.now = this._time = 0;
 	/* 移动变量 */
 	this._timer = null;
 	/* 初始化完毕 */
 	
-	this.pos = {};
 	this.init();	
 }
 XScroll2.prototype = {
@@ -96,7 +89,7 @@ XScroll2.prototype = {
 		var len = this.count,
 			root = this;
 		/*	*/
-		var posi = (root.how==0) ? "position:absolute;" : '',
+		var posi = (root.defaults.how==0) ? "position:absolute;" : '',
 			fl = (root.direct =='left') ? "float:left;" : "",
 			W = (root.direct =='left') ? (2*root.step+'px') : null,
 			H = (root.direct =='top') ? (2*root.step+'px') : null,
@@ -108,8 +101,8 @@ XScroll2.prototype = {
 		_.setCss(this.slider,{position:'absolute',left:'0',top:0,width:W,height:H});
 		_.setCss(this.slider.parentNode,{position:'relative',overflow:'hidden'});
 		_.setCss(this.items[0],{zIndex:10,display:'block'});
-		this.auto && (this.timer = setTimeout(_.Bind(this,this.Next),this.delay)) ;
-		if(this.pause) {
+		this.auto && (this.timer = setTimeout(_.Bind(this,this.Next),this.defaults.delay)) ;
+		if(this.defaults.pause) {
 			_.On('mouseout',function(){
 				root.Continue();
 			},this.slider);
@@ -129,7 +122,9 @@ XScroll2.prototype = {
 			pause:true,
 			event:'mouseover',
 			past:0,
-			Tween:easeOutStrong
+			fps:50,
+			ing:500,
+			Tween:easeInStrong
 		}
 		_.Extend(this.defaults,ops);
 	},
@@ -164,7 +159,7 @@ XScroll2.prototype = {
 			if(this.pager)  { _.cutover(this.pages,this.next,'on')};
 			this.now = this.next;
 		}
-		//this.how = Math.round(0+Math.random()*3);
+		//this.defaults.how = Math.round(0+Math.random()*3);
 	},
 	run:function(elm,callback) {
 		
@@ -182,7 +177,7 @@ XScroll2.prototype = {
 						_.setAlpha(root.nextS,100);
 						root.curS.style.display = 'none';
 						op0=0;
-						root.auto && (root.timer = setTimeout(_.Bind(root,root.Next),root.delay));
+						root.auto && (root.timer = setTimeout(_.Bind(root,root.Next),root.defaults.delay));
 					}
 				}
 				fading();
@@ -200,19 +195,19 @@ XScroll2.prototype = {
 				this.Move();
 			}
 		];
-		return effects[this.how];
+		return effects[this.defaults.how];
 		
 	},
 	Move:function(){
 		clearTimeout(this.timer);
 		if(this._c && (this._time++ <= this.ing)){
 			// this.Moving(Math.floor(this.tween(this._time,this._begin,this._c,this.ing)));
-			this.Moving(Math.floor(this._begin + this.tween(this._time/this.ing)*this._c));
+			this.Moving(Math.floor(this._begin + this.defaults.Tween(this._time/this.ing)*this._c));
 			this._timer = setTimeout(_.Bind(this,this.Move),this.speed);
 		} else {
 			this.Moving(this._end);
 			this._time = 0;
-			this.auto && (this.timer = setTimeout(_.Bind(this,this.Next),this.delay));
+			this.auto && (this.timer = setTimeout(_.Bind(this,this.Next),this.defaults.delay));
 		}
 	},
 	Moving:function(p){
@@ -233,12 +228,12 @@ XScroll2.prototype = {
 		//this.Pause();
 		clearTimeout(this.timer);
 		this.auto = true;
-		this.timer = setTimeout(_.Bind(this,this.Next),this.delay);
+		this.timer = setTimeout(_.Bind(this,this.Next),this.defaults.delay);
 	},
 	Pager:function(){
 		this.pages = this.pager.children;
 		var page = this.pager;
-		var	evt = this.event,
+		var	evt = this.defaults.event,
 			pl = this.pages.length,
 			root = this,
 			to;
@@ -247,7 +242,7 @@ XScroll2.prototype = {
 				_.On(evt,
 					function(){
 						root.Pause();
-						to = setTimeout(function(){root.go(i)},root.past);
+						to = setTimeout(function(){root.go(i)},root.defaults.past);
 					},
 					root.pages[i]);
 				_.On('mouseout',
@@ -268,4 +263,7 @@ function QuadOut(t,b,c,d){
 }
 function easeOutStrong(p) {
 	return 1 - --p * p * p * p
+}
+function easeInStrong(p) {
+	return (Math.pow((p-1), 3) +1);
 }
