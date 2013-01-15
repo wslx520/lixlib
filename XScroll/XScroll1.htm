@@ -89,7 +89,7 @@ XScroll.js，是一个用来实现单张图片幻灯片切换效果（焦点图�
 -->
 </div>
 <br />
-由于一屏内同时进行几个图片切换实在是对显卡有不小的考验，所以我加大了各图片区之间的间隔。见谅。
+
 <br />
 <h2>新的图片切换效果：交错切换，方向：向上，自动，带页码翻页，不带上下页，鼠标经过时暂停</h2>
 代码：
@@ -132,10 +132,11 @@ var xscroll = XScroll('idSlider2',{delay:3000,how:4, direct:1,Tween:Tween.CircOu
 		<option value="3">3</option>
 	</select>
 </div>
+由于切换参数时会发生重置，所以图片可能会显示错误，等他切换一次就行了。 <br />
 <script type="text/javascript" src="Tween.js"></script>
 <script type="text/javascript" src="XScroll.js"></script>
 <script type="text/javascript">
-var xscroll = XScroll('idSlider2',{delay:3000,how:4,direct:1,Tween:Tween.QuartOut,pager:'slider2p'});
+var xscroll = XScroll('idSlider2',{delay:3000,how:0,direct:1,Tween:Tween.QuartOut,pager:'slider2p'});
 
 document.onload = function (){
 	//alert('sdjkl');

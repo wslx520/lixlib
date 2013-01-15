@@ -157,25 +157,22 @@ XScroll.prototype = {
 				this.items[i].style.display = 'none';
 			}
 		}
-		this.curS.style.display = 'block';
-		this.nextS.style.display = 'block';
 		_.setAlpha(this.curS,100);
 		_.setAlpha(this.nextS,100);
 	},
 	go:function (num) {
-		clearTimeout(this.timer);
-		clearTimeout(this._timer);
-		this._time = 0;
-		//console.log(this.timer);
-		this.curS = this.items[this.now];
 		if(num != undefined) { this.next = num	}
 		else { this.next=this.now+1; }
-		//(num != undefined ) && (this.next = num) || (this.next = this.now+1);
 		(this.next>= this.count ) && (this.next = 0) || (this.next < 0) && (this.next = (this.count-1));
 		//console.log('num='+num +',this.next = '+ this.next);
 		//当前项为curS,下一项为nextS,谨记
 		if(this.next != this.now) {
+			clearTimeout(this.timer);
+			clearTimeout(this._timer);
+			this.curS = this.items[this.now];
 			this.nextS = this.items[this.next];
+			clearTimeout(this.curS._timer);
+			clearTimeout(this.nextS._timer);
 			this.fix();
 			this.moving = this.fading = 0;
 			this.curS.moving = this.nextS.moving = this.nextS.fading = this.curS.fading = 0;
@@ -202,6 +199,7 @@ XScroll.prototype = {
 		var effects = [
 			function(){
 				How.fadeIn([this.nextS]);
+				How.fadeOut([this.curS]);
 			},
 			function(){
 				this.curS.e = -step;
@@ -285,7 +283,7 @@ XScroll.prototype = {
 				elms[i].b = parseInt(elms[i].style[direct],10);
 				elms[i].c = elms[i].e - parseInt(elms[i].style[direct],10);
 			}
-			function moving(){
+			~function moving(){
 				if(Math.floor(elms[0].e-parseInt(elms[0].style[direct],10)) && t++ < root.ing) {
 					for(var i=0,l=elms.length;i<l;i++) {
 						//var b=elm[].b, c=elm.e - elm.b;
@@ -302,52 +300,48 @@ XScroll.prototype = {
 					if(!root.fading) root.after();
 					return;
 				}
-			}
-			moving();
+			}();
 		}
-		function fadeIn(elms){
-			var op0=0;
-			root.fading = 1;
-			function fading(){
+		function fading (elm,s,e,step,callback) {
+
+			clearTimeout(elm._timer);
+			var op0= 0,step = step || 5;
+			// var op0 = 0 ;
+			~function todo () {
 				if((op0+=5) < 100 ) {
-					for(var i=0,l=elms.length;i<l;i++) {
-						_.setAlpha(elms[i],op0);
-					}
-					
-					root._timer = setTimeout(fading,speed);
+						_.setAlpha(elm,(s+=step));
+						elm._timer = setTimeout(todo,speed);
+						console.log(elm._timer);
 				} else {
-					for(var i=0,l=elms.length;i<l;i++) {
-						_.setAlpha(elms[i],100);
-					}
+					_.setAlpha(elm,e);
 					op0 = 0;
 					//console.log('fadeIn' + elm.moving);
-					root.fading = 0;
-					if(!root.moving) root.after();
+					if(typeof callback === 'function') {
+						callback();
+					}
+					elm.fading = 0;
+					// root.fading = 0;
+					
 				}
+			}()
+			// _.set
+		}
+		function fadeIn(elms){
+			root.fading = 1;
+			for(var i=0,l=elms.length;i<l;i++) {
+				fading(elms[i],0,100,5);
 			}
-			fading();
 		}
 		function fadeOut(elms){
-			var op1 = 100;
 			root.fading = 1;
-			function fading(){
-				if((op1-=5) > 0 ) {
-					for(var i=0,l=elms.length;i<l;i++) {
-						_.setAlpha(elms[i],op1);
+			for(var i=0,l=elms.length;i<l;i++) {
+				fading(elms[i],100,0,-5,function(){
+					if(root.curS.fading == 0 && root.nextS.fading == 0) {
+						root.fading = 0;
+						if(!root.moving) root.after();
 					}
-					
-					root._timer = setTimeout(fading,speed);
-				} else {
-					for(var i=0,l=elms.length;i<l;i++) {
-						_.setAlpha(elms[i],0);
-					}
-					op1 = 0;
-					//console.log('fadeIn' + elm.moving);
-					root.fading = 0;
-					if(!root.moving) root.after();
-				}
+				});
 			}
-			fading();
 		}
 		return {
 			fadeIn:fadeIn,
