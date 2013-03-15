@@ -179,38 +179,41 @@ XMosaic.prototype = {
 		//console.log(this.what);		
 		
 		this.bigDIV = (function(){
-			var DIV = _.Create('A',{'class':'MosaicInner','target':'_blank' });			
-			for(var i=0; i < root.count; i++) {
-				var s = _.Create('DIV',{'id':'div'+i});
-				s.style.cssText = "float:left; position:absolute;background:url() 50% 50% no-repeat; width:"+root.sWidth+"px; height:"+root.sHeight+"px;left:"+pos.x*root.sWidth+"px;top:"+pos.y*root.sHeight+"px; background-position:"+(-pos.x*root.sWidth)+"px "+(-pos.y*root.sHeight)+"px; width:"+root.sWidth+"px; height:"+root.sHeight+"px;";
-				_.setAlpha(s,0);
-				
-				s.e = parseInt(s.style[root.what]);
-				//s.w = parseInt(s.style.width);
-				s.h = parseInt(s.style.height);
-				s.w = parseInt(s.style.width);
-				s.b = s.e - (wh ? s.e : 100*root.fan );
-				s.c = s.e - s.b;
-				if(root.how >4 && root.how < 7){
-					if(i % 2) {
-						//console.log(i);
-						s.b = s.b + s.c;
-						s.c = s.b - s.c;
-						s.b = s.b - s.c;
+			if(!_.id('MosaicInner')) {
+				var DIV = _.Create('A',{'class':'MosaicInner','target':'_blank','id':'MosaicInner' });			
+				for(var i=0; i < root.count; i++) {
+					var s = _.Create('DIV',{'id':'div'+i});
+					s.style.cssText = "float:left; position:absolute;background:url() 50% 50% no-repeat; width:"+root.sWidth+"px; height:"+root.sHeight+"px;left:"+pos.x*root.sWidth+"px;top:"+pos.y*root.sHeight+"px; background-position:"+(-pos.x*root.sWidth)+"px "+(-pos.y*root.sHeight)+"px; width:"+root.sWidth+"px; height:"+root.sHeight+"px;";
+					_.setAlpha(s,0);
+					
+					s.e = parseInt(s.style[root.what]);
+					//s.w = parseInt(s.style.width);
+					s.h = parseInt(s.style.height);
+					s.w = parseInt(s.style.width);
+					s.b = s.e - (wh ? s.e : 100*root.fan );
+					s.c = s.e - s.b;
+					if(root.how >4 && root.how < 7){
+						if(i % 2) {
+							//console.log(i);
+							s.b = s.b + s.c;
+							s.c = s.b - s.c;
+							s.b = s.b - s.c;
+						}
 					}
+					//console.log(root.fan+root.what+s.c);
+					pos.x++;
+					//console.log(pos.x);
+					if(pos.x > root.options.countX-1) {
+						pos.x = 0;
+						pos.y++;
+					}
+					root.smalls.push(DIV.appendChild(s));
 				}
-				//console.log(root.fan+root.what+s.c);
-				pos.x++;
-				//console.log(pos.x);
-				if(pos.x > root.options.countX-1) {
-					pos.x = 0;
-					pos.y++;
-				}
-				root.smalls.push(DIV.appendChild(s));
+				
+				DIV.style.cssText = "position:absolute; display:block; top:0; left:0; width:"+root.Width+"px;height:"+root.Height+"px;z-index:99;";
+				return DIV;	
 			}
 			
-			DIV.style.cssText = "position:absolute; display:block; top:0; left:0; width:"+root.Width+"px;height:"+root.Height+"px;z-index:99;";
-			return DIV;
 		})();
 				
 		this.wraper.appendChild(this.bigDIV);
@@ -405,10 +408,6 @@ XMosaic.prototype = {
 		this.auto = true;
 		this.timer = setTimeout(_.Bind(this,this.Next),this.delay);
 		//console.log(this.timer);
-	},
-	Die:function(){
-		this.wraper.removeChild(this.bigDIV);
-		this.Pause();
 	}
 }
 XMosaic.main.prototype = XMosaic.prototype;

@@ -66,8 +66,7 @@ XScroll2.main = function(elm,option) {
 	this.items = this.slider.children;
 	this.count = this.items.length;
 	/* 初始化选项 */
-	this.reset(option);
-	
+	_.Extend(this.defaults,option);
 	var drt = this.defaults.direct;
 	this.direct = ['left','top'][drt % 2];
 	//console.log(this.direct)
@@ -101,7 +100,7 @@ XScroll2.prototype = {
 		_.setCss(this.slider,{position:'absolute',left:'0',top:0,width:W,height:H});
 		_.setCss(this.slider.parentNode,{position:'relative',overflow:'hidden'});
 		_.setCss(this.items[0],{zIndex:10,display:'block'});
-		this.auto && (this.timer = setTimeout(_.Bind(this,this.Next),this.defaults.delay)) ;
+		this.auto && (this.timer = setTimeout(_.Bind(this,this.Next),this.defaults.auto)) ;
 		if(this.defaults.pause) {
 			_.On('mouseout',function(){
 				root.Continue();
@@ -113,20 +112,17 @@ XScroll2.prototype = {
 		this.pager && this.Pager();
 		this.Run = this.run();
 	},
-	reset:function(ops){
-		this.defaults = {
-			how:0,
-			direct:0,
-			delay:4000,
-			auto:true,
-			pause:true,
-			event:'mouseover',
-			past:0,
-			fps:50,
-			ing:500,
-			Tween:easeInStrong
-		}
-		_.Extend(this.defaults,ops);
+	//默认参数
+	defaults: {
+		how: 0,
+		direct: 0,
+		auto: 0,
+		pause: true,
+		event: 'mouseover',
+		past: 0,
+		fps: 50,
+		ing: 500,
+		Tween: easeInStrong
 	},
 	fix:function(){
 		//console.log(this.next);
@@ -145,9 +141,8 @@ XScroll2.prototype = {
 		this._time = 0;
 		//console.log(this.timer);
 		this.curS = this.items[this.now];
-		if(num != undefined) { this.next = num	}
-		else { this.next=this.now+1; }
-		//(num != undefined ) && (this.next = num) || (this.next = this.now+1);
+		(num != undefined) ? this.next = num : this.next=this.now+1;
+		
 		(this.next>= this.count ) && (this.next = 0) || (this.next < 0) && (this.next = (this.count-1));
 		//console.log('num='+num +',this.next = '+ this.next);
 				
@@ -177,7 +172,7 @@ XScroll2.prototype = {
 						_.setAlpha(root.nextS,100);
 						root.curS.style.display = 'none';
 						op0=0;
-						root.auto && (root.timer = setTimeout(_.Bind(root,root.Next),root.defaults.delay));
+						root.auto && (root.timer = setTimeout(_.Bind(root,root.Next),root.defaults.auto));
 					}
 				}
 				fading();
@@ -207,7 +202,7 @@ XScroll2.prototype = {
 		} else {
 			this.Moving(this._end);
 			this._time = 0;
-			this.auto && (this.timer = setTimeout(_.Bind(this,this.Next),this.defaults.delay));
+			this.auto && (this.timer = setTimeout(_.Bind(this,this.Next),this.defaults.auto));
 		}
 	},
 	Moving:function(p){
@@ -228,7 +223,7 @@ XScroll2.prototype = {
 		//this.Pause();
 		clearTimeout(this.timer);
 		this.auto = true;
-		this.timer = setTimeout(_.Bind(this,this.Next),this.defaults.delay);
+		this.timer = setTimeout(_.Bind(this,this.Next),this.defaults.auto);
 	},
 	Pager:function(){
 		this.pages = this.pager.children;

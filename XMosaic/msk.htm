@@ -135,7 +135,7 @@ var msk = XMosaic('jsF',{pager:'pager',delay:3000,countX:10,countY:1,how:2,order
 
 <script>
 var t = new Date().getTime();
-var msk = XMosaic('jsF',{pager:'pager',delay:3000,countX:5,countY:1,how:7,order:5 });
+var msk = XMosaic('jsF',{pager:'pager',delay:3000,countX:10,countY:10,how:0,order:0 });
 var t1 = new Date().getTime();
 //alert(t1-t);
 //console.log(msk.how);
@@ -157,37 +157,39 @@ document.onload = function (){
 			break;
 		}
 	}
-	
+	function die () {
+		// msk = null;
+		msk.wraper.removeChild(msk.bigDIV);
+		msk.Pause();
+		// document.getElementById('MosaicInner')
+	}
 	show.onchange = function(){
-		msk.Die();
-		clearTimeout(msk.timer);
+		die();
+		
 		msk.how = this.value;
 		msk.initial();
 		msk.Cont();
 	}
 	scountX.onchange = function(){
-		msk.Die();
+		die();
 		msk.options.countX = this.value;
 		msk.count = msk.options.countX * msk.options.countY;
 		msk.initial();
 		msk.Cont();
 	}
 	scountY.onchange = function(){
-		msk.Die();
-		clearTimeout(msk.timer);
+		die();
 		msk.options.countY = this.value;
 		msk.count = msk.options.countX * msk.options.countY;
 		msk.initial();
 		msk.Cont();
 	}
 	order.onchange = function(){
-		msk.Die();
-		clearTimeout(msk.timer);
+		die();
 		msk.order= this.value;
 		msk.initial();
 		msk.Cont();
 	}
-	
 	
 }();
 </script>

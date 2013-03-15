@@ -311,7 +311,6 @@ XScroll.prototype = {
 				if((op0+=5) < 100 ) {
 						_.setAlpha(elm,(s+=step));
 						elm._timer = setTimeout(todo,speed);
-						console.log(elm._timer);
 				} else {
 					_.setAlpha(elm,e);
 					op0 = 0;
@@ -320,11 +319,9 @@ XScroll.prototype = {
 						callback();
 					}
 					elm.fading = 0;
-					// root.fading = 0;
 					
 				}
 			}()
-			// _.set
 		}
 		function fadeIn(elms){
 			root.fading = 1;
@@ -371,7 +368,6 @@ XScroll.prototype = {
 	Pause:function(){
 		clearTimeout(this.timer);
 		this.auto = false;
-		//console.log('Pause!' + this.timer);
 	},
 	Cont:function(){
 		this.Pause();
