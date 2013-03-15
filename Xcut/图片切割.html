@@ -1,14 +1,16 @@
 <!DOCTYPE HTML>
-<html lang="en-US">
+<html lang="en-US" onselectstart="return false">
 <head>
 	<meta charset="UTF-8">
 	<title>Canvas实现图片切割</title>
+	<meta name="description" content="用html5 canvas实现的一个图片切割程序，来自脚儿网。可以载入本地图片，切割并保存" />
 	<style type="text/css">
+	img {max-width: 100%;}
     #container {
       position: relative;
     }
     #container div.d {
-        position:absolute; width:12px;height:12px;/*切割块控制点的宽高，需与JS中吻合*/ background-color:#0f0; 
+        position:absolute; width:12px;height:12px;/*切割块控制点的宽高，需与JS中吻合*/ background-color:#0f0; left: -999em;
     }
     #container div#d1 {
         cursor: nw-resize;
@@ -42,299 +44,29 @@
     #ok {
       /*display: none;*/
     }
+    #container,.fl {float: left;}
+    .fl {margin-left: 1em;}
 	</style>
 </head>
 <body onselectstart="return false">
-  <!-- <h1>请选择图片，并点击预览</h1>
-  <input type="file" name="frompic" id="frompic" onchange="getPath(this)" /> <input type="submit" value="预览" onclick="picView()" /> -->
+  请选择图片:
+  <input type="file" name="frompic" id="frompic" onchange="getPath(this)" />
+  <br />
 <div id="container">
   <img src="gangqin.jpg" alt="图片" id="img" />
   <!-- <canvas id="img" width="800" height="600">图片容器</canvas> -->
   <canvas id="cut" width="600" height="375">切割框</canvas>
-  <span id="info">
-  	宽：<span></span>，高：<span></span>
-  </span> 
-  <canvas id="ok">预览</canvas>
-  <input type="button" value="确定" onclick="todo()"/>
 </div>  
+<div class="fl">
+<div id="info">
+  	宽：<span></span>，高：<span></span>
+  </div> 
+  <canvas id="ok">预览</canvas> <br />
+  <input type="button" value="确定切割" onclick="todo()"/>	
+</div>
+  
 </body>
 <script type="text/javascript" src="XtendCanvas.js"></script>
-<script type="text/javascript">
-// alert(XtendCanvas);
-// var a = {'b':'22','c':1,'d':33}, b = {'b':'22','d':33,'c':1};
-
-var d = document,
-	$ = function  (id) {
-		return d.getElementById(id);
-	}
-var frompic = $('frompic');
-var img = $('img');
-var cut = $('cut');
-var ok = $('ok');
-var infos = $('info').children;
-// var ctx = cut.getContext('2d');
-var ctx = XtendCanvas(cut);
-var okx = ok.getContext('2d');
-cut.drawed = false;
-// ctx;
-function getPath (file) {
-  if (file.files && file.files[0])  
-  {  
-    var reader = new FileReader();
-    reader.readAsDataURL(file.files[0]);
-    reader.onload = function(e) {
-      img.src = e.target.result;
-      cut.width = img.width;
-      cut.height = img.height;
-    }
-    // d.body.appendChild(img);
-  } 
-}
-function picView () {
-  var jpg = new Image();
-  console.log(frompic.value);
-  jpg.src = frompic.value;
-  jpg.onload = function  () {
-    var w = jpg.width,h=jpg.height;
-    img.width = cut.width = w;
-    img.height = cut.height =  h;
-    // ctx.drawImage(jpg,0,0,w,h,0,0,w,h);
-  }
-}
-
-
-var points = [],
-	mouse = {x:0,y:0},
-  	start = {x:0,y:0},
-	Border = {};
-cut.L = cut.getBoundingClientRect().left;
-cut.T = cut.getBoundingClientRect().top;
-cut.onmousedown = function  (e) {
-  console.log('mouse down on cut canvas');
-  start.x = e.clientX - cut.L,start.y = e.clientY - cut.T;
-  // var xx = getMouse(e).x, yy = getMouse(e).y;
-  
-  if(Border.x != undefined && Border.w != undefined) {
-    ctx.beginPath().rect(Border.x,Border.y,Border.w,Border.h);
-    console.log(ctx.context.isPointInPath(start.x,start.y));
-    if(ctx.context.isPointInPath(start.x,start.y)) {
-    	cut.pathIn = true;
-      	cut.style.cursor = 'move';
-    	// mouse.tx = mouse.x - Border.x;
-    	// mouse.ty = mouse.y - Border.y;
-    } 
-  }
-  d.onmousemove = toDraw;
-  
-}
-function getMouse (e) {
-	return mouse = {x: e.clientX - cut.L, y: e.clientY - cut.T };
-}
-function toDraw (e) {
-	// 
-  getMouse(e);
-	// mouse.x = e.clientX - cut.L, mouse.y = e.clientY - cut.T;
-	// console.log('new' + Border.x);
-	if(cut.pathIn) {
-        console.log(mouse.x - (start.x - start.ox));
-        Border.x = (mouse.x -  (start.x - start.ox));
-        // mouse.x += (mouse.x - (start.x - start.ox));
-        Border.y = (mouse.y -  (start.y - start.oy));
-        // Border.y += (mouse.y - Border.y);
-	} else {
-	Border.x = Math.min(mouse.x,start.x), Border.y = Math.min(mouse.y,start.y);
-		Border.w = Math.abs(mouse.x - start.x), Border.h = Math.abs(mouse.y - start.y);
-	}
-  	// console.log(cut.oldx +'>'+ cut.oldy +'>' +Border.w +'>'+Border.h);
-  	drawCut(Border.x,Border.y,Border.w,Border.h)
-}
-d.onmouseup = function (e) {
-  d.onmousemove = null;
-  cut.pathIn = false;
-  if(Border.w < 0) {
-  	console.log('noooooooooooooooooooooooooooooooooo');
-  	Border.x = Border.x + Border.w;
-  	Border.w = -Border.w;
-  }
-
-  if(Border.h < 0) {
-  	console.log('noooooooooooooooooooooooooooooooooo');
-  	Border.y = Border.y + Border.h;
-  	Border.h = -Border.h;
-  }
-  drawCut(Border.x,Border.y,Border.w,Border.h);
-  start.ox = Border.x;
-  start.oy = Border.y;
-  	docut();
-  // start.x = start.y =0;
-  console.log('mouse up'); 
-  // cut.drawed = false;
-  cut.style.cursor = 'default';
-}
-var frag = d.createDocumentFragment(),
-	divs = (function () {
-	    var a = [];
-	    for(var i=0;i<8;i++) {
-	        var div = d.createElement('DIV');
-	        div.className = 'd';
-	        div.id = 'd'+(i+1);
-	        div.w = 12;//定义div宽高变量
-	        a.push(frag.appendChild(div));
-	    }
-	    return a;
-	})();
-// alert(frag);
-function drawCut (x,y,w,h) {
-	ctx.save().clearRect(0,0,cut.width,cut.height)
-  		.beginPath()
-  		.rect(0,0,cut.width,cut.height)
-  		.fillStyle('rgba(0,0,0,0.2)').fill()
-  		.clearRect(x,y,w,h)
-  		.beginPath()
-  		.rect(x,y,w,h).closePath()
-  		.strokeStyle('rgba(255,0,0,0.8)').stroke().restore();
-	  points = [[x,y],[x+w/2,y],[x+w,y],[x+w,y+h/2],[x+w,y+h],[x+w/2,y+h],[x,y+h],[x,y+h/2]];
-	  ctx.beginPath();
-	  for(var i=0,l = points.length;i<l;i++) {
-	      var x = points[i][0],y = points[i][1], d = divs[i];
-	  	// ctx.moveTo(x,y).arc(x,y,3,0,Math.PI*2);
-	  	d.x = x, d.y = y;
-	  	d.style.left = x-d.w/2 +'px';
-	  	d.style.top =  y-d.w/2 + 'px';
-	  }
-	  // ctx.closePath().fillStyle('rgba(122,0,0,0.6)').fill();
-	  showInfo(w,h);
-}
-
-~function  resize ( ) {
-	// var argus = {x:0,y:0, w:0, h:0};
-  for(var i=0;i<8; i++) {
-    divs[i].addEventListener('mousedown',function  () {
-    	var t = this;
-      console.log(t.x);
-      var argus = {},fns = [];
-      var x=Border.x,y=Border.y,w=Border.w,h=Border.h;
-      var tx = this.x,ty = this.y;
-      switch (this.x) {
-        case Border.x+Border.w:
-        	argus.w = 1;
-        	fns.push(function  () {
-        		Border.w = mouse.x - Border.x;
-        	});
-        	
-        	switch(this.y) {
-        		case Border.y :
-        			argus.y = 1;
-        			argus.h = 1;
-        			fns.push(function  () {
-        				Border.h = h - (mouse.y - ty);
-        				Border.y = mouse.y;
-        			})
-        			break;
-        		case Border.y+Border.h :
-        			argus.h = 1;
-        			fns.push(function  () {
-        				Border.h = h + (mouse.y - ty);
-        			})
-        			break;
-        		default:
-        			break;
-        	}
-        	break;
-        case Border.x+Border.w/2:
-        	argus.h = 1;
-        	if (this.y == Border.y) {
-        		fns.push(function  () {
-        			Border.h = h - (mouse.y - ty);
-        			Border.y = mouse.y;
-        		})
-        		argus.y = 1;
-        	} else {
-
-	        	fns.push(function  () {
-	        		Border.h = h + (mouse.y - ty);
-	        	})
-        	};
-        	break;
-        default:
-        	argus.x = 1;
-        	argus.w = 1;
-        	fns.push(function () {
-        		Border.x = mouse.x;
-        		Border.w = w - (mouse.x - tx);
-        	})
-        	switch(this.y) {
-        		case Border.y+Border.h :
-        			argus.h = 1;
-        			fns.push(function (){
-        				Border.h = h + (mouse.y - ty);
-        			})
-        			break;
-        		case Border.y :
-        			argus.h = 1;
-        			argus.y = 1;
-        			fns.push(function (){
-        				Border.y = mouse.y;
-        				Border.h = h - (mouse.y - ty);
-        			})
-        			break;
-        		default:
-        			break;
-        	}
-        // case Border.x :
-        	
-      }
-      console.log(argus);
-      d.onmousemove = function  (e) {
-      	getMouse(e);
-      	for(var i=0, l = fns.length;i<l ;i++) {
-      		fns[i]();
-      	}
-      	drawCut(Border.x,Border.y,Border.w,Border.h);
-      }
-      /*if(this.x == Border.x+Border.w) {
-        argus.w =1;
-        console.log('right!');
-        if (this.y == Border.y+Border.h) {
-          argus.h = 1;
-        } else {
-          argus.h = 1;
-          argus.y = 1;
-        }
-      }*/
-    },false)
-  }
-}()
-function showInfo (w,h) {
-	infos[0].innerHTML = w;
-	infos[1].innerHTML = h;
-}
-$('container').appendChild(frag);
-function docut  () {
-	if(Border.x != undefined && Border.y != undefined && Border.w != undefined) {
-    ok.width = Border.w;
-    ok.height = Border.h;
-    // console.log(cut.oldx+'>'+cut.oldy);
-    okx.drawImage(img,Border.x,Border.y,Border.w,Border.h,0,0,Border.w,Border.h);
-    return;
-  } 
-  return false;
-}
-//需要运行在服务器环境
-function todo () {
-	var i = new Image();
-	var data = ok.toDataURL();
-	i.src = data;
-	d.body.appendChild(i);
-}
-d.addEventListener('keydown',function  (e) {
-	if(e.ctrlKey) {
-		console.log('ctrl has press');
-		Border.w = Border.h = Math.min(Border.w,Border.h);
-		drawCut(Border.x,Border.y,Border.w,Border.h);
-		console.log(Border.w+'www'+Border.h);
-	}
-})
-</script>
+<script type="text/javascript" src="cutImage.js"></script>
 
 </html>

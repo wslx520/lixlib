@@ -1,5 +1,6 @@
+var bak = ['isPointInPath']//有返回值的函数，不用放在循环中
 var XtendCanvas = function () {
-    var pro = ['save','restore', 'scale', 'rotate', 'translate', 'transform',  'createLinearGradient', 'createRadialGradient', 'getLineDash', 'clearRect', 'fillRect', 'beginPath', 'closePath', 'moveTo', 'lineTo', 'quadraticCurveTo', 'bezierCurveTo', 'arcTo', 'rect', 'arc', 'fill', 'stroke', 'clip', 'isPointInPath', 'measureText', 'clearShadow', 'fillText', 'strokeText',   'strokeRect', 'drawImage', 'drawImageFromRect',  'putImageData', 'createPattern', 'createImageData', 'getImageData','strokeStyle','lineWidth','globalAlpha','fillStyle','font','shadowOffsetX','shadowOffsetY','shadowBlur','shadowColor','lineCap','lineJoin','miterLimit'];
+    var pro = ['save','restore', 'scale', 'rotate', 'translate', 'transform',  'createLinearGradient', 'createRadialGradient', 'getLineDash', 'clearRect', 'fillRect', 'beginPath', 'closePath', 'moveTo', 'lineTo', 'quadraticCurveTo', 'bezierCurveTo', 'arcTo', 'rect', 'arc', 'fill', 'stroke', 'clip',  'measureText', 'clearShadow', 'fillText', 'strokeText',   'strokeRect', 'drawImage', 'drawImageFromRect',  'putImageData', 'createPattern', 'createImageData', 'getImageData','strokeStyle','lineWidth','globalAlpha','fillStyle','font','shadowOffsetX','shadowOffsetY','shadowBlur','shadowColor','lineCap','lineJoin','miterLimit'];
     function fn (canvas) {
         this.context = canvas.getContext('2d');
     }
