@@ -68,7 +68,6 @@ var _ = {
 	},
 	setPos:function(obj,pos){
 		for(var p in pos) {
-			////console.log(obj);
 			obj.style[p] = pos[p] + 'px';
 		}
 	}
@@ -147,18 +146,42 @@ XScroll.prototype = {
 				root.Pause();
 			},this.wraper);
 		}
-		this.pager && this.Pager();
+		if(this.pager) {
+			this.pages = _.id(this.pager).children;
+			var evt = this.event,
+				pl = this.pages.length,
+				root = this,
+				to;
+			for(var i = 0; i< pl; i++){
+				(function(i){
+					_.On(evt,
+						function(){
+							root.Pause();
+							to = setTimeout(function(){root.go(i)},150);
+						},
+						root.pages[i]);
+					_.On('mouseout',
+						function(){
+							clearTimeout(to);
+							if(root.defaults.auto) root.auto = true;
+							//root.Cont();
+						},
+						root.pages[i]);	
+				})(i);
+			}
+		}
 		this.Hower = this.How();
 		this.Run = this.run();
 	},
 	fix:function(){
-		for(var i=0,l=this.count;i<l;i++) {
-			if(i != this.now && i != this.next) {
+		var i = this.count;
+		while(i--) {
+			if(i == this.now || i == this.next) {
+				this.items[i].style.display = 'block';
+			} else {
 				this.items[i].style.display = 'none';
 			}
 		}
-		_.setAlpha(this.curS,100);
-		_.setAlpha(this.nextS,100);
 	},
 	go:function (num) {
 		if(num != undefined) { this.next = num	}
@@ -377,28 +400,7 @@ XScroll.prototype = {
 		//console.log(this.timer);
 	},
 	Pager:function(){
-		this.pages = _.id(this.pager).children;
-		var evt = this.event,
-			pl = this.pages.length,
-			root = this,
-			to;
-		for(var i = 0; i< pl; i++){
-			(function(i){
-				_.On(evt,
-					function(){
-						root.Pause();
-						to = setTimeout(function(){root.go(i)},150);
-					},
-					root.pages[i]);
-				_.On('mouseout',
-					function(){
-						clearTimeout(to);
-						if(root.defaults.auto) root.auto = true;
-						//root.Cont();
-					},
-					root.pages[i]);	
-			})(i);
-		}
+		
 	}
 }
 
