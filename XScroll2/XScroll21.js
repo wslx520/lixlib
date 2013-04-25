@@ -104,14 +104,12 @@ XScroll2.prototype = {
 		_.setCss(this.items[0],{zIndex:10,display:'block'});
 		_.setCss(this.slider,sliderCss);
 		this.auto && (this.timer = setTimeout(_.Bind(this,this.Next),this.defaults.auto)) ;
-		if(this.defaults.pause) {
-			_.On('mouseout',function(){
-				root.Continue();
-			},this.slider);
-			_.On('mouseover',function(){
-				root.Pause();
-			},this.slider);
-		}
+		_.On('mouseout',function(){
+			root.Continue();
+		},this.slider);
+		_.On('mouseover',function(){
+			root.Pause();
+		},this.slider);
 		// console.log(this.defaults.how);
 		if(how == 0) this.Run = this.run();
 		if(this.pager) {
@@ -142,7 +140,6 @@ XScroll2.prototype = {
 		how: 0,
 		direct: 0,
 		auto: 0,
-		pause: true,
 		event: 'mouseover',
 		past: 0,
 		fps: 50,
@@ -162,16 +159,17 @@ XScroll2.prototype = {
 		}
 	},
 	go:function (num) {
-		clearTimeout(this.timer);
-		this._time = 0;
-		this.curS = this.items[this.now];
-		(num != undefined) ? this.next = num : this.next=this.now+1;
-		
+		(num != undefined) ? this.next = num : this.next=this.now+1;		
 		(this.next>= this.count ) && (this.next = 0) || (this.next < 0) && (this.next = (this.count-1));
 		//console.log('num='+num +',this.next = '+ this.next);
 				
-		//当前项为curS,下一项为nextS,谨记
 		if(this.now != this.next) {
+
+			clearTimeout(this.timer);
+			this._time = 0;
+			//当前项为curS,下一项为nextS,谨记
+			this.curS = this.items[this.now];
+			// console.log('GOOOOO');
 			this.nextS = this.items[this.next];
 			this.fix();
 			if(this.atBefore) {var l = this.atBefore.length; while(l--) {this.atBefore[l].call(this);}}
@@ -217,8 +215,8 @@ XScroll2.prototype = {
 	},
 	Moving :function(){
 		clearTimeout(this.timer);
-		console.log(this._c +'...'+this._time);
 		if(this._c && (this._time++ <= this.ing)){
+		// console.log(this._c +'...'+this._time);
 			// this.Move(Math.floor(this.tween(this._time,this._begin,this._c,this.ing)));
 			this.Move(Math.ceil(this._begin + this.defaults.Tween(this._time/this.ing)*this._c));
 			this.timer = setTimeout(_.Bind(this,this.Moving),this.speed);
@@ -239,13 +237,9 @@ XScroll2.prototype = {
 		this.go(++this.next);
 	},
 	Pause :function(){
-		// clearTimeout(this.timer);
 		this.auto = false;
-		//console.log('Pause!' + this.timer);
 	},
-	Continue:function(){
-		//this.Pause();
-		// clearTimeout(this.timer);
+	Continue :function(){
 		this.auto = this.defaults.auto;
 		this.auto && (this.timer = setTimeout(_.Bind(this,this.Next),this.defaults.auto));
 	}
