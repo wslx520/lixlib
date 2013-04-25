@@ -1,6 +1,6 @@
 ﻿/*
 	Javascript图片切换类：XScroll2
-	版本：0.1
+	版本：0.2
 	作者：脚儿网/jo2.org
 	使用说明：
 	从任意序号跳转到任意序号，都只有一次滚动,不过会切换方向
@@ -86,7 +86,6 @@ XScroll2.main = function(elm,option) {
 	this.pager = _.id(this.defaults.pager);
 	this.next = this.now = this._time = 0;
 	/* 移动变量 */
-	this._timer = null;
 	/* 初始化完毕 */
 	
 	this.init();	
@@ -164,9 +163,7 @@ XScroll2.prototype = {
 	},
 	go:function (num) {
 		clearTimeout(this.timer);
-		clearTimeout(this._timer);
 		this._time = 0;
-		//console.log(this.timer);
 		this.curS = this.items[this.now];
 		(num != undefined) ? this.next = num : this.next=this.now+1;
 		
@@ -191,7 +188,7 @@ XScroll2.prototype = {
 			if((op0+=step) < 100){
 				// console.log(root.curS);
 				_.setAlpha(this,op0);
-				this._timer = setTimeout(this.todo,root.speed);
+				this.timer = setTimeout(this.todo,root.speed);
 			} else {
 				//console.log(op0);
 				_.setAlpha(this,100);
@@ -220,10 +217,11 @@ XScroll2.prototype = {
 	},
 	Moving :function(){
 		clearTimeout(this.timer);
+		console.log(this._c +'...'+this._time);
 		if(this._c && (this._time++ <= this.ing)){
 			// this.Move(Math.floor(this.tween(this._time,this._begin,this._c,this.ing)));
 			this.Move(Math.ceil(this._begin + this.defaults.Tween(this._time/this.ing)*this._c));
-			this._timer = setTimeout(_.Bind(this,this.Moving),this.speed);
+			this.timer = setTimeout(_.Bind(this,this.Moving),this.speed);
 		} else {
 			this.Move(this._end);
 			this._time = 0;
@@ -241,15 +239,15 @@ XScroll2.prototype = {
 		this.go(++this.next);
 	},
 	Pause :function(){
-		clearTimeout(this.timer);
+		// clearTimeout(this.timer);
 		this.auto = false;
 		//console.log('Pause!' + this.timer);
 	},
 	Continue:function(){
 		//this.Pause();
-		clearTimeout(this.timer);
-		this.auto = true;
-		this.timer = setTimeout(_.Bind(this,this.Next),this.defaults.auto);
+		// clearTimeout(this.timer);
+		this.auto = this.defaults.auto;
+		this.auto && (this.timer = setTimeout(_.Bind(this,this.Next),this.defaults.auto));
 	}
 }
 
