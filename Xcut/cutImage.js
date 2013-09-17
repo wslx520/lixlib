@@ -51,7 +51,7 @@ var mouse = {
 cut.L = cut.getBoundingClientRect().left;
 cut.T = cut.getBoundingClientRect().top;
 cut.onmousedown = function(e) {
-	console.log(d.body.scrollTop + d.documentElement.scrollTop);
+	console.log('d.body.scrollTop + d.documentElement.scrollTop');
 	// start = getMouse(e);
 	start.x = e.clientX - cut.L, start.y = e.clientY - cut.T + d.body.scrollTop + d.documentElement.scrollTop;
 
@@ -73,8 +73,8 @@ function getMouse(e) {
 		x: e.clientX - cut.L,
 		y: e.clientY - cut.T + d.body.scrollTop + d.documentElement.scrollTop
 	};
-	mouse.x > cut.width && (mouse.x = cut.width) || (mouse.x < 0 && (mouse.x = 0));
-	mouse.y > cut.height && (mouse.y = cut.height) || (mouse.y < 0 && (mouse.y = 0));
+	mouse.x = Math.min(Math.max(0,mouse.x), cut.width);
+	mouse.y = Math.min(Math.max(0,mouse.y), cut.height);
 	return mouse;
 }
 
@@ -94,6 +94,7 @@ function toDraw(e) {
 	drawCut(rect)
 }
 d.onmouseup = function(e) {
+	// console.log(d.onmousemove);
 	d.onmousemove = null;
 	cut.pathIn = false;
 	start.ox = rect.x;
@@ -151,6 +152,7 @@ function drawCut(rect,fns) {
 	}
 	for (var i = 0; i < 8; i++) {
 		divs[i].addEventListener('mousedown', function() {
+			// console.log('dddddddddddddddd');
 			var fns = [];			
 			switch (this.x) {
 				case start.ox + start.ow:
@@ -219,7 +221,8 @@ function todo() {
 	
 }
 var ctrl, shift;
-d.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function(e) {
+	console.log(e.ctrlKey);
 	if (e.ctrlKey) {
 		console.log('ctrl has pressd');
 		ctrl = true;
@@ -236,7 +239,7 @@ d.addEventListener('keydown', function(e) {
 	}
 })
 d.addEventListener('keyup', function(e) {
-	console.log(e.keyCode)
+	// console.log(e.keyCode)
 	ctrl = false;
 	shift = false;
 	if (e.ctrlKey) {

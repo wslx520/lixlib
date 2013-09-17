@@ -34,9 +34,9 @@ span.red {color:#f00;}
 	list-style:none;
 	color: #fff;
 	text-align: center;
-	line-height: 20px;
-	width: 20px;
-	height: 20px;
+	line-height: 32px;
+	width: 32px;
+	height: 32px;
 	font-family: Arial;
 	font-size: 12px;
 	cursor: pointer;
@@ -64,7 +64,7 @@ XScroll.js，是一个用来实现单张图片幻灯片切换效果（焦点图�
 <li>支持5种基本切换效果，但后4种效果分别有上下左右4个方向</li>
 <li>how:切换效果。0淡入淡出，1两张图片同时滚动，2当前图片不动，下一张图片覆盖上来，3当前图片飞走，显示出下一张；4当前图片与下一张图片反向拉伸，然后回切，完成切换. </li>
 <li>direct:方向，值为0123，分别表示左上右下，默认为0.在how参数<span class="red">不为0</span>时有效</li>
-<li>delay:自动滚动间隔时间。默认为4000</li>
+<li>auto:自动滚动间隔时间。默认为4000,设为false则不自动</li>
 <li>step:滚动步长。当滚动方向是水平时，step会默认为slider元素的offsetWidth；当滚动方向是垂直时，则默认为offsetHeight。当然，也可以自己设置</li>
 <li>pager:值应该是一个元素的id,指定slider的页码翻页元素。指定后XScroll会为此标签的第一层子元素添加跳转函数</li>
 <li>how与direct搭配使用. </li>
@@ -94,7 +94,7 @@ XScroll.js，是一个用来实现单张图片幻灯片切换效果（焦点图�
 <h2>新的图片切换效果：交错切换，方向：向上，自动，带页码翻页，不带上下页，鼠标经过时暂停</h2>
 代码：
 <pre>
-var xscroll = XScroll('idSlider2',{delay:3000,how:4, direct:1,Tween:Tween.CircOut,pager:'slider2p'});
+var xscroll = XScroll('idSlider2',{auto:3000,how:4, direct:1,Tween:Tween.CircOut,pager:'slider2p'});
 </pre>
 <div class="container" id="idContainer2">
 	
@@ -136,7 +136,7 @@ var xscroll = XScroll('idSlider2',{delay:3000,how:4, direct:1,Tween:Tween.CircOu
 <script type="text/javascript" src="Tween.js"></script>
 <script type="text/javascript" src="XScroll.js"></script>
 <script type="text/javascript">
-var xscroll = XScroll('idSlider2',{delay:3000,how:0,direct:1,Tween:Tween.BounceOut,pager:'slider2p'});
+var xscroll = XScroll('idSlider2',{auto :3000,how:4,direct:3,pager:'slider2p'});
 
 document.onload = function (){
 	//alert('sdjkl');
@@ -155,7 +155,7 @@ document.onload = function (){
 	direct.onchange = function(){
 		xscroll.Pause();
 		xscroll.defaults.direct = this.value;
-		xscroll.direct
+		// xscroll.direct
 		xscroll.init();
 		xscroll.Cont();
 	}

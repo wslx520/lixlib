@@ -40,7 +40,7 @@ XScroll2.js，又一个用来实现单张图片幻灯片切换效果（焦点图
 <ol>
 <li>how:切换效果。0(默认)淡入淡出，1滚动;</li>
 <li>direct:方向，值为0左1上，默认为0.在how参数不为0时有效</li>
-<li>delay:自动滚动间隔时间。默认为4000</li>
+<li>auto:自动滚动间隔时间。默认为0不自动</li>
 <li>step:滚动步长。当滚动方向是水平时，step会默认为slider元素的offsetWidth；当滚动方向是垂直时，则默认为高度。当然，也可以自己设置</li>
 <li>pager:值应该是一个元素的id,指定slider的页码翻页元素。指定后XScroll2会为此标签的第一层子元素添加跳转函数</li>
 <li>how与direct搭配使用. </li>
@@ -78,7 +78,7 @@ XScroll2.js，又一个用来实现单张图片幻灯片切换效果（焦点图
 <br />
 <script type="text/javascript" src="XScroll21.js"></script>
 <script type="text/javascript">
-var paipai = XScroll2('idSlider4',{direct:1,how:1,pager:'taobaopage',auto: false});
+var paipai = XScroll2('idSlider4',{direct:0,how:1,pager:'taobaopage',auto: 3000});
 // paipai.atEnd.push(function  () {
 // 	alert(this.nextS.innerHTML);
 // })

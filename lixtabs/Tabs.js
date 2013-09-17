@@ -24,38 +24,35 @@ $C=function(cn,tag,elm){
 	return classArr;
 },
 cutover=function(arr,cur,cls){
-	for(var i=0,l=arr.length;i<l;i++){
-		if(i==cur){
-			var t=arr[i].className.indexOf(cls);
-			if (t==-1) {
-				arr[i].className += ' '+cls;
-			}
-			else return true;
-		}else{
-			arr[i].className = arr[i].className.replace(cls,'');
-		}
-		
+	for(var l=arr.length,c,reg = eval('/\\b'+cls+'\\b/');l--;){
+		if(reg.test((c=arr[l].className))) {
+			l!==cur && (arr[l].className = c.replace(reg,''));
+		} else {
+			l===cur && (arr[l].className =  c.replace(/\s$/g,'')+' '+cls);
+		}	
 	}
 },
-Bind = function(object, fun) {
+Bind = function(o, fn) {
 	return function() {
-		return fun.apply(object);
+		return fn.apply(o);
 	}
 },
-addEvent = function(eType,eFunc,eObj){
-	eObj = eObj || document;
-	if(window.addEventListener) eObj.addEventListener(eType,eFunc,false);
-	else eObj.attachEvent("on"+eType,eFunc);
-},
-Tabs = function (elm,items){
+on = (function(){
+		return ('addEventListener' in window) ? function(obj,type,fn) {
+			obj.addEventListener(type,fn,false);
+		} : function(obj,type,fn) {
+			obj.attachEvent("on"+type,fn);
+		};
+	})(),
+Tabs = function (elm,args){
 	if(elm == null){return false;}
-	return new Tabs.prototype.ini(elm,items);
+	return new Tabs.prototype.ini(elm,args);
 }
 Tabs.prototype = {
-	ini:function(elm,items){
+	ini:function(elm,args){
 		var t=this;
 		
-		var a=items || {};
+		var a=args || {};
 		
 		/*开始缓存传入参数*/
 		this.hdtag =a.hdtag || 'DIV';
@@ -65,6 +62,7 @@ Tabs.prototype = {
 		this.bdcn =a.bdcn || 'tabbd';
 		this.bdtagcur =a.bdtagcur || 'cur';
 		this.event = a.event || 'mouseover';
+		this.auto = a.auto || 0;
 		this.delay = a.delay || 0;
 		/*缓存参数完成*/
 		
@@ -75,55 +73,47 @@ Tabs.prototype = {
 		
 		this.now = 0;
 		this.yes = true;
-		this.time =a.auto;
 		this.sum = this.tabtag.length;
 		if(this.sum != this.tabcon.length) {
-			alert('Tab标签个数与内容个数不匹配');
-			return true;
+			alert(elm+':Tab标签个数与内容个数不匹配');
+			return ;
 		}
-		//alert(t.time);
 		/**/
-		for(var i=0;i<t.sum;i++){
-			
+		for(var i=0;i<t.sum;i++){			
 			(function(i){
-				addEvent('mouseover',function(){
+				on(t.tabtag[i],'mouseover',function(){
 					t.yes = false;
-				},t.tabtag[i]);
-				addEvent(t.event,function(){
+				});
+				on(t.tabtag[i],t.event,function(){
 					t.now = i;
-					//alert(i);
 					t.run = setTimeout(Bind(t,t.change),t.delay);
-				},t.tabtag[i])
-				addEvent('mouseout',function(){
+				})
+				on(t.tabtag[i],'mouseout',function(){
 					t.yes = true;
 					clearTimeout(t.run);
-				},t.tabtag[i]);
+				});
 			})(i);
 		}
-		this.change();
-		if(this.time){
-			elm.onmouseover = function(){
-				t.stop()
-			}
-			elm.onmouseout = function(){
-				t.go()
-			}
+		if(this.auto){
+			on(elm,'mouseover',function(){t.stop()});
+			on(elm,'mouseout',function(){t.go()});
 		}
+		this.change();
 	},
 	change:function(){
 		cutover(this.tabtag,this.now,this.hdtagcur);
 		cutover(this.tabcon,this.now,this.bdtagcur);
-		if(this.time && this.yes){
+		if(this.auto && this.yes){
 			this.now = (this.now == this.sum-1) ? 0 : this.now+1;
 			this.go();
 		}
 	},
 	go:function(){
 		this.stop();
-		this.auto = setTimeout(Bind(this,this.change),this.time)
+		this._timer = setTimeout(Bind(this,this.change),this.auto)
 	},
 	stop:function(){
-		clearTimeout(this.auto);
+		clearTimeout(this._timer);
 	}
 };
 Tabs.prototype.ini.prototype = Tabs.prototype;
