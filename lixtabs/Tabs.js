@@ -1,6 +1,6 @@
 ﻿/* 
 类:Lix Tabs
-版本:0.4
+版本:0.7
 作者:十年灯 http://www.jo2.org/
 说明:欢迎使用,欢迎转载,但请勿据为已有
 
@@ -46,13 +46,10 @@ on = (function(){
 	})(),
 Tabs = function (elm,args){
 	if(elm == null){return false;}
-	return new Tabs.prototype.ini(elm,args);
-}
-Tabs.prototype = {
-	ini:function(elm,args){
-		var t=this;
-		
-		var a=args || {};
+	return new tabShadow(elm,args);
+};
+function tabShadow(elm,args) {
+		var t=this,a=args || {};
 		
 		/*开始缓存传入参数*/
 		this.hdtag =a.hdtag || 'DIV';
@@ -99,7 +96,8 @@ Tabs.prototype = {
 			on(elm,'mouseout',function(){t.go()});
 		}
 		this.change();
-	},
+};
+tabShadow.prototype = {
 	change:function(){
 		cutover(this.tabtag,this.now,this.hdtagcur);
 		cutover(this.tabcon,this.now,this.bdtagcur);
@@ -116,7 +114,6 @@ Tabs.prototype = {
 		clearTimeout(this._timer);
 	}
 };
-Tabs.prototype.ini.prototype = Tabs.prototype;
 
 
 
