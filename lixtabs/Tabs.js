@@ -24,7 +24,7 @@ $C=function(cn,tag,elm){
 	return classArr;
 },
 cutover=function(arr,cur,cls){
-	for(var l=arr.length,c,reg = eval('/\\b'+cls+'\\b/');l--;){
+	for(var l=arr.length,c,reg = new RegExp('\\b'+cls+'\\b');l--;){
 		if(reg.test((c=arr[l].className))) {
 			l!==cur && (arr[l].className = c.replace(reg,''));
 		} else {
@@ -43,8 +43,8 @@ on = (function(){
 		} : function(obj,type,fn) {
 			obj.attachEvent("on"+type,fn);
 		};
-	})(),
-Tabs = function (elm,args){
+	})();
+function Tabs (elm,args){
 	if(elm == null){return false;}
 	return new tabShadow(elm,args);
 };
@@ -77,19 +77,19 @@ function tabShadow(elm,args) {
 		}
 		/**/
 		for(var i=0;i<t.sum;i++){			
-			(function(i){
-				on(t.tabtag[i],'mouseover',function(){
+			(function(item,i){
+				on(item,'mouseover',function(){
 					t.yes = false;
 				});
-				on(t.tabtag[i],t.event,function(){
+				on(item,t.event,function(){
 					t.now = i;
 					t.run = setTimeout(Bind(t,t.change),t.delay);
 				})
-				on(t.tabtag[i],'mouseout',function(){
+				on(item,'mouseout',function(){
 					t.yes = true;
 					clearTimeout(t.run);
 				});
-			})(i);
+			})(t.tabtag[i],i);
 		}
 		if(this.auto){
 			on(elm,'mouseover',function(){t.stop()});

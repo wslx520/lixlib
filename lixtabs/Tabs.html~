@@ -1,0 +1,377 @@
+﻿<!DOCTYPE HTML>
+<HTML>
+ <HEAD>
+  <TITLE>LixTabs切换类示例页---lixlib</TITLE>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <META NAME="Generator" CONTENT="EditPlus">
+  <META NAME="Author" CONTENT="">
+  <META NAME="Keywords" CONTENT="">
+  <META NAME="Description" CONTENT="">
+  <link rel="stylesheet" type="text/css" href="Tabs.css" media="all" />
+  <script type="text/javascript" src="Tabs.js"></script>
+  <style type="text/css">
+ul,li{margin:0;padding:0;}
+img {border:none;}
+pre {padding:1em; background-color:#f0f0f0; border:1px solid #ccc; font-size:12px;margin:1em 0; display: inline-block; }
+ul li {list-style:none;}
+h1,h2 {font-family:'微软雅黑';font-size:16px;}
+h2{border-left:5px solid #abc; padding-left:1em;}
+.about {float: right;padding: 1em; width: 300px; background-color: #f1f1f1;box-shadow: 0 0 20px rgba(0,0,0,0.2); position: fixed; right: 1em;}
+.about ol li {
+	list-style-type:decimal; list-style-position: inside;
+}
+.about dt {
+	margin: 0.5em 0; font-weight: bold;
+}
+  </style>
+ </HEAD>
+
+ <BODY>
+	<h1>Lix Tabs,javascript TAB切换类，由<a href="http://www.cnblogs.com/lixlib/" title="">十年灯</a>首发于博客园</h1>
+	<div class="about">
+		<h2>LixTabs.js使用简介</h2>
+		<ol>
+			<li>
+				第一个参数是一个html元素，第2个参数是一个对象，里面是LixTabs的详细设置参数
+			</li>
+			<li>
+				详细参数中，hd即head，表示tab的头部，bd即body，表示tab的内容体
+			</li>
+		</ol>
+		<dl>
+			<dt>详细参数列表：</dt>
+			<dd>hdtag:tab头部标签，默认div</dd>
+			<dd>hdcn:tab头部标签的class，默认是tabhd</dd>
+			<dd>hdtagcur:tab头部标签里面的当前tab标签的class，默认是cur</dd>
+			<dd>bdtag:tab内容区标签，默认div</dd>
+			<dd>bdcn:tab内容区的class，默认是tabbd</dd>
+			<dd>bdtagcur:tab当前显示内容区的class，默认是cur</dd>
+			<dd>event:触发切换的事件，默认是mouseover</dd>
+			<dd>delay:触发事件后延迟多少时间执行，默认是0</dd>
+		</dl>
+	</div>
+	<hr />
+	以下点击触发，并且非自动.
+	代码：<br />
+	<pre>Tabs($id('tabLite'),{hdcn:'tablite',hdtagcur:'now',bdcn:'tabcon',event:'click'});</pre>
+	<div class="inner" id="tabLite">
+		<div class="tablite"><a class="now" title="" href="#">城市指数</a><a title="" href="#" class="">名牌指数</a><a title="" href="#" class="">网上百货</a></div>
+		<div class="tabcon">
+			<div class="no cur">
+			<ul>
+				<li>·<a title="" href="#">0上海起火楼工程多萨斯附属卡</a></li>
+				<li>·<a title="" href="#">损失达5亿 忠犬不吃了快速扩大解放</a></li>
+				<li>·<a title="" href="#">发改委要求各地制定阿斯蒂芬接口</a></li>
+				<li>·<a title="" href="#">广西隆安违 囚禁精神病是富我卡拉</a></li>
+				<li>·<a title="" href="#">水管网7年来第10次爆裂啊加拉塞克</a></li>
+			</ul>
+			</div>
+			<div class="no">
+			<ul>
+				<li>·<a title="" href="#">1上海起火楼工程多</a></li>
+				<li>·<a title="" href="#">损失达5亿 忠犬不吃</a></li>
+				<li>·<a title="" href="#">发改委要求各地制定</a></li>
+				<li>·<a title="" href="#">广西隆安违 囚禁精神病</a></li>
+				<li>·<a title="" href="#">水管网7年来第10次爆裂</a></li>
+			</ul>
+			</div>
+			<div class="no">
+			<ul>
+				<li>·<a title="" href="#">2上海起火楼工程多</a></li>
+				<li>·<a title="" href="#">损失达5亿 忠犬不吃</a></li>
+				<li>·<a title="" href="#">发改委要求各地制定</a></li>
+				<li>·<a title="" href="#">广西隆安违 囚禁精神病</a></li>
+				<li>·<a title="" href="#">水管网7年来第10次爆裂</a></li>
+			</ul>
+			</div>
+		</div>
+	</div>
+	非自动，鼠标经过触发,延迟0.3秒。代码：<br />
+	<pre>var t2=Tabs($id('tab2'),{hdcn:'tabhead',bdcn:'tabcon',bdtagcur:'show',delay:300});</pre>
+	<div class="inner" id="tab2">
+		<div class="tabhead"><a class="cur" title="" href="#">城市</a><a title="" href="#" class="">名牌</a><a title="" href="#" class="">网络</a><a title="" href="#" class="">购物</a></div>
+		<div class="tabcon">
+			<div class="show">
+			<ul>
+				<li>·<a title="" href="#">0上海起火楼工程多萨斯附属卡</a></li>
+				<li>·<a title="" href="#">损失达5亿 忠犬不吃了快速扩大解放</a></li>
+				<li>·<a title="" href="#">发改委要求各地制定阿斯蒂芬接口</a></li>
+				<li>·<a title="" href="#">广西隆安违 囚禁精神病是富我卡拉</a></li>
+				<li>·<a title="" href="#">水管网7年来第10次爆裂啊加拉塞克</a></li>
+			</ul>
+			</div>
+			<div class="hide">
+			<ul>
+				<li>·<a title="" href="#">1上海起火楼工程多</a></li>
+				<li>·<a title="" href="#">损失达5亿 忠犬不吃</a></li>
+				<li>·<a title="" href="#">发改委要求各地制定</a></li>
+				<li>·<a title="" href="#">广西隆安违 囚禁精神病</a></li>
+				<li>·<a title="" href="#">水管网7年来第10次爆裂</a></li>
+			</ul>
+			</div>
+			<div class="hide">
+			<ul>
+				<li>·<a title="" href="#">2当你的正则表达式不能正常工作的时候</a></li>
+				<li>·<a title="" href="#">他应该工作还是你觉得他应该工作</a></li>
+				<li>·<a title="" href="#">你真想把头发都扯掉</a></li>
+				<li>·<a title="" href="#">这个工具很有意思</a></li>
+				<li>·<a title="" href="#">RegExr Desktop app，不光可以实时</a></li>
+			</ul>
+			</div>
+			<div class="hide">
+			<ul>
+				<li>·<a title="" href="#">3他应该工作还是你觉得他应该工作</a></li>
+				<li>·<a title="" href="#">当你的正则表达式不能正常工作的时候</a></li>
+				<li>·<a title="" href="#">你真想把头发都扯掉</a></li>
+				<li>·<a title="" href="#">这个工具很有意思</a></li>
+				<li>·<a title="" href="#">RegExr Desktop app，不光可以实时</a></li>
+			</ul>
+			</div>
+		</div>
+	</div>
+			<div class="mod wgt-tab" id="blog">
+				鼠标经过时触发，且自动.代码：<br />
+				<pre>var blog=Tabs($id('blog'),{hdcn:'tab-hd',hdtagcur:'current',bdcn:'tab-bd',bdtagcur:'current',auto:4000});</pre>
+				<div class="tab-hd tab-u-10 clearfix">
+					<span class="tab-u current"><a href="http://blog.163.com/">博客</a></span>
+					<span class="tab-u"><a href="http://blog.163.com/">草根</a></span>
+					<span class="tab-u"><a href="http://blog.163.com/">读图</a></span>
+					<span class="tab-u"><a href="http://huodong.163.com/">活动</a></span>
+				</div>
+				<div class="bd tab-bd display-control">
+					<div class="tab-con current">
+						<div class="imgText-temp-1 dotline clearfix">
+							<div class="mod-img main-img">
+								<a href="http://blog.163.com/?blog"><img width="120" height="90" title="日本震后英国海港干涸" alt="日本震后英国海港干涸" src="http://img2.cache.netease.com/cnews/2011/3/17/20110317083552ca786.jpg"><cite>日本震后英国海港干涸</cite></a>
+							</div>
+							<h3 class="main-title"><a href="http://mikesakai.blog.163.com/blog/static/1353354892011216112041564/?blog">日本核电安全神话破灭原因(图)</a></h3>
+							<ul class="mod-list main-list">
+									<li><a href="http://ssnly100.blog.163.com/blog/static/1156339201121711440405/?blog">宋石男：各地疯抢盐皆因无知(图)</a></li>
+									<li><a href="http://liao.xinbo.blog.163.com/blog/static/11195067920112161120660/?blog">广东卫生厅副厅长：抢购盐大可不必</a></li>
+									<li><a href="http://mkxblog.blog.163.com/blog/static/13576850820112163400402/?blog">博友：日本灾区外生活仍悠闲(图)</a></li>
+									<li><a href="http://panshiyisoho.blog.163.com/blog/static/11756303201121653921585/?blog">潘石屹：中日的建筑质量差距较大</a></li>
+								</ul>
+						</div>
+						<ul class="mod-list main-list">
+							<li><a href="http://fengyusunce.blog.163.com/blog/static/150333408201121693231305/?blog">博友:该死的盐卖断货了</a> <a href="http://tang-xinzi.blog.163.com/blog/static/12708933920112171430130/">唐辛子:日本人很淡定国人倒慌了</a></li>
+							<li><a href="http://hyreporternews.blog.163.com/blog/static/177647174201121683828731/?blog">日本球迷赛场感谢中国援助</a> <a href="http://zqguanjianbin.blog.163.com/blog/static/13566475820112162838551/">日本会重演前苏联核灾难吗？</a></li>
+							<li><a href="http://shishusivip.blog.163.com/blog/static/16761894320112163540533/?blog">石述思:何以阻击日本核谣言？</a> <a href="http://zft2000.blog.163.com/blog/static/105336823201121793458581/">食品色香味俱全要不得！</a></li>
+							<li><a href="http://blog.163.com/blog_youcai/blog/static/1166387322011217103140205/?blog">良少:超给力的滑板少年</a> <a href="http://huuu258.blog.163.com/blog/static/119694751201121711349145/">非2里葛优泡舒淇的房每晚1万2</a></li>
+							<li><a href="http://com633966.blog.163.com/blog/static/182152312201121135418514/?blog">创世西游:孙悟空的爱情</a> <a href="http://blog.163.com/special/0012rt/xyzw.html"><em class="cDRed">有奖征文</em></a> <a href="http://csxy.163.com/fab/">体验《创世西游》</a></li>
+						</ul>
+					</div>
+					<div class="tab-con">
+						<div class="imgText-temp-1 dotline clearfix">
+							<div class="mod-img main-img">
+								<a href="http://bingrongglasses.blog.163.com/blog/static/168977637201121605910858/?caogen"><img width="120" height="90" title="呆在盒子里好舒服哦" alt="呆在盒子里好舒服哦" src="http://img2.cache.netease.com/cnews/2011/3/17/201103171724580f1cd.jpg"><cite>呆在盒子里好舒服哦</cite></a>
+							</div>
+							<h3 class="main-title"><a href="http://yujuanfudan.blog.163.com/blog/static/182424119201121685015648/?caogen">治癌遇见神医 在黄山的村里治病</a></h3>
+							<ul class="mod-list main-list">
+								<li><a href="http://fengyusunce.blog.163.com/blog/static/150333408201121693231305/?caogen">疯了 各大超市的盐都被抢光了</a></li>
+								<li><a href="http://mkxblog.blog.163.com/blog/static/13576850820112163400402/?caogen">到了日本 大阪的生活依旧很热闹</a></li>
+								<li><a href="http://beimeigulang.blog.163.com/blog/static/179888015201121641615957/?caogen">自己改装的山寨95式步枪(图) </a></li>
+								<li><a href="http://jtzyzz.blog.163.com/blog/static/181027079201121625345334/?caogen">嫁鸡随鸡是出于对失败婚姻的无奈</a></li>
+							</ul>
+						</div>
+						<ul class="mod-list main-list">
+							<li><a href="http://lm08953.blog.163.com/blog/static/99638720201121784955930/?caogen">桃花随年龄涨的星女</a> <a href="http://manyubao8.blog.163.com/blog/static/162424374201121610134245/" target="_blank">要是葫芦娃都猥琐成这样…</a></li>
+							<li><a href="http://qktx007.blog.163.com/blog/static/16995771720112171550971/?caogen">直击食盐疯抢现场(图)</a> <a href="http://blog.163.com/xiongy_l/blog/static/17182320220112164346754/" target="_blank">内衣女模后台“春光”尽泄</a></li>
+							<li><a href="http://huuu258.blog.163.com/blog/static/119694751201121711349145/?caogen">非2里葛优泡舒淇的房每晚1万2</a> <a href="http://lixinycbk.blog.163.com/blog/static/124361382201121685629654/" target="_blank">戴安娜最喜爱的散步之地</a></li>
+							<li><a href="http://chonglychang.blog.163.com/blog/static/8827747620112167455723/?caogen">常吃八种食物可以预防核辐射</a> <a href="http://bushenti.blog.163.com/blog/static/165685770201121701317840/" target="_blank">地震来了准妈妈该如何应对</a></li>
+							<li><a href="http://imsuqin.blog.163.com/blog/static/303854142011216515528/?caogen">老婆利用楼市限购令骗了我260万</a> <a href="http://cankudejimo.blog.163.com/blog/static/335619720112179922389/" target="_blank">和情人决裂他竟强暴我</a></li>
+						</ul>
+					</div>
+					<div class="tab-con">
+						<ul class="mod-imgList imgList-w120 clearfix">
+									<li><a href="http://picture007.blog.163.com/album/?saitu#m=2&amp;aid=220278948&amp;pid=6829242301"><img width="120" height="90" title="核武器爆炸解禁照" alt="核武器爆炸解禁照" src="http://img2.cache.netease.com/cnews/2011/3/18/20110318090536f5b32.jpg"></a><p><a href="http://picture007.blog.163.com/album/?saitu#m=2&amp;aid=220278948&amp;pid=6829242301">核武器爆炸解禁照</a></p></li>
+									<li><a href="http://blog.163.com/xiongy_l/album/?saitu#m=2&amp;aid=220260544&amp;pid=6828956481"><img width="120" height="90" title="印度富豪超奢华婚礼" alt="印度富豪超奢华婚礼" src="http://img2.cache.netease.com/cnews/2011/3/18/20110318081059dc814.jpg"></a><p><a href="http://blog.163.com/xiongy_l/album/?saitu#m=2&amp;aid=220260544&amp;pid=6828956481">印度富豪超奢华婚礼</a></p></li>
+									<li><a href="http://image007.blog.163.com/album/?saitu#m=2&amp;aid=220278905&amp;pid=6829180376"><img width="120" height="90" title="穷小子自制风力发电" alt="穷小子自制风力发电" src="http://img1.cache.netease.com/cnews/2011/3/18/201103180820312ae8f.jpg"></a><p><a href="http://image007.blog.163.com/album/?saitu#m=2&amp;aid=220278905&amp;pid=6829180376">穷小子自制风力发电</a></p></li>
+									<li><a href="http://fortune007.blog.163.com/album/?saitu#m=2&amp;aid=220271350&amp;pid=6828718007"><img width="120" height="90" title="极具诱惑力的艺术" alt="极具诱惑力的艺术" src="http://img2.cache.netease.com/cnews/2011/3/17/20110317174701b87f5.jpg"></a><p><a href="http://fortune007.blog.163.com/album/?saitu#m=2&amp;aid=220271350&amp;pid=6828718007">极具诱惑力的艺术</a></p></li>
+									<li><a href="http://fortune007.blog.163.com/album/?saitu#m=2&amp;aid=220216918&amp;pid=6826634682"><img width="120" height="90" title="那些被解救失足妇女" alt="那些被解救失足妇女" src="http://img1.cache.netease.com/cnews/2011/3/17/2011031711142644c46.jpg"></a><p><a href="http://fortune007.blog.163.com/album/?saitu#m=2&amp;aid=220216918&amp;pid=6826634682">那些被解救失足妇女</a></p></li>
+									<li><a href="http://image007.blog.163.com/blog/static/178223463201121611812516/?saitu"><img width="120" height="90" title="拿着标枪跳海里捕鲸" alt="拿着标枪跳海里捕鲸" src="http://img1.cache.netease.com/cnews/2011/3/17/20110317082956c344a.jpg"></a><p><a href="http://image007.blog.163.com/blog/static/178223463201121611812516/?saitu">拿着标枪跳海里捕鲸</a></p></li>
+						</ul>
+</div>
+<div class="tab-con">
+							<a href="http://fm.163.com/activities/fmzhcd/index.html?act=fmzhcd_20110314_02?id_2010?huodong"><img width="370" height="90" class="main-bn-blog" title="智慧充电" alt="智慧充电" src="http://imgrc.ph.126.net/BQnG4ADuPsuK7Jk_ztxGsQ==/4222969075589980869.jpg"></a>
+					<ul class="mod-list main-list">
+							<li><a href="http://blog.163.com/ht/37?id_2020?huodong">【有奖征文】同桌的你</a></li>
+							<li><a href="http://mhxx.dream.163.com?mail=mhxx_20110316_05?id_2021?huodong">梦幻修仙新服火爆开启</a></li>
+							<li><a href="http://fm.163.com/activities/fmyhq/fmyhq.do?act=fmyhq_20110117_06?id_2022?huodong">闪电邮优惠券给力派送中！</a></li>
+							<li><a href="http://dream.163.com/honeylady?act=mhhd_20110307_02?id_2023?huodong">非诚勿扰，赶快寻找心动女生！</a></li>
+							<li><a href="http://yxp.163.com/h/action/ssnxj.html?sss=fromsyehdwz&amp;act=yxp0301_20110301_42?id_2024?huodong">时尚女性季，创意饰品10元起！</a></li>
+							<li><a href="http://fm.163.com/activities/fmzhcd/index.html?act=fmzhcd_20110314_03?id_2025?huodong">智能版闪电邮来给你的智慧充电啦，体验更有itouch送！</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+	<!-- 图片切换示例-->
+	<div class="r1">图片自动切换，mouseover触发。代码：<br />
+		<pre>var pic = Tabs($id('f_div'),{hdtag:'UL',hdcn:'buttonDiv',hdtagcur:'on',
+			bdcn:'imgDiv',bdtagcur:'now',auto:3000});</pre>
+	<div id="f_div">
+		<!--图片区域-->
+		<div id="imgDiv" class="imgDiv">
+			<a href="#1" title="" class="now"><img src="../images/s1.jpg" alt=""/></a>
+			<a href="#2" title=""><img src="../images/s2.jpg" alt=""/></a>
+			<a href="#3" title=""><img src="../images/s3.jpg" alt=""/></a>
+			<a href="#4" title=""><img src="../images/s4.jpg" alt=""/></a>
+		</div>	
+		<!--数字按钮区域-->
+		<ul id="buttonDiv" class="buttonDiv">
+			<li title="" class="on">1</li>
+			<li title="">2</li>
+			<li title="">3</li>
+			<li title="">4</li>
+		</ul>
+	</div>
+	</div>
+	
+	<h2>以下两个是批量实现的实例,mouseover触发，非自动</h2>
+	代码：<br />
+	<pre>var as = $C('as','DIV',document);
+	for(var i=0,l=as.length;i&lt;l;i++){
+		as[i].tab = Tabs(as[i],{hdtag:'UL',hdcn:'sn',hdtagcur:'now',bdcn:'imgs',bdtagcur:'cur'});
+	}</pre>
+	<div class="ads as">
+		<div class="imgs">
+			<p class="cur"><a href="#" title=""><img src="../images/s2.jpg" alt=""></a><span>1新闻标题一个1</span><i></i></p>
+			<p><a href="#" title=""><img src="../images/s4.jpg" alt=""></a><span>2新闻标题一个2</span><i></i></p>
+			<p><a href="#" title=""><img src="../images/s3.jpg" alt=""></a><span>3新闻标题一个3</span><i></i></p>
+		</div>
+		<ul class="sn"><li class="now">1</li><li>2</li><li>3</li></ul>
+	</div>
+	<div class="ads as">
+		<div class="imgs">
+			<p class="cur"><a href="#" title=""><img src="../images/s1.jpg" alt=""></a><span>1新闻标题一个1</span><i></i></p>
+			<p><a href="#" title=""><img src="../images/s4.jpg" alt=""></a><span>2新闻标题一个2</span><i></i></p>
+			<p><a href="#" title=""><img src="../images/s3.jpg" alt=""></a><span>3新闻标题一个3</span><i></i></p>
+			<p><a href="#" title=""><img src="../images/s2.jpg" alt=""></a><span>4新闻标题一个4</span><i></i></p>
+		</div>
+		<ul class="sn"><li class="now">1</li><li>2</li><li>3</li><li>4</li></ul>
+	</div>
+	<br />
+	<br />
+	<br />
+				<hr />
+			<h2>实现仿当当图书的双重tab效果，大tab里套小tab，共4个tab</h2>
+			<pre>
+	var book=Tabs($id('book_tab1'),{hdcn:'book_tab1_top',hdtagcur:'active',bdcn:'book_tab1_content',bdtagcur:'show',delay:1});
+	var tab1_0 = Tabs($id('tab1_0'),{hdcn:'book_djtg_tab',hdtagcur:'active',bdcn:'book_djtg_content',bdtagcur:'show'});
+	var tab1_1 = Tabs($id('tab1_1'),{hdcn:'book_tsjc_tab',hdtagcur:'active',bdcn:'book_tsjc_content',bdtagcur:'show'});
+	var tab1_2 = Tabs($id('tab1_2_0'),{hdcn:'book_tjss_tab',hdtagcur:'active',bdcn:'book_tjss_content',bdtagcur:'show'});
+			</pre>
+<div class="book_tab1" id="book_tab1">
+    <div class="book_tab1_top" id="book_tab1_top">
+        <a id="tab1_host_tab_0" href="javascript:;" title="独家特供" class="active"><span>独家特供</span></a><a id="tab1_host_tab_1" href="javascript:;" title="特书鉴藏" class=""><span>特书鉴藏</span></a><a id="tab1_host_tab_2" href="javascript:;" title="特价书市" class=""><span>特价书市</span></a>    
+    </div>
+    <div class="book_tab1_content">
+		<div id="tab1_0" class="book_djtg show" name="DuJiaTG" style=" top: 0px; left: 0px; width: 760px; height: 442px;  ">
+                    <div class="book_djtg_tab clearfix" id="djtg_tab">
+                        <a id="tab1_host_tab_0" href="javascript:;" title="主打" class="active"><span>小tab1</span></a>
+						<a id="tab1_host_tab_1" href="javascript:;" title="少儿"><span>小tab2</span></a>
+						<a id="tab1_host_tab_2" href="javascript:;" title="文艺"><span>文艺</span></a>
+						<a id="tab1_host_tab_3" href="javascript:;" title="小说"><span>小说</span></a>
+						<a id="tab1_host_tab_4" href="javascript:;" title="青春"><span>青春</span></a>
+						<a id="tab1_host_tab_5" href="javascript:;" title="励志"><span>励志</span></a>
+						<a id="tab1_host_tab_6" href="javascript:;" title="社科"><span>社科</span></a>
+						<a id="tab1_host_tab_7" href="javascript:;" title="经管"><span>经管</span></a>
+						<a id="tab1_host_tab_8" href="javascript:;" title="生活"><span>生活</span></a>
+						<a id="tab1_host_tab_9" href="javascript:;" title="教育"><span>教育</span></a>
+						<a id="tab1_host_tab_10" href="javascript:;" title="传记"><span>传记</span></a>
+						
+						</div>
+                    <div id="djtg_area_slide" class="book_djtg_content" style="position: relative; width: 759px; height: 410px; ">
+                            <div id="djtg_area_0" class="clearfix show" tab2="%D6%F7%B4%F2" style="top: 0px; left: 0px; z-index: 11; ">
+							<div class="detail">
+							<div class="pic"><a href="http://jo2.org/?21094590" target="_blank" title=""><img alt="" original="http://img30.ddimg.cn/66/2/21094590-1_b.jpg" src="http://img30.ddimg.cn/66/2/21094590-1_b.jpg" style="display: inline; "></a></div><p class="title"><a href="http://jo2.org/?21094590" target="_blank" title="">林格伦作品选（9册/套）{最新</a></p><p class="tip">当当独家特供</p><p>作 者：（瑞典）林格伦  </p><p>出版社：中国少年儿童出版</p><p class="price">当当价：<span class="price_d">¥<em>170.30</em></span></p><p class="description">&amp;nbsp;&amp;nbsp;“皮皮”，这个最响亮的名字，从她诞生之日起，就震憾</p></div><ul class="clearfix"><li><div class="pic"><a href="http://jo2.org/?22614911" target="_blank" title=""><img alt="" original="http://img31.ddimg.cn/44/30/22614911-1_a.jpg" src="http://img31.ddimg.cn/44/30/22614911-1_a.jpg" style="display: inline; "></a></div><p class="title"><span class=" icon"="" title="独家"><a href="http://jo2.org/?22614911" target="_blank" title="">房间——比《美丽人生》更艰难</a></p><p class="price"><span class="price_m">¥37.60</span></p><p class="price"><span class="price_d">¥<em>25.90</em></span></p></li><li><div class="pic"><a href="http://jo2.org/?22546291" target="_blank" title=""><img alt="" original="http://img31.ddimg.cn/31/8/22546291-1_a.jpg" src="http://img31.ddimg.cn/31/8/22546291-1_a.jpg" style="display: inline; "></a><div class="stemp">
+							</div></div><p class="title"><span class=" icon"="" title="独家"><a href="http://jo2.org/?22546291" target="_blank" title="">与神对话（全三卷，精装版），</a></p><p class="price"><span class="price_m">¥150.00</span></p><p class="price"><span class="price_d">¥<em>82.80</em></span></p></li><li><div class="pic"><a href="http://jo2.org/?20696250" target="_blank" title=""><img alt="" original="http://img30.ddimg.cn/3/4/20696250-1_a.jpg" src="http://img30.ddimg.cn/3/4/20696250-1_a.jpg" style="display: inline; "></a><div class="stemp">
+							</div></div><p class="title"><span class=" icon"="" title="独家"><a href="http://jo2.org/?20696250" target="_blank" title="">席慕容典藏文集（全三册：《槭</a></p><p class="price"><span class="price_m">¥60.00</span></p><p class="price"><span class="price_d">¥<em>39.00</em></span></p></li><li><div class="pic"><a href="http://jo2.org/?22612892" target="_blank" title=""><img alt="二十世纪中国史纲（简本） 金冲及著 （更低价钱，更少时间，更多精华内容，读透中国百年历史启示录）" original="http://img32.ddimg.cn/5/9/22612892-1_a.jpg" src="http://img32.ddimg.cn/5/9/22612892-1_a.jpg" style="display: inline; "></a><div class="stemp"></div></div><p class="title"><span class=" icon"="" title="独家"><a href="http://jo2.org/?22612892" target="_blank" title="二十世纪中国史纲（简本） 金冲及著 （更低价钱，更少时间，更多精华内容，读透中国百年历史启示录）">二十世纪中国史纲（简本） 金</a></p><p class="price"><span class="price_m">¥68.00</span></p><p class="price"><span class="price_d">¥<em>48.10</em></span></p></li><li><div class="pic"><a href="http://jo2.org/?22544196" target="_blank" title=""><img alt="" original="http://img36.ddimg.cn/15/22/22544196-1_a.jpg" src="http://img36.ddimg.cn/15/22/22544196-1_a.jpg" style="display: inline; "></a><div class="stemp">
+							</div></div><p class="title"><span class=" icon"="" title="独家"><a href="http://jo2.org/?20970893" target="_blank" title="美国国家地理少儿版百科（美国国家地理杂志为孩子量身定做。内容超级丰富，图片精美绝伦，知识前沿时尚）">美国国家地理少儿版百科（美国</a></p><p class="price"><span class="price_m">¥88.00</span></p><p class="price"><span class="price_d">¥<em>59.90</em></span></p></li><li><div class="pic"><a href="http://jo2.org/?21045133" target="_blank" title="开启孩子天赋的妈妈学校套装 （让孩子爱上自主学习的家庭教育法，彻底解决孩子在“阅读写作表达能力美术英语”五方面问题，独家定制“陪你一起长大”DIY创意亲子手册，留存宝贝最美好的时光！）"><img alt="开启孩子天赋的妈妈学校套装 （让孩子爱上自主学习的家庭教育法，彻底解决孩子在“阅读写作表达能力美术英语”五方面问题，独家定制“陪你一起长大”DIY创意亲子手册，留存宝贝最美好的时光！）" original="http://img33.ddimg.cn/10/14/21045133-1_a.jpg" src="http://img33.ddimg.cn/10/14/21045133-1_a.jpg" style="display: inline; "></a><div class="stemp"></div></div><p class="title"><span class=" icon"="" title="独家"><a href="http://jo2.org/?21045133" target="_blank" title="开启孩子天赋的妈妈学校套装 （让孩子爱上自主学习的家庭教育法，彻底解决孩子在“阅读写作表达能力美术英语”五方面问题，独家定制“陪你一起长大”DIY创意亲子手册，留存宝贝最美好的时光！）">开启孩子天赋的妈妈学校套装 </a></p><p class="price"><span class="price_m">¥156.00</span></p><p class="price"><span class="price_d">¥<em>93.60</em></span></p></li><li><div class="pic"><a href="http://jo2.org/?21032716" target="_blank" title="贾斯汀·比伯——第一步到永远：我的故事（当当网独家限量版）（现货发售，数量有限售完为止）"><img alt="贾斯汀·比伯——第一步到永远：我的故事（当当网独家限量版）（现货发售，数量有限售完为止）" original="http://img36.ddimg.cn/67/29/21032716-1_a.jpg" src="http://img36.ddimg.cn/67/29/21032716-1_a.jpg" style="display: inline; "></a></div><p class="title"><span class=" icon"="" title="独家"><a href="http://jo2.org/?21032716" target="_blank" title="贾斯汀·比伯——第一步到永远：我的故事（当当网独家限量版）（现货发售，数量有限售完为止）">贾斯汀·比伯——第一步到永远</a></p><p class="price"><span class="price_m">¥69.80</span></p><p class="price"><span class="price_d">¥<em>48.90</em></span></p></li></ul></div>
+							<div id="djtg_area_1" class="clearfix" tab2="%C9%D9%B6%F9" style="top: 0px; left: 0px; z-index: 10;  ">1111111</div>
+							<div id="djtg_area_2" class="clearfix" tab2="" style="  ">22222</div>
+							<div id="djtg_area_3" class="clearfix" tab2="" style="top: 0px; left: 0px; z-index: 8;  ">333333333</div>
+							<div id="djtg_area_4" class="clearfix" tab2="" style="top: 0px; left: 0px; z-index: 7;  ">444444</div>
+							<div id="djtg_area_5" class="clearfix" tab2="" style="top: 0px; left: 0px; z-index: 6;  ">55555555</div>
+							<div id="djtg_area_6" class="clearfix" tab2="" style="top: 0px; left: 0px; z-index: 5;  ">6666666</div>
+							<div id="djtg_area_7" class="clearfix" style="top: 0px; left: 0px; z-index: 4;  ">7777777</div>
+							<div id="djtg_area_8" class="clearfix" style="top: 0px; left: 0px; z-index: 3;  ">8888888</div>
+							<div id="djtg_area_9" class="clearfix" tab2="" style="top: 0px; left: 0px; z-index: 2;  ">9999999</div>
+							<div id="djtg_area_10" class="clearfix" style="top: 0px; left: 0px; z-index: 1;  ">10</div> 
+                    </div>
+                </div>
+                <div id="tab1_1" class="book_tsjc" name="TeShuJC" style="position: absolute; top: 0px; left: 0px; width: 760px; height: 442px; z-index: 3; ">
+				<div class="book_tsjc_tab clearfix" id="book_tsjc_tab"><a href="javascript:;" title="签名本" class="active"><span>签名本</span></a><a href="javascript:;" title="超值买赠"><span>超值买赠</span></a><a href="javascript:;" title="礼品书"><span>礼品书</span></a></div>
+				<div class="book_tsjc_content" id="tsjc_area_slide" style="position: relative; width: 760px; height: 410px; ">
+				<ul class="clearfix" id="tsjc_area_0" tab2="%C7%A9%C3%FB%B1%BE" style="position: absolute; top: 0px; left: 0px; z-index: 3; ">
+				<li><div class="pic"><a href="http://jo2.org/?22618502" target="_blank" title=""><img alt="" src="http://img32.ddimg.cn/71/32/22618502-1_f.jpg"></a>	<span class="overlay"></span><span class="overlay1"><span>牛刀亲笔签名</span></span></div><p class="title"><span class="icon"></span><a href="http://jo2.org/?22618502" target="_blank" title="">牛刀说：我们怎样过</a></p><p class="price"><span class="price_d">¥<em>20.80</em></span><span class="discount">65折</span></p></li><li><div class="pic"><a href="http://jo2.org/?22615055" target="_blank" title=""><img alt="" src="http://img35.ddimg.cn/89/26/22615055-1_f.jpg"></a>	<span class="overlay"></span><span class="overlay1"><span>金韵蓉亲笔签名</span></span></div><p class="title"><span class="icon"></span><a href="http://jo2.org/?22615055" target="_blank" title="">女人40+（当当网全</a></p><p class="price"><span class="price_d">¥<em>26.30</em></span><span class="discount">75折</span></p></li><li><div class="pic"><a href="http://jo2.org/?22601009" target="_blank" title="宽怀人生：延参法师的人生慧语(签名开光版，当当独家)"><img alt="宽怀人生：延参法师的人生慧语(签名开光版，当当独家)" src="http://img39.ddimg.cn/2/3/22601009-1_f.jpg"></a><div class="stemp"></div>	<span class="overlay"></span><span class="overlay1"><span>延参法师亲笔签名</span></span></div><p class="title"><span class="icon"></span><a href="http://jo2.org/?22601009" target="_blank" title="宽怀人生：延参法师的人生慧语(签名开光版，当当独家)">宽怀人生：延参法师</a></p><p class="price"><span class="price_d">¥<em>28.90</em></span><span class="discount">88折</span></p></li><li><div class="pic"><a href="http://jo2.org/?22610268" target="_blank" title="（当当全国独家珍藏毛边签名版）重说中国近代史"><img alt="（当当全国独家珍藏毛边签名版）重说中国近代史" src="http://img38.ddimg.cn/54/12/22610268-1_f.jpg"></a><div class="stemp"></div>	<span class="overlay"></span><span class="overlay1"><span>张鸣亲笔签名</span></span></div><p class="title"><span class="icon"></span><a href="http://jo2.org/?22610268" target="_blank" title="（当当全国独家珍藏毛边签名版）重说中国近代史">（当当全国独家珍藏</a></p><p class="price"><span class="price_d">¥<em>25.60</em></span><span class="discount">80折</span></p></li><li><div class="pic"><a href="http://jo2.org/?22595804" target="_blank" title="丁丁当当·黑痴白痴（彩插签名珍藏版）中国当代顶级儿童文学作家曹文轩最新力作！感动当下，追随永恒！"><img alt="丁丁当当·黑痴白痴（彩插签名珍藏版）中国当代顶级儿童文学作家曹文轩最新力作！感动当下，追随永恒！" src="http://img34.ddimg.cn/44/15/22595804-1_f.jpg"></a><div class="stemp"></div>	<span class="overlay"></span><span class="overlay1"><span>曹文轩亲笔签名</span></span></div><p class="title"><span class="icon"></span><a href="http://jo2.org/?22595804" target="_blank" title="丁丁当当·黑痴白痴（彩插签名珍藏版）中国当代顶级儿童文学作家曹文轩最新力作！感动当下，追随永恒！">丁丁当当·黑痴白痴</a></p><p class="price"><span class="price_d">¥<em>11.60</em></span><span class="discount">65折</span></p></li><li><div class="pic"><a href="http://jo2.org/?22472686" target="_blank" title="男人那点心思，女人那点心计--(作者亲笔签名版，当当独家销售）----情感心灵导师苏芩独家爱情方法论，不了解男人的女人&quot;嚣张&quot;一阵子，了解男人的女人&quot;嚣张&quot;一辈子"><img alt="男人那点心思，女人那点心计--(作者亲笔签名版，当当独家销售）----情感心灵导师苏芩独家爱情方法论，不了解男人的女人&quot;嚣张&quot;一阵子，了解男人的女人&quot;嚣张&quot;一辈子" src="http://img36.ddimg.cn/82/33/22472686-1_f.jpg"></a><div class="stemp"></div>	<span class="overlay"></span><span class="overlay1"><span>苏芩亲笔签名</span></span></div><p class="title"><span class="icon"></span><a href="http://jo2.org/?22472686" target="_blank" title="男人那点心思，女人那点心计--(作者亲笔签名版，当当独家销售）----情感心灵导师苏芩独家爱情方法论，不了解男人的女人&quot;嚣张&quot;一阵子，了解男人的女人&quot;嚣张&quot;一辈子">男人那点心思，女人</a></p><p class="price"><span class="price_d">¥<em>18.20</em></span><span class="discount">65折</span></p></li><li><div class="pic"><a href="http://jo2.org/?22512868" target="_blank" title="《世界儿童文学·阅读与经典》（彭懿亲笔签名版，集著名儿童文学研究者、儿童阅读推广人、作家彭懿多年研究积累，给孩子和家长最专业、最权威的阅读指南）"><img alt="《世界儿童文学·阅读与经典》（彭懿亲笔签名版，集著名儿童文学研究者、儿童阅读推广人、作家彭懿多年研究积累，给孩子和家长最专业、最权威的阅读指南）" src="http://img38.ddimg.cn/70/33/22512868-1_f.jpg"></a>	<span class="overlay"></span><span class="overlay1"><span>彭懿亲笔签名</span></span></div><p class="title"><span class="icon"></span><a href="http://jo2.org/?22512868" target="_blank" title="《世界儿童文学·阅读与经典》（彭懿亲笔签名版，集著名儿童文学研究者、儿童阅读推广人、作家彭懿多年研究积累，给孩子和家长最专业、最权威的阅读指南）">《世界儿童文学·阅</a></p><p class="price"><span class="price_d">¥<em>62.10</em></span><span class="discount">63折</span></p></li><li><div class="pic"><a href="http://jo2.org/?20458876" target="_blank" title="嘭嘭嘭（全4册）（童喜喜·幽默新幻想·作家签名本,让孩子懂得爱的幻想故事）"><img alt="嘭嘭嘭（全4册）（童喜喜·幽默新幻想·作家签名本,让孩子懂得爱的幻想故事）" src="http://img36.ddimg.cn/31/22/20458876-1_f.jpg"></a><div class="stemp"></div>	<span class="overlay"></span><span class="overlay1"><span>童喜喜亲笔签名</span></span></div><p class="title"><span class="icon"></span><a href="http://jo2.org/?20458876" target="_blank" title="嘭嘭嘭（全4册）（童喜喜·幽默新幻想·作家签名本,让孩子懂得爱的幻想故事）">嘭嘭嘭（全4册）（</a></p><p class="price"><span class="price_d">¥<em>39.60</em></span><span class="discount">66折</span></p></li><li><div class="pic"><a href="http://jo2.org/?22541642" target="_blank" title="白鹿原——中国首部当代名家名篇宣纸线装书，陈忠实先生亲笔签名签章限量珍藏版"><img alt="白鹿原——中国首部当代名家名篇宣纸线装书，陈忠实先生亲笔签名签章限量珍藏版" src="http://img32.ddimg.cn/35/21/22541642-1_f.jpg"></a>	<span class="overlay"></span><span class="overlay1"><span>陈忠实亲笔签名</span></span></div><p class="title"><span class="icon"></span><a href="http://jo2.org/?22541642" target="_blank" title="白鹿原——中国首部当代名家名篇宣纸线装书，陈忠实先生亲笔签名签章限量珍藏版">白鹿原——中国首部</a></p><p class="price"><span class="price_d">¥<em>360.00</em></span><span class="discount">75折</span></p></li><li><div class="pic"><a href="http://jo2.org/?22529553" target="_blank" title=""><img alt="" src="http://img33.ddimg.cn/24/31/22529553-1_f.jpg"></a><div class="stemp"></div>	<span class="overlay"></span><span class="overlay1"><span>严歌苓亲笔签名</span></span></div><p class="title"><span class="icon"></span><a href="http://jo2.org/?22529553" target="_blank" title="">（签名本）花儿与少</a></p><p class="price"><span class="price_d">¥<em>20.00</em></span><span class="discount">80折</span></p></li>
+				</ul>
+				<ul class="clearfix" id="tsjc_area_1" style="top: 0px; left: 0px; z-index: 2;  ">ul1</ul>
+				<ul class="clearfix" id="tsjc_area_2" style="top: 0px; left: 0px; z-index: 1;  ">ul2</ul>
+				</div>
+				</div>
+				<div id="tab1_2" class="book_tjss_bang clearfix" style=" top: 0px; left: 0px; width: 760px; height: 442px; z-index: 3;   ">
+				<div class="book_tjss" name="__TeJiaSS-P" id="tab1_2_0" >
+					<div class="book_tjss_tab clearfix" id="book_tjss_tab"><a href="javascript:;" title="清仓甩" class=""><span>清仓甩</span></a><a href="javascript:;" title="五元"><span>五元</span></a><a href="javascript:;" title="十元"><span>十元</span></a><a href="javascript:;" title="三折" class="active"><span>三折</span></a><a href="javascript:;" title="四折" class=""><span>四折</span></a><a href="javascript:;" title="五折"><span>五折</span></a>
+					</div>
+				<div class="book_tjss_content" id="tjss_area_slide" style="position: relative; width: 519px; height: 410px; ">
+				<ul class="clearfix show" id="tjss_area_0" tab2="%C7%E5%B2%D6%CB%A6" style="">
+				<li><div class="pic"><a href="http://jo2.org/?21018865" target="_blank" title=""><img alt="" src="http://img35.ddimg.cn/76/16/21018865-1_a.jpg"></a><div class="stemp"></div></div><p class="title"><a href="http://jo2.org/?21018865" target="_blank" title="">《梦回大清精装版》全两册（《</a></p><p class="price"><span class="price_d">¥<em>23.00</em></span><span class="discount">50折</span></p></li><li><div class="pic"><a href="http://jo2.org/?22493132" target="_blank" title="茅台为什么这么牛（最暴力的公司，最具解释力的中国式成功真相）"><img alt="茅台为什么这么牛（最暴力的公司，最具解释力的中国式成功真相）" src="http://img32.ddimg.cn/35/18/22493132-1_a.jpg"></a><div class="stemp"></div></div><p class="title"><a href="http://jo2.org/?22493132" target="_blank" title="茅台为什么这么牛（最暴力的公司，最具解释力的中国式成功真相）">茅台为什么这么牛（最暴力的公</a></p><p class="price"><span class="price_d">¥<em>19.30</em></span><span class="discount">46折</span></p></li><li><div class="pic"><a href="http://jo2.org/?9231504" target="_blank" title="和佛陀赏花去"><img alt="和佛陀赏花去" src="http://img34.ddimg.cn/51/4/9231504-1_a.jpg"></a><div class="stemp"></div></div><p class="title"><a href="http://jo2.org/?9231504" target="_blank" title="和佛陀赏花去">和佛陀赏花去</a></p><p class="price"><span class="price_d">¥<em>7.00</em></span><span class="discount">39折</span></p></li><li><div class="pic"><a href="http://jo2.org/?22527380" target="_blank" title=""><img alt="" src="http://img30.ddimg.cn/29/4/22527380-1_a.jpg"></a></div><p class="title"><a href="http://jo2.org/?22527380" target="_blank" title="">神奇的一氧化氮（"伟哥"理论发</a></p><p class="price"><span class="price_d">¥<em>17.50</em></span><span class="discount">50折</span></p></li><li><div class="pic"><a href="http://jo2.org/?22545148" target="_blank" title=""><img alt="" src="http://img38.ddimg.cn/76/12/22545148-1_a.jpg"></a><div class="stemp"></div></div><p class="title"><a href="http://jo2.org/?22545148" target="_blank" title="">格列佛游记-导读版-初中阶段-</a></p><p class="price"><span class="price_d">¥<em>7.40</em></span><span class="discount">44折</span></p></li><li><div class="pic"><a href="http://jo2.org/?20851068" target="_blank" title="爱的教育(唯一荣获意大利政府文化奖的全译本)(原版插图)"><img alt="爱的教育(唯一荣获意大利政府文化奖的全译本)(原版插图)" src="http://img38.ddimg.cn/84/14/20851068-1_a.jpg"></a></div><p class="title"><a href="http://jo2.org/?20851068" target="_blank" title="爱的教育(唯一荣获意大利政府文化奖的全译本)(原版插图)">爱的教育(唯一荣获意大利政府</a></p><p class="price"><span class="price_d">¥<em>13.40</em></span><span class="discount">50折</span></p></li><li><div class="pic"><a href="http://jo2.org/?22510656" target="_blank" title="林语堂文集（精装全26册，典藏收录大师最经典文章，汇集大师人生智慧，畅读最精彩小说）"><img alt="林语堂文集（精装全26册，典藏收录大师最经典文章，汇集大师人生智慧，畅读最精彩小说）" src="http://img36.ddimg.cn/36/4/22510656-1_a.jpg"></a></div><p class="title"><a href="http://jo2.org/?22510656" target="_blank" title="林语堂文集（精装全26册，典藏收录大师最经典文章，汇集大师人生智慧，畅读最精彩小说）">林语堂文集（精装全26册，典藏</a></p><p class="price"><span class="price_d">¥<em>265.00</em></span><span class="discount">36折</span></p></li><li><div class="pic"><a href="http://jo2.org/?21089648" target="_blank" title="帝国即将溃败：西方视角下的晚清图景（第一次从情报战争角度解读大清帝国溃败始末的历史力作，西方媒体残存一个多世纪的珍贵史料及图片首次在华曝光）（当当网全国独家销售）"><img alt="帝国即将溃败：西方视角下的晚清图景（第一次从情报战争角度解读大清帝国溃败始末的历史力作，西方媒体残存一个多世纪的珍贵史料及图片首次在华曝光）（当当网全国独家销售）" src="http://img38.ddimg.cn/74/18/21089648-1_a.jpg"></a></div><p class="title"><a href="http://jo2.org/?21089648" target="_blank" title="帝国即将溃败：西方视角下的晚清图景（第一次从情报战争角度解读大清帝国溃败始末的历史力作，西方媒体残存一个多世纪的珍贵史料及图片首次在华曝光）（当当网全国独家销售）">帝国即将溃败：西方视角下的晚</a></p><p class="price"><span class="price_d">¥<em>19.90</em></span><span class="discount">50折</span></p></li>
+				</ul>
+				<ul class="clearfix" id="tjss_area_1" tab2="%CE%E5%D4%AA" style=" ">五元</ul>
+				<ul class="clearfix" id="tjss_area_2" tab2="%CA%AE%D4%AA" style="">十元</ul>
+				<ul class="clearfix" id="tjss_area_3" tab2="%C8%FD%D5%DB" style=" ">
+				<li><div class="pic"><a href="http://jo2.org/?9002352" target="_blank" title="唐诗３００首赏析"><img alt="唐诗３００首赏析" src="http://img32.ddimg.cn/84/30/9002352-1_a.jpg"></a></div><p class="title"><a href="http://jo2.org/?9002352" target="_blank" title="唐诗３００首赏析">唐诗３００首赏析</a></p><p class="price"><span class="price_d">¥<em>3.20</em></span><span class="discount">20折</span></p></li><li><div class="pic"><a href="http://jo2.org/?9002364" target="_blank" title="藏戏——人类口头与非物质文化遗产丛书"><img alt="藏戏——人类口头与非物质文化遗产丛书" src="http://img34.ddimg.cn/96/5/9002364-1_a.jpg"></a></div><p class="title"><a href="http://jo2.org/?9002364" target="_blank" title="藏戏——人类口头与非物质文化遗产丛书">藏戏——人类口头与非物质文化</a></p><p class="price"><span class="price_d">¥<em>9.00</em></span><span class="discount">20折</span></p></li><li><div class="pic"><a href="http://jo2.org/?22487244" target="_blank" title="魔幻作文城堡"><img alt="魔幻作文城堡" src="http://img34.ddimg.cn/87/13/22487244-1_a.jpg"></a><div class="stemp">
+				</div></div>
+				<p class="title"><a href="http://jo2.org/?20694523" target="_blank" title="非物质文化遗产丛书：安顺地戏">非物质文化遗产丛书：安顺地戏</a></p><p class="price"><span class="price_d">¥<em>29.90</em></span><span class="discount">65折</span></p></li><li><div class="pic"><a href="http://jo2.org/?20694521" target="_blank" title="非物质文化遗产丛书：关中皮影"><img alt="非物质文化遗产丛书：关中皮影" src="http://img31.ddimg.cn/56/14/20694521-1_a.jpg"></a><div class="stemp"></div></div><p class="title"><a href="http://jo2.org/?20694521" target="_blank" title="非物质文化遗产丛书：关中皮影">非物质文化遗产丛书：关中皮影</a></p><p class="price"><span class="price_d">¥<em>31.20</em></span><span class="discount">65折</span></p></li>
+				</ul>
+				<ul class="clearfix" id="tjss_area_4" tab2="%CB%C4%D5%DB" style=" ">
+				<li><div class="pic"><a href="http://jo2.org/?20362190" target="_blank" title="丰盈与永恒——与欧洲博物馆的艺术邂逅(彩版)(东思西想集)"><img alt="丰盈与永恒——与欧洲博物馆的艺术邂逅(彩版)(东思西想集)" src="http://img30.ddimg.cn/68/17/20362190-1_a.jpg"></a></div><p class="title"><a href="http://jo2.org/?20362190" target="_blank" title="丰盈与永恒——与欧洲博物馆的艺术邂逅(彩版)(东思西想集)">丰盈与永恒——与欧洲博物馆的</a></p><p class="price"><span class="price_d">¥<em>23.20</em></span><span class="discount">40折</span></p></li><li><div class="pic"><a href="http://jo2.org/?20362192" target="_blank" title="祛魅与解咒——管窥西方现代艺术(彩版)(东思西想集)"><img alt="祛魅与解咒——管窥西方现代艺术(彩版)(东思西想集)" src="http://img32.ddimg.cn/70/19/20362192-1_a.jpg"></a></div><p class="title"><a href="http://jo2.org/?20362192" target="_blank" title="祛魅与解咒——管窥西方现代艺术(彩版)(东思西想集)">祛魅与解咒——管窥西方现代艺</a></p><p class="price"><span class="price_d">¥<em>23.20</em></span><span class="discount">40折</span></p></li><li><div class="pic"><a href="http://jo2.org/?20072146" target="_blank" title="摄影圣典"><img alt="摄影圣典" src="http://img36.ddimg.cn/94/16/20072146-1_a.jpg"></a><div class="stemp">
+				</div></div><p class="title"><a href="http://jo2.org/?20072146" target="_blank" title="摄影圣典">摄影圣典</a></p><p class="price"><span class="price_d">¥<em>59.20</em></span><span class="discount">40折</span></p></li><li><div class="pic"><a href="http://jo2.org/?20140847" target="_blank" title="EOS王朝"><img alt="EOS王朝" src="http://img37.ddimg.cn/89/8/20140847-1_a.jpg"></a><div class="stemp">
+				</div></div><p class="title"><a href="http://jo2.org/?20140847" target="_blank" title="EOS王朝">EOS王朝</a></p><p class="price"><span class="price_d">¥<em>51.20</em></span><span class="discount">40折</span></p></li><li><div class="pic"><a href="http://jo2.org/?20617713" target="_blank" title="佳能镜界"><img alt="佳能镜界" src="http://img33.ddimg.cn/72/18/20617713-1_a.jpg"></a><div class="stemp">
+				</div></div><p class="title"><a href="http://jo2.org/?20617713" target="_blank" title="佳能镜界">佳能镜界</a></p><p class="price"><span class="price_d">¥<em>34.00</em></span><span class="discount">50折</span></p></li><li><div class="pic"><a href="http://jo2.org/?9330337" target="_blank" title="全景摄影"><img alt="全景摄影" src="http://img37.ddimg.cn/82/10/9330337-1_a.jpg"></a><div class="stemp">
+				</div></div><p class="title"><a href="http://jo2.org/?9330337" target="_blank" title="全景摄影">全景摄影</a></p><p class="price"><span class="price_d">¥<em>84.00</em></span><span class="discount">50折</span></p></li><li><div class="pic"><a href="http://jo2.org/?9128304" target="_blank" title="黄金武士：二战日本掠夺亚洲巨额黄金黑幕"><img alt="黄金武士：二战日本掠夺亚洲巨额黄金黑幕" src="http://img34.ddimg.cn/9/34/9128304-1_a.jpg"></a><div class="stemp">
+				</div></div><p class="title"><a href="http://jo2.org/?9128304" target="_blank" title="黄金武士：二战日本掠夺亚洲巨额黄金黑幕">黄金武士：二战日本掠夺亚洲巨</a></p><p class="price"><span class="price_d">¥<em>24.40</em></span><span class="discount">68折</span></p></li><li><div class="pic"><a href="http://jo2.org/?9316172" target="_blank" title="设计在谋"><img alt="设计在谋" src="http://img32.ddimg.cn/74/16/9316172-1_a.jpg"></a></div><p class="title"><a href="http://jo2.org/?9316172" target="_blank" title="设计在谋">设计在谋</a></p><p class="price"><span class="price_d">¥<em>14.00</em></span><span class="discount">50折</span></p></li>
+				</ul>
+				<ul class="clearfix" id="tjss_area_5" tab2="%CE%E5%D5%DB" style="">五折</ul>
+				</div>
+				</div>
+				<a class="more" href="http://discount.dangdang.com/list/01.html" target="_blank">更多&gt;&gt;</a>
+				
+				
+				<div class="discount_bestsell_bang" id="discount_bestsell_bang" name="__TeJiaSS-B">
+					<h3>特价畅销榜</h3>
+					<ul>
+					<li class="first detail clearfix " id="img_bang_9052734_0"><div class="num"><span class="active">1</span></div><div class="pic"><a href="http://jo2.org/?9052734" title="古文观止（注音版）——中华传世经典诵读" target="_blank"><img src="http://img34.ddimg.cn/75/18/9052734-1_x.jpg"></a></div><div class="description_wrapper"><div class="description_content"><div class="description"><p class="title"><a href="http://jo2.org/?9052734" title="古文观止（注音版）——中华传世经典诵读" target="_blank">古文观止（注音版）——中华传世经典</a></p><p class="price"><span class="price_d">¥<em>10.00</em></span><span class="discount">50折</span></p></div></div></div></li><li class="first  detail clearfix hidden" id="img_bang_9052734_0"></li><li id="bang_9052734_0" class=" hidden"><div class="num"><span class="active">1</span></div><div class="title">古文观止（注音版）——中华传</div></li><li class=" detail clearfix hidden" id="img_bang_20086549_1"></li><li id="bang_20086549_1" class=""><div class="num"><span class="active">2</span></div><div class="title">沉思录（有史以来最伟大的作品</div></li><li class=" detail clearfix hidden" id="img_bang_21064341_2"></li><li id="bang_21064341_2" class=""><div class="num"><span class="active">3</span></div><div class="title">让阳光自然播洒：刘有生演讲录</div></li><li class=" detail clearfix hidden" id="img_bang_22569977_3"></li><li id="bang_22569977_3" class=""><div class="num"><span>4</span></div><div class="title">一年级语文下（R）（配人教版</div></li><li class=" detail clearfix hidden" id="img_bang_20542046_4"></li><li id="bang_20542046_4" class=""><div class="num"><span>5</span></div><div class="title">成功无捷径：第56号教室的奇迹</div></li>
+					<li class=" detail clearfix hidden" id="img_bang_9239276_5"></li><li id="bang_9239276_5" class=""><div class="num"><span>6</span></div><div class="title">大国崛起(以历史的眼光和全球</div></li>
+					<li class=" detail clearfix hidden" id="img_bang_20610507_6"></li><li id="bang_20610507_6" class=""><div class="num"><span>7</span></div><div class="title">动物庄园（赠送英文原版）</div></li>
+					<li class=" detail clearfix hidden" id="img_bang_8839174_7"></li><li id="bang_8839174_7" class=""><div class="num"><span>8</span></div><div class="title">股市趋势技术分析(第8版)</div></li><li class=" detail clearfix hidden" id="img_bang_8915220_8"></li><li id="bang_8915220_8" class=""><div class="num"><span>9</span></div><div class="title">论新时期共产党员的修养</div></li>
+					<li class=" detail clearfix hidden" id="img_bang_20072046_9"></li><li id="bang_20072046_9" class=""><div class="num"><span>10</span></div><div class="title">人生的艺术(梁漱溟著)</div></li>
+					</ul>      
+				</div>
+			</div>	
+    </div>
+</div>
+	<h1>以上效果全由tab切换类LixTabs.js实现</h1>
+ <SCRIPT LANGUAGE="JavaScript">
+ <!--
+	Tabs($id('tabLite'),{hdcn:'tablite',hdtagcur:'now',bdcn:'tabcon',event:'click'});
+	var t2=Tabs($id('tab2'),{hdcn:'tabhead',bdcn:'tabcon',bdtagcur:'show',delay:300});
+	var blog=Tabs($id('blog'),{hdcn:'tab-hd',hdtagcur:'current',bdcn:'tab-bd',bdtagcur:'current',auto:4000});
+	var pic = Tabs($id('f_div'),{hdtag:'UL',hdcn:'buttonDiv',hdtagcur:'on',bdcn:'imgDiv',bdtagcur:'now',auto:3000});
+	
+	/* 批量定义 */
+	var as = $C('as','DIV',document);
+	for(var i=0,l=as.length;i<l;i++){
+		as[i].tab = Tabs(as[i],{hdtag:'UL',hdcn:'sn',hdtagcur:'now',bdcn:'imgs',bdtagcur:'cur'});
+	}
+	/* 仿当当图书tab */
+	var book=Tabs($id('book_tab1'),{hdcn:'book_tab1_top',hdtagcur:'active',bdcn:'book_tab1_content',bdtagcur:'show',delay:1});
+		var tab1_0 = Tabs($id('tab1_0'),{hdcn:'book_djtg_tab',hdtagcur:'active',bdcn:'book_djtg_content',bdtagcur:'show'});
+		var tab1_1 = Tabs($id('tab1_1'),{hdcn:'book_tsjc_tab',hdtagcur:'active',bdcn:'book_tsjc_content',bdtagcur:'show'});
+		var tab1_2 = Tabs($id('tab1_2_0'),{hdcn:'book_tjss_tab',hdtagcur:'active',bdcn:'book_tjss_content',bdtagcur:'show'});
+	/* 当当 end */
+ //-->
+ </SCRIPT>
+  
+ </BODY>
+</HTML>

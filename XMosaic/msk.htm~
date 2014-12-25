@@ -135,7 +135,7 @@ var msk = XMosaic('jsF',{pager:'pager',delay:3000,countX:10,countY:1,how:2,order
 
 <script>
 var t = new Date().getTime();
-var msk = XMosaic('jsF',{pager:'pager',delay:3000,countX:10,countY:1,how:2,order:0 });
+var msk = XMosaic('jsF',{pager:'pager',delay:3000,countX:10,countY:1,how:0,order:0 });
 var t1 = new Date().getTime();
 //alert(t1-t);
 //console.log(msk.how);

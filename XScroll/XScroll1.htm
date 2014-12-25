@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -75,7 +75,7 @@ XScroll.js，是一个用来实现单张图片幻灯片切换效果（焦点图�
 	<li>2012-4-19:bug修复。以前如果快速依次划过页码，则会把路过的图片都动画一次。比如你只是路过2，然后跳到3，此时他还会坚持把2的动画执行完。现在改成，马上中断2的动画，开始3的动画</li>
 	<li>2012-4-13:更新至0.2版，实现了how参数值为4的切换效果，并优化了代码效率，总代码量：10.2KB。更新日志</li>
 </ol>
-<!-- 
+<!--
 -1: 无效果，直接切换 <br />
 0：淡入淡出<br />
 1: 前一张下一张同时滚动<br />
@@ -97,7 +97,7 @@ XScroll.js，是一个用来实现单张图片幻灯片切换效果（焦点图�
 var xscroll = XScroll('idSlider2',{auto:3000,how:4, direct:1,Tween:Tween.CircOut,pager:'slider2p'});
 </pre>
 <div class="container" id="idContainer2">
-	
+
 	<ul id="idSlider2">
 		<li><a href="http://jo2.org/"><img src="../images/s1.jpg"/></a></li>
 		<li><a href="http://jo2.org/"><img src="../images/s2.jpg"/></a></li>
@@ -122,7 +122,7 @@ var xscroll = XScroll('idSlider2',{auto:3000,how:4, direct:1,Tween:Tween.CircOut
 		<option value="2">2</option>
 		<option value="3">3</option>
 		<option value="4">4</option>
-	
+
 	</select>
 	direct:
 	<select name="" id="direct">
@@ -136,7 +136,7 @@ var xscroll = XScroll('idSlider2',{auto:3000,how:4, direct:1,Tween:Tween.CircOut
 <script type="text/javascript" src="Tween.js"></script>
 <script type="text/javascript" src="XScroll.js"></script>
 <script type="text/javascript">
-var xscroll = XScroll('idSlider2',{auto :3000,how:4,direct:3,pager:'slider2p'});
+var xscroll = XScroll('idSlider2',{auto :3000,how:4,direct:0,pager:'slider2p'});
 
 document.onload = function (){
 	//alert('sdjkl');
@@ -144,7 +144,7 @@ document.onload = function (){
 	//alert(show.options.length);
 	show.options[xscroll.how].selected = true;
 	direct.options[xscroll.defaults.direct].selected = true;
-	
+
 	show.onchange = function(){
 		xscroll.Pause();
 		clearTimeout(xscroll.timer);
@@ -159,8 +159,8 @@ document.onload = function (){
 		xscroll.init();
 		xscroll.Cont();
 	}
-	
-	
+
+
 }();
 
 </script>

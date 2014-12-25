@@ -16,9 +16,8 @@ var _ = {
 		return defaults;
 	},
 	Bind:function(object, fun) {
-		var args = Array.prototype.slice.call(arguments).slice(2);
 		return function() {
-			return fun.apply(object, args.concat(Array.prototype.slice.call(arguments)));
+			return fun.apply(object, Array.prototype.slice.call(arguments,2));
 		}
 	},
 	Create:function(o,pro){
@@ -54,7 +53,7 @@ var _ = {
 		}
 		arr[cur].className = arr[cur].className.replace(/\s$/g,'') + ' ' + cls;
 	},
-	setAlpha:(function(){ 		
+	setAlpha:(function(){
 		return (-[1,]) ? function (obj,alpha) {
 				obj.style.opacity = alpha * 0.01;
 			} : function(obj,alpha){
@@ -87,7 +86,7 @@ XScroll.main = function(elm,option) {
 	this.how = this.defaults.how;
 	//this.
 	this.auto = this.defaults.auto;
-	
+
 	//console.log(this.step)
 	//console.log(this.fan);
 	this.speed = 1000/this.defaults.fps;
@@ -103,8 +102,8 @@ XScroll.main = function(elm,option) {
 	/* 初始化完毕 */
 	this._time = 0;
 	this.init();
-	
-	
+
+
 }
 XScroll.prototype = {
 	reset:function(ops){
@@ -127,12 +126,12 @@ XScroll.prototype = {
 		while (len-- > 0){
 			items[len].style.cssText = "position:absolute; display:none; z-index:5;top:0;left:0;"
 		}
-		
+
 		_.setCss(items[0],{zIndex:10,display:'block'});
 
 		var drt = this.defaults.direct;
 		this.direct = ['left','top'][drt % 2];
-		
+
 		this.fan = (drt > 1) ? -1 : 1;
 		this.step = this.defaults.step || (drt % 2 ? this.wraper.offsetHeight : this.wraper.offsetWidth);
 		this.step *= this.fan;
@@ -165,7 +164,7 @@ XScroll.prototype = {
 							if(root.defaults.auto) root.auto = true;
 							// root.Cont();
 						},
-						root.pages[i]);	
+						root.pages[i]);
 				})(pl);
 			}
 		}
@@ -197,7 +196,7 @@ XScroll.prototype = {
 			this.fix();
 			this.moving = 1;
 			// this.curS.style[this.direct] = this.curS.e = this.nextS.style[this.direct] = this.nextS.e = 0;
-			
+
 			_.setCss(this.curS,{zIndex:5})
 			_.setCss(this.nextS,{zIndex:10})
 			this.Run.apply(this);
@@ -205,7 +204,7 @@ XScroll.prototype = {
 			this.now = this.next;
 		}
 		//this.how = Math.round(0+Math.random()*3);
-		
+
 	},
 	run:function(elm,callback) {
 		var step = this.step,
@@ -257,10 +256,10 @@ XScroll.prototype = {
 				var curS = this.curS,
 					nextS = this.nextS;
 				curS.style.zIndex = 10;
-				nextS.style.zIndex = 5;	
+				nextS.style.zIndex = 5;
 				curS.e = -step/2;
 				nextS.e = step/2;
-				
+
 				var t = 0,
 					c = curS.e-0,
 					ing = this.ing*2,
@@ -268,7 +267,7 @@ XScroll.prototype = {
 					speed = this.speed,
 					//pos = {	},
 					yes = 1;
-						
+
 					(function runing(){
 						clearTimeout(root.timer);
 						if(yes) {
@@ -276,7 +275,7 @@ XScroll.prototype = {
 								curS.style[direct] = Math.floor(tween(t++,0,c,ing)) +'px';
 								nextS.style[direct] = Math.floor(tween(t++,0,-c,ing))+'px';
 								root.timer = setTimeout(runing,speed);
-								
+
 							} else {
 								yes = 0;
 								t = 0;
@@ -297,11 +296,11 @@ XScroll.prototype = {
 								root.after();
 							}
 						}
-						
+
 					})(); //runing
 			}
 		];
-		
+
 		var t = +new Date();
 		return effects[this.how];
 	},
@@ -316,7 +315,7 @@ XScroll.prototype = {
 			//this.curS.moving =this.nextS.moving = 0;
 			this.Cont();
 		// }
-		
+
 	},
 	End : function  () {
 		this._time = 0;

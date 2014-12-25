@@ -93,7 +93,7 @@ XScroll2.prototype = {
 			W = (root.direct =='left') ? (2*root.step+'px') : null,
 			H = (root.direct =='top') ? (2*root.step+'px') : null,
 			css = fl+"display:none; z-index:5;"+posi;
-		console.log(H);	
+		// console.log(H);	
 		while (len-- > 0){
 			this.items[len].style.cssText = css;
 		}

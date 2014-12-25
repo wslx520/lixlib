@@ -90,12 +90,12 @@ var XScroll2 = XScroll2('idSlider2',{delay:5000,how:0,Tween:Tween.CircOut,pager:
 <div class="container" id="idContainer2">
 	
 	<ul id="idSlider2">
-		<li style=""><a href="http://jo2.org/"><img src="../s1.jpg"/></a>
+		<li style=""><a href="http://jo2.org/"><img src="../images/s1.jpg"/></a>
 			<p>这里是描述，每个不同</p>
 		</li>
-		<li><a href="http://jo2.org/"><img src="../s2.jpg"/></a><p>2这里是描述，每个不同</p></li>
-		<li><a href="http://jo2.org/"><img src="../s3.jpg"/></a><p>33这里是描述，每个不同</p></li>
-		<li><a href="http://jo2.org/"><img src="../s4.jpg"/></a><p>444这里是描述，每个不同</p></li>
+		<li><a href="http://jo2.org/"><img src="../images/s2.jpg"/></a><p>2这里是描述，每个不同</p></li>
+		<li><a href="http://jo2.org/"><img src="../images/s3.jpg"/></a><p>33这里是描述，每个不同</p></li>
+		<li><a href="http://jo2.org/"><img src="../images/s4.jpg"/></a><p>444这里是描述，每个不同</p></li>
 	</ul>
 	<ul id="slider2p" class="num">
 		<li class="on">1</li>
@@ -111,9 +111,9 @@ var XScroll2 = XScroll2('idSlider2',{delay:5000,how:0,Tween:Tween.CircOut,pager:
 <pre>var taobao3 = XScroll2('idSlider4',{direct:1,how:1,delay:3000,pager:'taobaopage'});</pre>
 <div id="taobaolike">
 <ul id="idSlider4">
-	<li><a href="http://jo2.org/"><img src="../s3.jpg"/></a></li>
-	<li><a href="http://jo2.org/"><img src="../s4.jpg"/></a></li>
-	<li><a href="http://jo2.org/"><img src="../s1.jpg"/></a></li>
+	<li><a href="http://jo2.org/"><img src="../images/s3.jpg"/></a></li>
+	<li><a href="http://jo2.org/"><img src="../images/s4.jpg"/></a></li>
+	<li><a href="http://jo2.org/"><img src="../images/s1.jpg"/></a></li>
 </ul>
 <div id="taobaopage">
 	<a href="#" class="on">仿淘宝电器城切换0</a>
@@ -128,8 +128,8 @@ var XScroll2 = XScroll2('idSlider2',{delay:5000,how:0,Tween:Tween.CircOut,pager:
 #taobaolike #taobaopage a.on {opacity:0.8;filter:Alpha(Opacity=80);}
 </style>
 <br />
-<script type="text/javascript" src="Tween.js"></script>
-<script type="text/javascript" src="XScroll21.js"></script>
+<script type="text/javascript" src="../Tween/Tween.js"></script>
+<script type="text/javascript" src="XScroll2.js"></script>
 <script type="text/javascript">
 var xx = XScroll2('idSlider2',{delay:3000,how:1,direct:1,pager:'slider2p',auto:2000});
 xx.atBefore = function fn1 (elem) {
@@ -155,7 +155,7 @@ xx.atEnd = function fn(elem) {
 	fading();
 }
 //var x2 = XScroll2('idSlider3',{direct:0,how:1 });
-// var taobao3 = XScroll2('idSlider4',{direct:1,how:1,pager:'taobaopage'});
+var taobao3 = XScroll2('idSlider4',{direct:1,how:1,pager:'taobaopage'});
 
 </script>
 <div id="footer">

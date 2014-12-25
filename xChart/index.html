@@ -1,0 +1,270 @@
+<!DOCTYPE HTML>
+<html lang="cn">
+<head>
+	<meta charset="UTF-8">
+	<title>xChart.js | Javascript图表工具库 | 脚儿网</title>
+	<style type="text/css">
+	*{margin:0;padding:0;}
+	div.canvas-box {
+		position: relative; display: inline-block;border: 1px solid #e00;
+	}
+	div.canvas-box canvas{
+		
+	}
+	#box {}
+	</style>
+</head>
+<body>
+<div class="canvas-box" id="box">
+	<canvas width="400" height="300" id="canvas">你的浏览器不支持canvas.Your browser haven't support Canvas yet.</canvas>
+</div>
+<div class="canvas-box" id="box-curve">
+	<canvas width="400" height="300" id="canvas-curve">你的浏览器不支持canvas.Your browser haven't support Canvas yet.</canvas>
+</div>
+<div class="canvas-box" id="box-line">
+	<canvas width="400" height="300" id="canvas-line">你的浏览器不支持canvas.Your browser haven't support Canvas yet.</canvas>
+</div>
+<div class="canvas-box" id="box-radar">
+	<canvas width="400" height="300" id="canvas-radar">你的浏览器不支持canvas.Your browser haven't support Canvas yet.</canvas>
+</div>
+<div class="canvas-box" id="box-polar">
+	<canvas width="400" height="300" id="canvas-polar">你的浏览器不支持canvas.Your browser haven't support Canvas yet.</canvas>
+</div>
+<div class="canvas-box" id="box-cake">
+	<canvas width="400" height="300" id="canvas-cake">你的浏览器不支持canvas.Your browser haven't support Canvas yet.</canvas>
+</div>
+<div class="canvas-box" id="box-ring">
+	<canvas width="400" height="300" id="canvas-ring">你的浏览器不支持canvas.Your browser haven't support Canvas yet.</canvas>
+</div>
+
+
+
+</body>
+<script src="xChart.js" type="text/javascript"></script>
+<script type="text/javascript">
+var cvs = document.getElementById('canvas');
+/*console.log(new xChart(cvs).Bars({
+	datas: {
+        // '标签名':值数组,即使只有一个值,也要用数组包起来
+        'jQuery':[22,11,24],
+        'dojo':[23,44],
+        'Mootool':[13,16]
+    }
+ }))
+*/
+new xChart(cvs).Bars(
+	{
+	labels : ['HTML','HTML5','Javascript','CSS','CSS3','Canvas','SVG'],
+	datas: [
+		{
+			fill:"rgba(151,187,205,0.5)",
+			stroke:'rgb(151,187,205)',
+			data:[98,90,95,99,90,90,50]
+		}
+	]
+ },{
+labelLineColor:'#f8f8f8'
+ })
+/**/
+var curve = document.getElementById('canvas-curve');
+
+new xChart(curve).Curve({
+	labels : ['jQuery','dojo','Mootool','Prototype'],
+	datas: [
+		{
+			fill:"rgba(220,220,220,0.3)",
+			stroke:'rgb(220,220,220)',
+			data:[139,162,143,192],
+			point:{
+				fill:"rgba(220,220,220,0.7)",
+				stroke:"#fff"
+			}
+		},	
+		{
+			fill:"rgba(151,187,205,0.3)",
+			stroke:'rgb(151,187,205)',
+			data:[182,123,195,166],
+			point:{
+				fill:"rgba(151,187,205,0.7)",
+				stroke:"#fff"
+			}
+		}
+	]
+},{
+	point:true,
+	pointSize:10,
+	pointStyle:'circle',
+	scaleStart:100,
+	scaleEnd:200
+})
+var line = document.getElementById('canvas-line');
+
+new xChart(line).Line({
+	labels : ['jQuery','dojo','Mootool','Prototype','Backbone','Sizzle'],
+	datas: [
+		{
+			// fill:"rgba(220,220,220,0.3)",
+			stroke:'rgb(220,220,220)',
+			data:[39,62,43,92,37,81],
+			point:{
+				fill:"rgba(220,220,220,0.7)",
+				stroke:"#fff"
+			}
+		},	
+		{
+			// fill:"rgba(151,187,205,0.3)",
+			stroke:'rgb(151,187,205)',
+			data:[82,23,95,66,20,91],
+			point:{
+				fill:"rgba(151,187,205,0.7)",
+				stroke:"#fff"
+			}
+		},	
+		{
+			// fill:"rgba(251,87,205,0.3)",
+			stroke:'rgb(250,129,216)',
+			data:[79,65,39,11,67,76],
+			point:{
+				fill:"rgba(251,87,205,0.7)",
+				stroke:"#fff"
+			}
+		}	
+	]
+},
+{
+	pointStyle:'square',
+	pointSize:10,
+	point:true
+})
+
+var radar = document.getElementById('canvas-radar');
+
+new xChart(radar).Radar({
+	labels : ['jQuery','dojo','Mootool','Prototype','Backbone','Sizzle','Uize'],
+	datas: [
+		{
+			fill:"rgba(220,220,220,0.3)",
+			stroke:'rgb(220,220,220)',
+			data:[39,62,43,92,37,81,12],
+			point:{
+				fill:"rgba(220,220,220,0.7)",
+				stroke:"#fff"
+			}
+		},	
+		{
+			fill:"rgba(151,187,205,0.3)",
+			stroke:'rgb(151,187,205)',
+			data:[82,23,95,66,20,91,82],
+			point:{
+				fill:"rgba(151,187,205,0.7)",
+				stroke:"#fff"
+			}
+		},	
+		{
+			fill:"rgba(251,87,205,0.3)",
+			stroke:'rgb(250,129,216)',
+			data:[29,65,39,11,67,71,29],
+			point:{
+				fill:"rgba(251,87,205,0.7)",
+				stroke:"#fff"
+			}
+		}	
+	]
+},{
+	point:true,
+	pointSize:6,
+	pointStyle:'circle'
+})
+
+var cake = document.getElementById('canvas-cake');
+
+new xChart(cake).Cake([
+		{
+			label:'jQuery',
+			fill:"rgba(220,220,220,0.3)",
+			data:19
+		},	
+		{
+			label:'dojo',
+			fill:"rgba(151,187,205,0.3)",
+			data:42
+		},	
+		{
+			label:'Mootool',
+			fill:"rgba(251,87,205,0.3)",
+			data:59
+		},	
+		{
+			label:'Prototype',
+			fill:"rgba(51,87,205,0.3)",
+			data:20
+		},	
+		{
+			label:'Uize',
+			fill:"rgba(51,187,205,0.3)",
+			data:40
+		}
+	]
+)
+
+var ring = document.getElementById('canvas-ring');
+
+new xChart(ring).Ring([
+		{
+			label:'dojo',
+			fill:"rgba(151,187,205,0.3)",
+			data:92
+		},	
+		{
+			label:'Mootool',
+			fill:"rgba(251,87,205,0.3)",
+			data:59
+		},	
+		{
+			label:'Prototype',
+			fill:"rgba(142,68,173,0.3)",
+			data:40
+		}	
+	]
+)
+var polar = document.getElementById('canvas-polar');
+
+new xChart(polar).Polar([
+		{
+			label:'jQuery',
+			fill:"rgba(220,220,220,0.5)",
+			data:59
+		},	
+		{
+			label:'dojo',
+			fill:"rgba(151,187,205,0.5)",
+			data:42
+		},	
+		{
+			label:'Mootool',
+			fill:"rgba(251,87,205,0.5)",
+			data:79
+		},	
+		{
+			label:'Prototype',
+			fill:"rgba(51,87,205,0.5)",
+			data:90
+		},	
+		{
+			label:'Mootool',
+			fill:"rgba(21,87,5,0.5)",
+			data:49
+		},	
+		{
+			label:'Prototype',
+			fill:"rgba(51,187,205,0.5)",
+			data:39
+		}	
+	]
+,{
+	// scaleLineWidth:2,
+	// scaleLineColor:'#f00'
+})
+
+</script>
+</html>
