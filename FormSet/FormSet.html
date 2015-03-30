@@ -8,55 +8,7 @@
   <meta name="keywords" content="" />
   <meta name="description" content="" />
   <script type="text/javascript">
-var setFormElements = function  (form,obj) {
-		// var res = form.elements,elem;
-		var nul = null;
-		for(var o in obj) {
-			var value = obj[o],elems = form[o];
-			if(value != nul && elems) {
-			
-				if(elems.tagName) {//是单个元素
-					elems = [elems];
-				} 
-				var vObj = nul; //强制nul，不然会把这次的值带到下次循环
-				for(var e = elems.length,elem;e--;) {
-					elem = elems[e];
-					var tagName = elem.tagName,type=elem.type;
-					if(tagName == 'INPUT' && (type==='text' || type==='hidden' || type==='password') || tagName == 'TEXTAREA') {
-						elem.value = value;
-					} else if(type === 'radio'){
-						 elem.checked = value == elem.value; 
-					} else {
-						if(!value.splice) value=[value];
-						if(vObj === nul) {
-							vObj = {};
-							for(var v = value.length;v--;) {
-								vObj[value[v]] = 1;
-							}	
-						}
-						// var 
-						// value = vObj;
-						if(type ==='checkbox') {
-							elem.checked = !!vObj[elem.value];
-						} else if(tagName=='SELECT') {
-							//先判断type，是单选那么就永远是单选；如果不是单选，再判断value，value只有一个则还是单选
-							var one = type === 'select-one' || (value.length<2); 
-							// console.log(elem,vObj,ONE)
-							for(var options = elem.options,o = options.length;o--;) {
-								if(vObj[options[o].value]) {
-									options[o].selected = true;
-									if(one) break;
-								}
-							}
-						} 	
-					}
-					
-				}
-			}
-		}
-	}
-	//压缩版
-	// var setFormElements=function(e,a){var r=null;for(var l in a){var t=a[l],i=e[l];if(t!=r&&i){i.tagName&&(i=[i]);for(var n,o=r,v=r,f=i.length;f--;){n=i[f];var s=n.tagName,c=n.type;if(("INPUT"!=s||"text"!==c&&"hidden"!==c&&"password"!==c)&&"TEXTAREA"!=s){if(t.splice||(t=[t]),o===r){o={};for(var h=t.length;h--;)o[t[h]]=1}if("checkbox"!==c&&"radio"!==c){if("SELECT"==s){v===r&&(v=t.length<2);for(var d=n.options,l=d.length;l--&&(!o[d[l].value]||(d[l].selected=!0,!v)););}}else n.checked=!!o[n.value]}else n.value=t}}}};
+
 var setElement = function  (elem,vv) {
 	if(tagName == 'INPUT'  && (type==='text' || type==='hidden' || type==='password')  || tagName == 'TEXTAREA') {
 		elem.value = vv;
@@ -110,58 +62,67 @@ var FormSet = function  () {
 		
 	}
 	setForm.prototype = {
-		each: function  (fn) {
-			var elems = this.form.elements,len = elems.length,elem;
-			for(;elem = elems[len-=1];fn(elem,elem.name,elem.tagName,elem.type));
+		each: function  (fn,elems) {
+			elems = elems && (elems.tagName ? [elems] : elems) || this.form.elements;
+			// console.log(elems);
+			for(var len = elems.length,elem;elem = elems[len-=1];fn(elem,elem.name,elem.tagName,elem.type));
 		},
-		set: function  (name,value) {
-			var valueisobj = Object.prototype.toString.call(value) === '[object Object]',
-			vv = valueisobj ? value.value : value;
-			this.each(function  (elem,ename,tagName,type) {
-				if(ename == name || elem.id == name) {
-					var vObj = null;
-					if(valueisobj) {
-						if(value.disabled != null) elem.disabled = value.disabled;
-					}
-					if(tagName == 'INPUT' 
-						&& (type==='text' || type==='hidden' || type==='password') 
-						|| tagName == 'TEXTAREA') {
-						elem.value = vv;
-					} else if(type === 'radio' && vv == elem.value){
-						 elem.checked = true; 
-					} else {
-						var vvv = vv.splice ? vv : [vv];
-						if(vObj === null) {
-							vObj = {};
-							for(var v = vvv.length;v--;) {
-								vObj[vvv[v]] = 1;
-							}	
+		set: function  (names,value) {
+			//names is required. but it's could be a string or an object,when it's a object, value will be null
+			if(names+'' === names) {
+				var temp = {};
+				temp[names] = value;
+				names = temp;
+			}			
+			for(var name in names) {
+				var 
+				value = names[name],
+				valueisobj = Object.prototype.toString.call(value) === '[object Object]',
+				vv = valueisobj ? value.value : value;
+				this.each(function  (elem,ename,tagName,type) {
+					if(ename == name || elem.id == name) {
+				// console.log(vv)
+						var vObj = null;
+						if(valueisobj) {
+							if(value.disabled != null) elem.disabled = value.disabled;
 						}
-						// var 
-						// vv = vObj;
-						if(type ==='checkbox') {
-							elem.checked = !!vObj[elem.value];
-						} else if(tagName=='SELECT') {
-							//先判断type，是单选那么就永远是单选；如果不是单选，再判断value，value只有一个则还是单选
-							var one = type === 'select-one' || (vv.length<2); 
-							// console.log(elem,vObj,ONE)
-							for(var options = elem.options,o = options.length;o--;) {
-								if(vObj[options[o].value]) {
-									options[o].selected = true;
-									if(one) break;
-								}
+						if(tagName == 'INPUT' 
+							&& (type==='text' || type==='hidden' || type==='password') 
+							|| tagName == 'TEXTAREA') {
+							elem.value = vv;
+						} else if(type === 'radio'){
+							vv == elem.value && elem.checked = true; 
+						} else {
+							var vvv = vv.splice ? vv : [vv];
+							if(vObj === null) {
+								vObj = {};
+								for(var v = vvv.length;v--;) {
+									vObj[vvv[v]] = 1;
+								}	
 							}
-						} 
+							// var 
+							// vv = vObj;
+							if(type ==='checkbox') {
+								elem.checked = !!vObj[elem.value];
+							} else if(tagName=='SELECT') {
+								//先判断type，是单选那么就永远是单选；如果不是单选，再判断value，value只有一个则还是单选
+								var one = type === 'select-one' || (vv.length<2); 
+								// console.log(elem,vObj,ONE)
+								for(var options = elem.options,o = options.length;o--;) {
+									if(vObj[options[o].value]) {
+										options[o].selected = true;
+										if(one) break;
+									}
+								}
+							} 
+						}
 					}
-				}
-			})
-		},
-		setAll: function  (all) {
-			for(var a in all) {
-				this.set(a,all[a]);
+				},this.elements[name])	
 			}
+			
 		},
-		getFormData: function  (names,isForce) {
+		get: function  (names,isForce) {
+			// 当names为空时，就是get所有的；while names is null, it's will get all values
 			//当没有names参数时，会返回全部formData：一个以name为key的对象；
 			// 当只有一个name字符串时，会返回name等于这个字符串的元素的有效值
 			// 当names是个数组，会返回数组中列出的所有name的表单元素的有效值的formData：一个以name为key的对象
@@ -169,19 +130,17 @@ var FormSet = function  () {
 			// isForce意为是否强行取值，为true时，则不管元素是否有效都会取出来
 			var 
 			nameisstring = 'string' == typeof names,
-			valid = !isForce,
 			result = {},
-			namesObj,
 			arr = (names != null) && (nameisstring ? [names] : names);
 			// console.log(names)
 			if(arr) {
-				namesObj = {};
-				for(var n = arr.length;n--;namesObj[arr[n]] = 1);
+				for(var n = arr.length;n--;this.each(getOne,this.elements[arr[n]]));
+			} else {
+				this.each(getOne);
 			}
-			// console.log(namesObj)
-			this.each(function  (elem,name,tagName,type) {
-				if(isForce) name = name || elem.id;
-				if(!namesObj  || name && namesObj[name]) {
+			function getOne (elem,name,tagName,type) {
+				// if(isForce) name = name || elem.id;
+				if(name || (isForce && (name = elem.id))) {
 					var value = getElemValue(elem,!isForce);
 					// console.log(value)
 					if(value != null) { 
@@ -195,7 +154,7 @@ var FormSet = function  () {
 						}	
 					}
 				}
-			})
+			}
 
 			return nameisstring ? result[names] : result;
 		},
@@ -207,49 +166,18 @@ var FormSet = function  () {
 			return string.slice(0,-1);
 		}
 	}
+	return setForm;
 	return function  (form) {
 		return new setForm(form);
 	}
 }()
 //183行
-var getFormData = function (form) {
-	var elems = form.elements,
-	len=elems.length,
-	elem,name,
-	result = {};
-	for(;elem = elems[len-=1];) {
-		if(elem.name) {
-			// elem = elems[len];
-			var tagName = elem.tagName,type=elem.type,name = elem.name;
-			if(tagName == 'INPUT' && (type==='text' || type==='hidden' || type==='password') || type === 'select-one' || tagName == 'TEXTAREA') {
-				result[name] = elem.value;
-			} else if(type === 'radio') {
-				if(elem.checked ) {
-					result[name] = elem.value;
-				}
-			} else {
-				if(result[name] == null) {
-					result[name] = [];
-				}
-				if(type ==='checkbox' && elem.checked) {
-					result[name].push(elem.value);
-				} else if(tagName=='SELECT') {
-					for(var options = elem.options,o = options.length;o--;) {
-						if(options[o].selected) result[name].push(options[o].value);
-					}
-				}
-			} 
-			
-		}
-	}
-	return result;
-}
 
   </script>
  </head>
 
- <body>
- <form action="" id="form" name="form">
+<body>
+<form action="" id="form" name="form">
  	name叫name: <input type="text" name="name" id="" /> <br />
  	<label for="" name="label" aVc="aVc" Avc="Avc" onclick="console.log(this.getAttribute('avc'))">一个label,有name</label> <br />
  	没有name没有ID:<input type="text" name="" value="没有name没有ID" id="" /> <br />
@@ -284,32 +212,32 @@ var getFormData = function (form) {
  		<option value="44">44</option>
  		<option value="55">55</option>
  		<option value="66">66</option>
- 	</select>
- </form>
+ 	</select> 
+</form>
 item_gl_user_id
 item_gl_company_id
 <br /> 
 <pre>
 	表单元素有"input" ,"select", "textarea", 
 
-form.elements可以取得form中的所有表单元素，即使没有name的。
+	form.elements可以取得form中的所有表单元素，即使没有name的。
 
-form.nameOrId 可以取得form中name为'name'的元素，不管是什么元素
+	form.nameOrId 可以取得form中name为'name'的元素，不管是什么元素
 
-form.  nameOrId  会把所有同名(此id与彼name相同的话，也算同名)的元素放在一起，
+	form.  nameOrId  会把所有同名(此id与彼name相同的话，也算同名)的元素放在一起，
 
-form.elements['idOrName'],这样可以也以ID或name取得一个（或多个）元素
+	form.elements['idOrName'],这样可以也以ID或name取得一个（或多个）元素
 
-所以，表单元素之间的id和name千万不要冲突！
+	所以，表单元素之间的id和name千万不要冲突！
 
-html element的属性名，永远是小写，如：
+	html element的属性名，永远是小写，如：
 
-<label for="" name="label" aVc="aVc" Avc="Avc" onclick="console.log(this.getAttribute('avc'))">一个label,有name</label> 
+	&lt;label for="" name="label" aVc="aVc" Avc="Avc" onclick="console.log(this.getAttribute('avc'))"&gt;一个label,有name&lt;/label&gt; 
 
-这个只有一个叫avc的属性会生效，且是第一个aVc的值
+	这个只有一个叫avc的属性会生效，且是第一个aVc的值
 </pre>
- </body>
- <script>
+</body>
+<script>
 
 var form = document.getElementById('form');
 /*console.log(form.elements)
@@ -327,31 +255,31 @@ setFormElements(form,{
 })*/
 // console.log(obj2str(getFormData(form)))
 
-var fs = FormSet(form);
-fs.setAll({
+var fs = new FormSet(form);
+fs.set({
 	a:[2,3], //复选框值必须用数组，哪怕只有一个
 	radio:2,
 	text_j:'你变了',
 	text1:'this is text1',
-	r:'rr',
+	r:{value:'rr',disabled:true},
 	text:'textttttt',
 	textarea:'skldjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj',
 	select:2,
 	select1:[22,44],
 	hidden:'You can\'t see me!'
 })
-console.log(fs.getFormData())
-fs.set('radio',{value:3,disabled:true})
-console.log(fs.getFormData(['radio','select1','r','text1']))
+console.log(fs.get('text1',true))
+// fs.set('radio',{value:3,disabled:true})
+// console.log(fs.get(['radio','select1','r','text1']))
 
-console.log(fs.getFormData('radio',true))
-console.log(fs.getFormData('a'))
-console.log(fs.getFormData(null,true))
-var ddd = 350000;
-for(var i=0;i<20;i++) {
-	ddd *= 1.04;
-}
-alert(ddd)
+// console.log(fs.get('radio',true))
+// console.log(fs.get('a'))
+// console.log(fs.get(null,true))
+// var ddd = 350000;
+// for(var i=0;i<20;i++) {
+// 	ddd *= 1.04;
+// }
+// alert(ddd)
 // console.log(fs.serialise())
  </script>
 </html>
