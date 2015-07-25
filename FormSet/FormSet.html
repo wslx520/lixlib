@@ -37,10 +37,36 @@ var setElement = function  (elem,vv) {
 	}
 }
 var FormSet = function  () {
+	var slice = [].slice;
 	function setForm (form) {
+		var _isform = form.tagName === 'FORM';
 		this.form = form;
-		this.elements = form.elements;
+		this.elements = _isform ? form.elements : function  () {
+			var res = [],tags = ['input','select','textarea'];
+			for(var i=tags.length;i--;) {
+				var elems = form.getElementsByTagName(tags[i]);
+				try {
+					res = res.concat(slice.call(elems));
+				}catch(e) {
+					for(var e=elems.length;e--;res.push(elems[e]));
+					// res = res.concat()
+				}
+			}
+			for(var i=res.length;i--;) {
+				var rr = res[i]
+				if(rr.id) {
+					res[rr.id] = rr;
+				}
+				if(rr.name) {
+					if(res[rr.name]) res[rr.name].push(rr);
+					else res[rr.name] = [rr];
+				}
+			}
+			console.log( res);
+			return res;
+		}();
 	}
+
 	function getElemValue (elem,valid) {
 		// console.log(!elem.disabled && elem.checked || (elem.type !== 'radio' && elem.type!=="checkbox"),elem);
 		// console.log(!valid || !elem.disabled && (elem.checked || (elem.type !== 'radio' && elem.type!=="checkbox")) ,elem.value);
@@ -69,7 +95,8 @@ var FormSet = function  () {
 		},
 		set: function  (names,value) {
 			//names is required. but it's could be a string or an object,when it's a object, value will be null
-			if(names+'' === names) {
+			// when names is an object,it's each key is a name, and it's each name's value just name's value
+			if('string' === typeof names) {
 				var temp = {};
 				temp[names] = value;
 				names = temp;
@@ -77,11 +104,13 @@ var FormSet = function  () {
 			for(var name in names) {
 				var 
 				value = names[name],
-				valueisobj = Object.prototype.toString.call(value) === '[object Object]',
+				valueisobj = (value != undefined) && Object.prototype.toString.call(value) === '[object Object]',vv;
+
 				vv = valueisobj ? value.value : value;
+				if(vv == null) vv = '';
 				this.each(function  (elem,ename,tagName,type) {
 					if(ename == name || elem.id == name) {
-				// console.log(vv)
+						// console.log(vv)
 						var vObj = null;
 						if(valueisobj) {
 							if(value.disabled != null) elem.disabled = value.disabled;
@@ -91,9 +120,9 @@ var FormSet = function  () {
 							|| tagName == 'TEXTAREA') {
 							elem.value = vv;
 						} else if(type === 'radio'){
-							vv == elem.value && elem.checked = true; 
+							if(vv == elem.value) elem.checked = true; 
 						} else {
-							var vvv = vv.splice ? vv : [vv];
+							var vvv = (vv!= null && vv.splice) ? vv : [vv];
 							if(vObj === null) {
 								vObj = {};
 								for(var v = vvv.length;v--;) {
@@ -216,6 +245,22 @@ var FormSet = function  () {
 </form>
 item_gl_user_id
 item_gl_company_id
+<div style="border: 1px solid #f00;" id="divform">
+	这是个DIV,里面也放了些表单元素
+	<input type="hidden" name="aaa" value="1" />
+	<input type="text" name="ttt" id="" value="ttt" />
+	<input type="password" name="pwd" id="" value="pwd" />
+	<select name="sel" id="">
+		<option value="1">111</option>
+		<option value="2">222</option>
+	</select>
+	<textarea name="ta" id="" cols="30" rows="10">23323</textarea>
+ 	<br />
+ 	<input type="radio" name="radio" id="" value="1" />1
+ 	<input type="radio" name="radio" id="" value="2" />2
+ 	<input type="radio" name="radio" id="" value="3" />3
+ 	<br />
+</div>
 <br /> 
 <pre>
 	表单元素有"input" ,"select", "textarea", 
@@ -224,7 +269,7 @@ item_gl_company_id
 
 	form.nameOrId 可以取得form中name为'name'的元素，不管是什么元素
 
-	form.  nameOrId  会把所有同名(此id与彼name相同的话，也算同名)的元素放在一起，
+	form.nameOrId  会把所有同名(此id与彼name相同的话，也算同名)的元素放在一起，
 
 	form.elements['idOrName'],这样可以也以ID或name取得一个（或多个）元素
 
@@ -281,5 +326,8 @@ console.log(fs.get('text1',true))
 // }
 // alert(ddd)
 // console.log(fs.serialise())
+
+var ds = new FormSet(document.getElementById('divform'));
+ds.set({'ttt':null,'radio':'2'})
  </script>
 </html>
