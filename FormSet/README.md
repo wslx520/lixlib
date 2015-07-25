@@ -7,10 +7,13 @@ var fs = new FormSet(form);
 然后就可以:
 
 fs.set('a','aaa');
+
 这样就会把表单中name或id等于a的元素(无论是什么元素)的值设为aaa,如果对应的元素是select,则会选中value=aaa的那一项
-如果要让名叫a的select选中多个项,则
-fs.set('a',['aaa','bbb']);
+
+如果要让名叫a的select选中多个项,则fs.set('a',['aaa','bbb']);
+
 如果有4个多选框,需要选中其中value=1或2的项,则:
+
 fs.set('a',[1,2]);
 
 
@@ -30,15 +33,23 @@ fs.set({
 
 
 得到某组元素的值(这个值是指:text的值,或select选中项,或checkbox选中项)
+
 fs.get('a');
+
 批量取值:
+
 fs.get(['radio','select1','r','text1'])
+
 取出全部值:
+
 fs.get();
+
 序列化表单值:
+
 fs.serialise()
 
 对表单内所有字段做操作
+
 fs.each(function(elem,elem.name,elem.tagName,elem.type){
 	...
 })
