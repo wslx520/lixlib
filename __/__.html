@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<HTML>
+ <HEAD>
+  <meta charset="UTF-8" />
+  <TITLE>__</TITLE>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <META NAME="Author" CONTENT="">
+  <META NAME="Keywords" CONTENT="">
+  <META NAME="Description" CONTENT="">
+  <style type="text/css">
+  /*未设置宽度或高度时IE中设置透明度无效*/
+  #wrap{position:relative;border:1px solid #f00;height:500px; width:600px;background-color:#567;filter: alpha(opacity=10); opacity: 0.5;}
+  .now{color:#f00;}
+  .bg {background-image:url(images/ex.png);
+	background-position:-22px 33px;
+  }
+  #div2 p:nth-child(3) {
+  	color: #f00;
+  }
+  div + div {
+  	background-color: #abc;
+  }
+  .dd {width: 100px;height: 100px;margin: 10px;padding: 10px;border: 10px solid #ccc; float: left;}
+  </style>
+ </HEAD>
+<BODY>
+<div class="dd" id="dd">dd</div>
+<div id="">
+<h1>__.js,常用函数集</h1>
+<strong>__</strong>
+<p>其本身就是个选择器，只是querySelectorAll的简单调用。使用方法：__('#id .class div')</p>is
+<h2>函数：</h2>
+<strong>__.bind</strong>
+<p>将一个函数绑定到另一个对象上，即转移this的指向.
+<br />
+var fn1 = __.bind(fn,otherobj,arg1,arg2); <br />
+fn1(1,2,3);
+// 实际上fn1接到的参数会是：arg1,arg2,1,2,3
+</p>
+<h2>定时器</h2>
+<strong>__.timer</strong>
+<p>主要解决定时器调用函数无法传参的问题 <br />
+function fn(a,b,c) {console.log(a,b,c)};
+__.timer(fn,1000,1,2,3); //会输出1,2,3
+</p>
+<strong>__.addClass(elem,'cls1 cls2')</strong>
+<p>
+	可同时添加多个className.
+</p>
+<strong>__.hasClass(elem,'cls1 cls2')</strong>
+<p>
+	可同时判断多个.
+</p>
+<strong>__.removeClass(elem,'cls1 cls2')</strong>
+<p>
+	可同时移除多个。
+</p>
+<strong>__.toggleClass</strong>
+<p>
+	不可同时切换多个.__.toggleClass(elem,'cls1')
+</p>
+<strong>getStyle</strong>
+<p>
+	得到元素指定的style: __.getStyle(elm,'border-left');
+</p>
+<strong>getAttr</strong>
+<p>获取元素某属性的值:__.getAttr(elem,'data-id');</p>
+<strong>setAttr</strong>
+<p>获取元素某属性的值:__.setAttr(elem,'data-id',222);</p>
+<strong>removeAttr</strong>
+<p>完全移出元素某属性: __.removeAttr(elem,'disabled');</p>
+<strong>contains</strong>
+<p>判断chi是否被包含在par中：__.contains(par,chi);</p>
+<strong>addEvent</strong>
+<p>添加事件监听</p>
+<strong>removeEvent</strong>
+<p>移出事件监听</p>
+<strong>index</strong>
+<p>得到HTML元素在集合中的位置，可指定集合，如果不指定，则默认获得元素在其所有同级元素间的index：<br />
+__.index(node,list);
+</p>
+<strong>wrap</strong>
+<p></p>
+<strong>__.remove</strong>
+<p>
+	移除html节点：__.remove(elm)
+</p>
+<strong>closest</strong>
+<p>获取elem符合fn执行结果的最近的元素：__.cloest(elem,function(par) {return par.tagName=="DIV";});</p>
+<strong>each</strong>
+<p>遍历一个数据或对象，执行相关函数：__.each(arrOrObjOrHTMLCollection,function(item,i,items){...}</p>
+<strong>trim</strong>
+<p>去除字符串两头空格</p>
+<strong>include</strong>
+<p></p>
+<strong>startWith</strong>
+<p></p>
+<strong>endWith</strong>
+<p></p>
+<strong>extend</strong>
+<p>用后头的对象扩展旧对象：__.extend(old,newo); <br />
+会直接改变原对象，且如果原对象里与新对象冲突的值，会被新对象的值覆盖。</p>
+<strong>merge</strong>
+<p>合并两个对象：__.merge(old,newo); <br />
+合并两个对象并返回一个新对象（不会更改原来的两个对象）</p>
+<strong>isElement</strong>
+<p>判断参数是个html节点</p>
+<strong>isObject</strong>
+<p>判断参数是个Object</p>
+<strong>isString</strong>
+<p>判断参数是字符串</p>
+<strong>isNumber</strong>
+<p>判断参数是个数字</p>
+<strong>isNull</strong>
+<p>判断参数是个空</p>
+<strong>isDate</strong>
+<p>判断参数是个日期</p>
+<strong>isRegexp</strong>
+<p>判断参数是个正则表达式</p>
+<strong>isArray</strong>
+<p>判断参数是个数组</p>
+<strong>isFunction</strong>
+<p>判断参数是个函数</p>
+<strong>typeOf</strong>
+<p>判断参数是以上的哪种类型</p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+<strong></strong>
+<p></p>
+</BODY>
+<script type="text/javascript" src="__.js"></script>
+<script>
+var fn = function  (a,b,c) {
+	console.log(this.a,a,b,c);
+};
+var arr = [1,2,3,4,5];
+// var arr1 = __.clone(arr);
+// console.log(arr,arr1);
+var arrO = [1,2,3,4,5,{a:'aaa',b:[33,22,11]}];
+var arrO1 = __.clone(arrO,true);
+arrO1[5].a = 'AAA';
+arrO1[5].b.push('skdfj')
+console.log(arrO,arrO1);
+var obj = {a:'aaa',b:'bbb',c:[1,2,3],d:{d:'d',e:[12,32]}};
+var obj1 = __.clone(obj,true);
+obj1.c.push(44);
+obj1.d.d = 'D';
+obj1.d.e.push(23);
+console.log(obj,obj1);
+// console.log(__.toCamel('border-left-width'))
+// console.log(__.getStyle(document.getElementById('dd'),'border'))
+// console.log(__.getStyle(document.getElementById('dd'),'border-left'))
+// console.log(__.getStyle(document.getElementById('dd'),'border-left-width'))
+// __.timer(fn,1000,1,2,3)
+// setTimeout 默认不能给fn传参数
+// setTimeout(fn,1000,1,2,3) // IE下只会输出3个undefined,chrome下正常
+var ie = navigator.userAgent.indexOf('MSIE');
+// console.log(navigator.userAgent,ie,' --' ,parseInt(navigator.userAgent.slice(ie+5,ie+8)))
+var ie = navigator.userAgent.indexOf('MSIE');
+		// if (ie>0 && parseInt(navigator.userAgent.slice(ie+5,ie+8)) < 10) {alert(1)}
+</script>
+</HTML>

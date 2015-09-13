@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>es5 新方法兼容至老浏览器</title>
+</head>
+<body>
+	
+	这个脚本能让老旧IE使用一些原生的JS新方法，包括：
+	Object.keys,Object.values,Object.create <br />
+	Array:
+	forEach,map,every,indexOf,lastIndexOf,some,filter,reduce,reduceRight <br />
+	Date.now <br />
+	JSON
+</body>
+<!--[if lte IE 8]>
+<script src="es5.js" type="text/javascript"></script>
+<![endif]-->
+<script>
+var arr = [1,2,3,4,5,6,7,'aaa',2,{a:'aaa'},{a:[43,23,12,4]},2,3,5,7,222];
+var numarr = [1,2,3,4,5,6,7,8,9,0,11,12,13];
+var objarr = [{plus:1},{minus:2},{a:5},{b:1},{plus:10}];
+var strarr = ['a',' ','array',' ','of',' ','string'];
+console.log(Date.now());
+console.log(arr.indexOf(2,2));
+console.log(arr.lastIndexOf(2));
+arr.forEach(function  (a,i,arr) {
+	console.log(a,i);
+});
+console.log(arr.map(function  (a,i,arr) {
+	return a > 2;
+}));
+console.log(arr.every(function  (a,i,arr) {
+	return a > 2;
+}));
+console.log(arr.some(function  (a,i,arr) {
+	return a > 2;
+}));
+console.log(arr.filter(function  (a,i,arr) {
+	return a > 2;
+}));
+console.log(numarr.reduce(function  (pre,cur,i) {
+	console.log(pre,cur)
+	if(typeof cur === 'string'){
+		return pre + cur;
+	} else {
+		return pre - cur;
+	}
+}));
+console.log(numarr.reduceRight(function  (pre,cur,i) {
+	console.log(pre)
+	if(typeof cur === 'number'){
+		return pre - cur;
+	}
+},100));
+</script>
+</html>
