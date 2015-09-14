@@ -22,6 +22,9 @@
   }
   .dd {width: 100px;height: 100px;margin: 10px;padding: 10px;border: 10px solid #ccc; float: left;}
   </style>
+  <!--[if lte IE 8]>
+<script src="../es5/es5.js" type="text/javascript"></script>
+<![endif]-->
  </HEAD>
 <BODY>
 <div class="dd aa cc" id="dd">dd</div>
@@ -104,8 +107,8 @@ __.index(node,list);
 <strong>__.cut(str,len)</strong>
 <p>从字符串str上切掉len长度的字符：<br />
 str = 'asdfghjkl';
-str = __.cut(str,3); //如果是正数，则从字符串前面切掉
-或str = __.cut(str,-3); //如果是负数，则从字符串后面切掉
+str = __.cut(str,3); //fghjkl:如果是正数，则从字符串前面切掉
+或str = __.cut(str,-3); //asdfgh:如果是负数，则从字符串后面切掉
 </p>
 <strong>include</strong>
 <p></p>
@@ -199,5 +202,21 @@ console.log(__.cut(str,-3)); //asdfgh
 // console.log(navigator.userAgent,ie,' --' ,parseInt(navigator.userAgent.slice(ie+5,ie+8)))
 var ie = navigator.userAgent.indexOf('MSIE');
 		// if (ie>0 && parseInt(navigator.userAgent.slice(ie+5,ie+8)) < 10) {alert(1)}
+__.addEvent(document,'keydown',function  (e) {
+	e = e || window.event;
+	console.log(e.which,(e.button |1),e.keyCode);
+})
+__.addEvent(document,'mousedown',function  (e) {
+	e = e || window.event;
+	console.log(e.which,(e.button |1),e.keyCode);
+})
+__.addEvent(document,'mousewheel',function  (e) {
+	e = e || window.event;
+	console.log(e.which,(e.button |1),e.keyCode);
+})
+__.addEvent(document,'DOMMouseScroll',function  (e) {
+	e = e || window.event;
+	console.log(e.which,(e.button |1),e.keyCode);
+})
 </script>
 </HTML>

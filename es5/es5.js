@@ -3,7 +3,7 @@
 * 使用方法：在文档head中写入：
 <!--[if lte IE 8]>
 <script src="es5.js" type="text/javascript"></script>
-<![end if]-->
+<![endif]-->
 */
 !function  (undefined) {
 	

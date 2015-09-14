@@ -6,6 +6,7 @@ var __ = function () {
 	isIE = !-[1,],
 	AP = Array.prototype,
 	slice = AP.slice,
+	toString = Object.prototype.toString,
 	/*主函数*/
 	main = function  (q) {
 		return dom.querySelectorAll(q);
@@ -25,7 +26,6 @@ var __ = function () {
 					return cache = {
 						name:res[1],version:res[2]
 					}
-					break;
 				}
 			}
 		}
@@ -64,15 +64,14 @@ var __ = function () {
 		return !!(par.compareDocumentPosition(chi) & 16);
 	},
 	closest = function  (elm,fn) {
-		var par = null;
 		while(elm) {
 			if(fn(elm)) {
-				par = elm;
-				break;
+				// par = elm;
+				// break;
+				return elm;
 			}
 			elm = elm.parentNode;
 		}
-		return par;
 	},
 	hasClass = function (elm,cls) {
 		cls = cls.split(/\s+/);
@@ -140,7 +139,7 @@ var __ = function () {
 	/*判断*/
 	isFunction = function( f ) {
 	    // return toString.call(f) === "[object Function]";
-	    return typeof f === 'function';
+	    return 'function' === typeof f;
 	},
 	isObject = function  (v) {
 		return toString.apply(v) === '[object Object]';
@@ -411,36 +410,32 @@ var __ = function () {
 		isArray:isArray,
 		isFunction:isFunction,
 		typeOf:typeOf,
+		getBrowser:getBrowser,
 		fixEvent : function  (evt) {
-			var sp = 'stopPropagation',
-			pd = 'preventDefault',
-			tt = 'target';
-			return function  (evt) {
-				evt = evt || window.event;
-				if(!evt[tt]) {
-				  	evt[tt] = evt.srcElement;
-				}
-				if(!evt[sp]) {
-				  	evt[sp] = function  () {
-				   		evt.cancelBubble = true;
-				 	}
-				}
-				if(!evt[pd]) {
-				  	evt[pd] = function  () {
-				   		evt.returnValue = false;
-				  	}
-				}
-				 // 自定义方法，会阻止默认行为，阻止冒泡，
-				if(!evt.stop) {
-				  	evt.stop = function  () {
-				   		evt[pd]();
-				   		evt[sp]();
-				  	}
-				}
-				return evt;
+			evt = evt || window.event;
+			var ie = getBrowser().name = 'MSIE',iev = getBrowser().version;
+			if(ie && iev <9) {
+				evt.target = evt.srcElement;
+				// IE8及以下，evt.button在按下鼠标中键时是4，(evt.button|1)则得到5，所幸的是很少用到按下鼠标中键的事件
+				evt.which = evt.keyCode || (evt.button|1);
+			  	evt.stopPropagation = function  () {
+			   		evt.cancelBubble = true;
+			 	}
+			  	evt.preventDefault = function  () {
+			   		evt.returnValue = false;
+			  	}
+			  	evt.pageX = evt.clientX + document.documentElement.scrollLeft;
+			  	evt.pageY = evt.clientY + document.documentElement.scrollTop;
 			}
-		 
-		}()
+			 // 自定义方法，会阻止默认行为，阻止冒泡，
+			if(!evt.stop) {
+			  	evt.stop = function  () {
+			   		evt.preventDefault();
+			   		evt.stopPropagation();
+			  	}
+			}
+			return evt;
+		}
 	});
 
 	return main;
