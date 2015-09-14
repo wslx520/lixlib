@@ -24,7 +24,7 @@
   </style>
  </HEAD>
 <BODY>
-<div class="dd" id="dd">dd</div>
+<div class="dd aa cc" id="dd">dd</div>
 <div id="">
 <h1>__.js,常用函数集</h1>
 <strong>__</strong>
@@ -42,14 +42,23 @@ fn1(1,2,3);
 <p>主要解决定时器调用函数无法传参的问题 <br />
 function fn(a,b,c) {console.log(a,b,c)};
 __.timer(fn,1000,1,2,3); //会输出1,2,3
+setTimeout(fn,1000,1,2,3) //IE下只会输出3个undefined
 </p>
+<h2>Object</h2>
+<strong>__.extend</strong>
+<p>用后头的newo对象扩展旧对象old：__.extend(old,newo); <br />
+会直接改变原对象，且如果原对象里与新对象冲突的值，会被新对象的值覆盖。</p>
+<strong>merge</strong>
+<p>合并两个对象：__.merge(old,newo); <br />
+合并两个对象并返回一个新对象（不会更改原来的两个对象）</p>
+<h2>DOM</h2>
 <strong>__.addClass(elem,'cls1 cls2')</strong>
 <p>
 	可同时添加多个className.
 </p>
 <strong>__.hasClass(elem,'cls1 cls2')</strong>
 <p>
-	可同时判断多个.
+	可同时判断多个，不过只要一个失败就全失败.
 </p>
 <strong>__.removeClass(elem,'cls1 cls2')</strong>
 <p>
@@ -85,24 +94,26 @@ __.index(node,list);
 <p>
 	移除html节点：__.remove(elm)
 </p>
-<strong>closest</strong>
+<strong>__.closest</strong>
 <p>获取elem符合fn执行结果的最近的元素：__.cloest(elem,function(par) {return par.tagName=="DIV";});</p>
 <strong>each</strong>
 <p>遍历一个数据或对象，执行相关函数：__.each(arrOrObjOrHTMLCollection,function(item,i,items){...}</p>
+<h2>字符串</h2>
 <strong>trim</strong>
 <p>去除字符串两头空格</p>
+<strong>__.cut(str,len)</strong>
+<p>从字符串str上切掉len长度的字符：<br />
+str = 'asdfghjkl';
+str = __.cut(str,3); //如果是正数，则从字符串前面切掉
+或str = __.cut(str,-3); //如果是负数，则从字符串后面切掉
+</p>
 <strong>include</strong>
 <p></p>
 <strong>startWith</strong>
 <p></p>
 <strong>endWith</strong>
 <p></p>
-<strong>extend</strong>
-<p>用后头的对象扩展旧对象：__.extend(old,newo); <br />
-会直接改变原对象，且如果原对象里与新对象冲突的值，会被新对象的值覆盖。</p>
-<strong>merge</strong>
-<p>合并两个对象：__.merge(old,newo); <br />
-合并两个对象并返回一个新对象（不会更改原来的两个对象）</p>
+<h2>常用判断</h2>
 <strong>isElement</strong>
 <p>判断参数是个html节点</p>
 <strong>isObject</strong>
@@ -112,7 +123,7 @@ __.index(node,list);
 <strong>isNumber</strong>
 <p>判断参数是个数字</p>
 <strong>isNull</strong>
-<p>判断参数是个空</p>
+<p>判断参数是不存在(即null或undefined，0或''是有值的)</p>
 <strong>isDate</strong>
 <p>判断参数是个日期</p>
 <strong>isRegexp</strong>
@@ -173,14 +184,18 @@ obj1.c.push(44);
 obj1.d.d = 'D';
 obj1.d.e.push(23);
 console.log(obj,obj1);
+var dd = document.getElementById('dd');
+console.log(__.hasClass(dd,'ddd'))
+str = 'asdfghjkl';
+console.log(__.cut(str,3)); //fghjkl
+console.log(__.cut(str,-3)); //asdfgh
 // console.log(__.toCamel('border-left-width'))
-// console.log(__.getStyle(document.getElementById('dd'),'border'))
+// console.log(__.getStyle(,'border'))
 // console.log(__.getStyle(document.getElementById('dd'),'border-left'))
 // console.log(__.getStyle(document.getElementById('dd'),'border-left-width'))
 // __.timer(fn,1000,1,2,3)
 // setTimeout 默认不能给fn传参数
 // setTimeout(fn,1000,1,2,3) // IE下只会输出3个undefined,chrome下正常
-var ie = navigator.userAgent.indexOf('MSIE');
 // console.log(navigator.userAgent,ie,' --' ,parseInt(navigator.userAgent.slice(ie+5,ie+8)))
 var ie = navigator.userAgent.indexOf('MSIE');
 		// if (ie>0 && parseInt(navigator.userAgent.slice(ie+5,ie+8)) < 10) {alert(1)}

@@ -10,6 +10,29 @@ var __ = function () {
 	main = function  (q) {
 		return dom.querySelectorAll(q);
 	},
+	getBrowser = function  () {
+		var tester = [/(MSIE) (\d)\.(\d)/,
+			/(Firefox)\/(\d{1,2})(\.*\d+)+/,
+			/(Chrome)\/(\d{1,2})(\.*\d+)+/
+			],
+		cache = null; //用来把浏览器信息缓存起来，避免每次都去跑
+		function test () {
+			var len = tester.length,t,res;
+			while(len--) {
+				t = tester[len];
+				if(res = t.exec(navigator.userAgent)) {
+					// console.log(res)
+					return cache = {
+						name:res[1],version:res[2]
+					}
+					break;
+				}
+			}
+		}
+		return function  () {
+			return cache || test();
+		}
+	}(),
 	/*克隆数组或对象*/
 	clone = function  (obj,deep) {
 		var isarr = isArray(obj) ,res;
@@ -53,18 +76,17 @@ var __ = function () {
 	},
 	hasClass = function (elm,cls) {
 		cls = cls.split(/\s+/);
-		var t = true;
 		for(var c=cls.length,ecls = ' '+elm.className+' ';c--;) {
 			if(ecls.indexOf(' '+cls[c]+' ') == -1) {
-				t = false; break;
+				return false;
 			}
 		}
-		return t;		
+		return true;		
 	},
 	addClass = function (elm,cls) {
-		if(!hasClass(elm,cls)) {
+		// if(!hasClass(elm,cls)) {
 			elm.className = __.trim(elm.className)+' '+cls;
-		}		
+		// }		
 	},
 	removeClass = function (elm,cls) {
 		cls = cls.split(/\s+/);
@@ -97,7 +119,8 @@ var __ = function () {
 		elem.parentNode.removeChild(elem);
 	},
 	index = function(node,list) {
-		list = list || node.parentNode.children,index = -1;
+		list = list || node.parentNode.children;
+		var index = -1;
 		for(var l = list.length;l--;) {
 			if(list[l] === node) {
 				// index = l;
@@ -271,7 +294,7 @@ var __ = function () {
 	                    document.documentElement.doScroll('left');
 	                    ready();
 	                } catch (e) {
-	                    util.timer(check, 0);
+	                    setTimeout(check, 0);
 	                }
 	            };
 	            check();
@@ -335,6 +358,10 @@ var __ = function () {
 				return $1.toUpperCase();
 			});
 		},
+		// 直接切掉指定长度的字符，返回切除后剩下的字符串
+		cut: function  (str,len) {
+			return len > 0 ? str.slice(len) : str.slice(0,len);
+		},
 		// 包含子串
 		include : function  (str,substr) {
 			return isString(str) ? str.indexOf(substr) !== -1 : include_A(str,substr);
@@ -365,7 +392,6 @@ var __ = function () {
 		/*timer 支持传参*/
 		timer : function  (fn,time) {
 			var args = slice.call(arguments,2);
-			console.log(args);
 			if(args.length) {
 				return setTimeout(function  () {
 					fn.apply(fn,args);
