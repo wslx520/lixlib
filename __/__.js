@@ -1,6 +1,9 @@
 //常用函数集
+var _$ = function  (id) {
+	return document.getElementById(id);
+}
 var __ = function () {
-	var 
+	var
 	dom = document,
 	body = dom.body,
 	isIE = !-[1,],
@@ -12,20 +15,25 @@ var __ = function () {
 		return dom.querySelectorAll(q);
 	},
 	getBrowser = function  () {
-		var tester = [/(MSIE) (\d)\.(\d)/,
+		var tester = [
+			/Version\/(\d+\.\d+)(?:\.\d+)* (Safari)/,
+			/(Opera).+Version\/(\d+\.\d+)/,
+			/(MSIE) (\d)\.(\d)/,
 			/(Firefox)\/(\d{1,2})(\.*\d+)+/,
 			/(Chrome)\/(\d{1,2})(\.*\d+)+/
 			],
 		cache = null; //用来把浏览器信息缓存起来，避免每次都去跑
 		function test () {
 			var len = tester.length,t,res;
-			while(len--) {
+			for(;len--;) {
 				t = tester[len];
 				if(res = t.exec(navigator.userAgent)) {
 					// console.log(res)
-					return cache = {
-						name:res[1],version:res[2]
-					}
+					return cache = (len>0) ? {
+						name:res[1]-0,version:res[2]
+					}: {
+						name:res[2],version:res[1]-0
+					};
 				}
 			}
 		}
@@ -37,8 +45,7 @@ var __ = function () {
 	clone = function  (obj,deep) {
 		var isarr = isArray(obj) ,res;
 		if(!deep) {
-			if(isarr) return slice.call(obj);
-			return extend({},obj);
+			return isarr ? slice.call(obj): extend({},obj);
 		}
 		if(isarr) {
 			res = [];
@@ -46,15 +53,14 @@ var __ = function () {
 				var ai = obj[i];
 				res.push('object' === typeof ai ? clone(ai,true) : ai);
 			}
-			return res;		
+			return res;
 		} else {
 			res = {};
 			for(var i in obj) {
 				var oo = obj[i];
-				res[i] = 'object' === typeof oo ? clone(oo,true) : oo; 
+				res[i] = 'object' === typeof oo ? clone(oo,true) : oo;
 			}
 			return res;
-			
 		}
 	},
 	/* DOM */
@@ -80,18 +86,18 @@ var __ = function () {
 				return false;
 			}
 		}
-		return true;		
+		return true;
 	},
 	addClass = function (elm,cls) {
 		// if(!hasClass(elm,cls)) {
 			elm.className = __.trim(elm.className)+' '+cls;
-		// }		
+		// }
 	},
 	removeClass = function (elm,cls) {
 		cls = cls.split(/\s+/);
 		cls.forEach(function  (cc,i) {
 			elm.className = elm.className.replace(RegExp('\\b'+cc+'\\b',"g"),'');
-		})				
+		})
 	},
 	addEvent = window.addEventListener? function (elm,act,fn,t) {
 		elm.addEventListener(act,fn,t || false);
@@ -111,7 +117,7 @@ var __ = function () {
 		var idx = index(nodes[0]);
 		for(var n =0,l=nodes.length;n<l;n++) {
 			par.appendChild(nodes[n]);
-		}	
+		}
 		pnode.insertBefore(par,pnode.children[idx]);
 	},
 	remove = function  (elem) {
@@ -135,7 +141,6 @@ var __ = function () {
 		var styles = elm.ownerDocument.defaultView.getComputedStyle(elm, null);
 		return style ? styles[style] : styles;
 	},
-	
 	/*判断*/
 	isFunction = function( f ) {
 	    // return toString.call(f) === "[object Function]";
@@ -144,8 +149,8 @@ var __ = function () {
 	isObject = function  (v) {
 		return toString.apply(v) === '[object Object]';
 	},
-	isArray = function(v){ 
-		return toString.apply(v) === '[object Array]'; 
+	isArray = function(v){
+		return toString.apply(v) === '[object Array]';
 	},
 	isNumber = function  (n) {
 		return typeof n === 'number' ? true : toString.call(obj) == '[object Number]';
@@ -173,10 +178,10 @@ var __ = function () {
 				isArray(obj) ? 'array' :
 				isElement(obj) ? 'element' :
 				isRegexp(obj) ? 'regexp' :
-				isDate(obj) ? 'date' : 
-				isNumber(obj) ? 'number' : 
+				isDate(obj) ? 'date' :
+				isNumber(obj) ? 'number' :
 				isString(obj) ? 'string' : '' ;
-		} 
+		}
 		return t;
 	},
 	/*数组*/
@@ -233,7 +238,6 @@ var __ = function () {
 					aObj[item] = 1;
 				})
 			}
-
 			each_A(options,function  (option,o) {
 				if(isFn) {
 					if(fn(option,o,options) === true) {
@@ -242,11 +246,9 @@ var __ = function () {
 					}
 				} else {
 					var t = option.selected = isArr ? aObj[option.value] ==1 : fn=== option.value;
-					
 					if(t && one) {
 						return false;
 					}
-					
 				}
 			})
 			this.add =  function  (text,value) {
@@ -266,8 +268,7 @@ var __ = function () {
 						}
 					})
 				}
-				
-			} 
+			}
 	}
 	;
 	extend(main,{
@@ -275,7 +276,6 @@ var __ = function () {
 	        var hasReady = false,
 	            list = [],
 	            check;
-
 	        function ready() {
 	            if (!hasReady) {
 	                hasReady = true;
@@ -284,7 +284,6 @@ var __ = function () {
 	                });
 	            }
 	        }
-
 	        if (document.addEventListener) {
 	            document.addEventListener('DOMContentLoaded', ready, false);
 	        } else if (window === top) {
@@ -298,9 +297,7 @@ var __ = function () {
 	            };
 	            check();
 	        }
-
 	        addEvent(window, 'load', ready);
-
 	        return function (func) {
 	            if (hasReady) {
 	                func();
@@ -334,12 +331,12 @@ var __ = function () {
 		addEvent:addEvent,
 		removeEvent:removeEvent,
 		index:index,
-		wrap:wrap,	
+		wrap:wrap,
 		closest:closest,
 		// 方便操作select元素
 		select: function  (sel,fn,through) {
 			return new Select(sel,fn,through);
-		},	
+		},
 		each: function  (arrOrObj,fn,through) {
 			if(isObject(arrOrObj)) {
 				each_O(arrOrObj,fn,through);
@@ -347,7 +344,6 @@ var __ = function () {
 				each_A(arrOrObj,fn,through);
 			}
 		},
-
 		/*字符串实用函数 start*/
 		trim:function (str) {
 			return str.replace(/^\s+/, '').replace(/\s+$/, '');
@@ -380,7 +376,6 @@ var __ = function () {
 		toInt : function  (num) {
 			return parseInt(num,10);
 		},
-		
 		/*将一个函数绑定到另一个作用域，且可指定参数*/
 		bind : function(fun,thisobj) {
 			var args = slice.call(arguments).slice(2);
@@ -397,7 +392,7 @@ var __ = function () {
 				},time)
 			} else {
 				return setTimeout(fn,time);
-			}	
+			}
 		},
 		extend:extend,
 		merge:merge,
@@ -437,8 +432,5 @@ var __ = function () {
 			return evt;
 		}
 	});
-
 	return main;
 }();
-
-

@@ -30,8 +30,9 @@
 <div class="dd aa cc" id="dd">dd</div>
 <div id="">
 <h1>__.js,常用函数集</h1>
+<p>为了兼容请先在旧IE中引入es5.js，如本页源码所示</p>
 <strong>__</strong>
-<p>其本身就是个选择器，只是querySelectorAll的简单调用。使用方法：__('#id .class div')</p>is
+<p>其本身就是个选择器，只是querySelectorAll的简单调用。使用方法：__('#id .class div')</p>
 <h2>函数：</h2>
 <strong>__.bind</strong>
 <p>将一个函数绑定到另一个对象上，即转移this的指向.
@@ -44,14 +45,14 @@ fn1(1,2,3);
 <strong>__.timer</strong>
 <p>主要解决定时器调用函数无法传参的问题 <br />
 function fn(a,b,c) {console.log(a,b,c)};
-__.timer(fn,1000,1,2,3); //会输出1,2,3
+__.timer(fn,1000,1,2,3); //会输出1,2,3 <br />
 setTimeout(fn,1000,1,2,3) //IE下只会输出3个undefined
 </p>
 <h2>Object</h2>
 <strong>__.extend</strong>
 <p>用后头的newo对象扩展旧对象old：__.extend(old,newo); <br />
 会直接改变原对象，且如果原对象里与新对象冲突的值，会被新对象的值覆盖。</p>
-<strong>merge</strong>
+<strong>__.merge</strong>
 <p>合并两个对象：__.merge(old,newo); <br />
 合并两个对象并返回一个新对象（不会更改原来的两个对象）</p>
 <h2>DOM</h2>
@@ -214,9 +215,12 @@ __.addEvent(document,'mousewheel',function  (e) {
 	e = e || window.event;
 	console.log(e.which,(e.button |1),e.keyCode);
 })
+// firefox的onmousewheel
 __.addEvent(document,'DOMMouseScroll',function  (e) {
 	e = e || window.event;
 	console.log(e.which,(e.button |1),e.keyCode);
 })
+var safari = /Version\/(\d+\.\d+)(?:\.\d+)* (Safari)/;
+console.log(safari.exec('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A'),typeof ('7.0'-0))
 </script>
 </HTML>

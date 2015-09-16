@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>loadScript.js测试</title>
+</head>
+<body>
+	loadScript.js测试
+	<br />
+	一个简单的用来动态加载JS文件的代码。无序的。比如：
+	<pre>
+	loadScript(['ok.js','404.js'],function  () {
+		console.log('ok.js is loaded')
+	})
+	loadScript(['http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'],function  () {
+		console.log('jquery on google is loaded')
+	})
+	loadScript('syntax-error.js',function  () {
+		console.log('syntax-error.js is loaded')
+	})
+	</pre>
+	其中第二个是调用的google上的jquery库，很慢，但他不会阻碍前面和后面的JS文件的加载，且加载成功（或失败）后依然会执行回调
+</body>
+<script src="loadScript.js"></script>
+<script>
+	loadScript(['ok.js','404.js'],function  () {
+		console.log('ok.js is loaded')
+	})
+	loadScript(['http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'],function  () {
+		console.log('jquery on google is loaded')
+	})
+	loadScript(['syntax-error.js'],function  () {
+		console.log('syntax-error.js is loaded')
+	})
+</script>
+</html>
