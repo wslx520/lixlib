@@ -87,6 +87,7 @@ var FormSet = function  () {
 		}
 		
 	}
+	function batch()
 	setForm.prototype = {
 		each: function  (fn,elems) {
 			elems = elems && (elems.tagName ? [elems] : elems) || this.form.elements;
@@ -107,18 +108,18 @@ var FormSet = function  () {
 				valueisobj = (value != undefined) && Object.prototype.toString.call(value) === '[object Object]',vv;
 
 				vv = valueisobj ? value.value : value;
-				if(vv == null) vv = '';
 				this.each(function  (elem,ename,tagName,type) {
 					if(ename == name || elem.id == name) {
 						// console.log(vv)
 						var vObj = null;
 						if(valueisobj) {
 							if(value.disabled != null) elem.disabled = value.disabled;
+							if(value.readonly != null) elem.readonly = value.readonly;
 						}
 						if(tagName == 'INPUT' 
 							&& (type==='text' || type==='hidden' || type==='password') 
 							|| tagName == 'TEXTAREA') {
-							elem.value = vv;
+							elem.value = vv ||'';
 						} else if(type === 'radio'){
 							if(vv == elem.value) elem.checked = true; 
 						} else {
@@ -187,8 +188,16 @@ var FormSet = function  () {
 
 			return nameisstring ? result[names] : result;
 		},
+		batch: function (names,attr,tof) {
+			tof = tof==undefined && true;
+			for(var n=0;n<names.length;n++) {
+				this.each(function  (elem) {
+					elem[attr] = tof;
+				},this.elements[names[n]]);
+			}	
+		},
 		serialise: function  () {
-			var string = '',obj = this.getFormData();
+			var string = '',obj = this.get();
 			for(var i in obj) {
 				string+=i+'='+obj[i]+'&';
 			}
@@ -314,6 +323,8 @@ fs.set({
 	hidden:'You can\'t see me!'
 })
 console.log(fs.get('text1',true))
+fs.disable('a,radio,text,r'.split(','),false);
+fs.reset();
 // fs.set('radio',{value:3,disabled:true})
 // console.log(fs.get(['radio','select1','r','text1']))
 
@@ -331,3 +342,4 @@ var ds = new FormSet(document.getElementById('divform'));
 ds.set({'ttt':null,'radio':'2'})
  </script>
 </html>
+

@@ -29,6 +29,7 @@
 *H 24小时制，不补零
 *hh 12小时制，补零
 *h 12小时制，不补零
+*tt 上午下午
 *mm 分，补零
 *m 分，不补零
 *ss 秒 补零
@@ -61,7 +62,6 @@
 
  */
 var DateFormat = function  () {
-    // var dateReg = /yyyy|M|dddd|m|d|q|H|h|MM|mm|S|s|SS|ss/g;
     var 
     dateReg = /y{3,4}|M{1,2}|m{1,2}|d{1,4}|H{1,2}|h{1,2}|s{1,4}|tt|q/g,
     fnLabels = 'yyyy d dddd H m s sss'.split(' '),
@@ -70,8 +70,8 @@ var DateFormat = function  () {
     plus1 = function (m) {return m-0+1;},
     defaultStrings = {
     	dddd :'日 一 二 三 四 五 六'.split(' '),
-    	// M: plus1,
-    	// q: plus1,
+    	M: plus1,
+    	q: plus1,
     	tt: function  (d) {
     		alert(d)
     		return d>1 ? 'PM' : 'AM';
@@ -83,7 +83,7 @@ var DateFormat = function  () {
     		return d.getHours()%12 || 12;
     	},
     	M: function  (d) {
-    		return d.getMonth()+1;
+    		return d.getMonth();
     	},
     	q: function (d) {
     		return Math.floor(d.getMonth()/3);
@@ -123,7 +123,7 @@ var DateFormat = function  () {
     	return format.replace(dateReg,function  (mt) {
 
 			var res = formats[mt](date),todo = options[mt] || defaultStrings[mt],ok;
-			
+			// console.log(mt,todo)
 			return todo ? 
 				typeof todo == 'function' ? todo(res) : todo[res] 
 				: res;
@@ -135,8 +135,15 @@ var DateFormat = function  () {
 var dateFormat = DateFormat();//当前时间，默认格式
 var dateFormat = DateFormat(new Date());//当前时间，默认格式
 var dateFormat = DateFormat(null,'yyyy-MM-dd');//当前时间，默认格式
-var dateFormat = DateFormat(new Date(),'yyyy-M-dd');//当前时间，另一种格式
+var dateFormat = DateFormat(new Date(),'yyyy-M-dd HH:mm');//当前时间，另一种格式
 var df = DateFormat(null,{
+	format: 'yyyy/M/d q天 周dddd tt hh:mm:ss:ssss',
+	q : ['春','夏','秋','冬'],
+	tt:function  (t) {
+		return t>1 ? ( t> 1.5 ? '晚上' : '下午') : ( t> 0.5 ? '上午' : '凌晨');
+	}
+});
+var df1 = DateFormat(null,{
 	format: 'yyyy/M/d q天 周dddd tt hh:mm:ss:ssss',
 	q : ['春','夏','秋','冬'],
 	tt:function  (t) {

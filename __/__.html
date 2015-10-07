@@ -206,20 +206,21 @@ console.log(__.cut(str,-3)); //asdfgh
 var ie = navigator.userAgent.indexOf('MSIE');
 		// if (ie>0 && parseInt(navigator.userAgent.slice(ie+5,ie+8)) < 10) {alert(1)}
 __.addEvent(document,'keydown',function  (e) {
-	e = e || window.event;
+	e = e || __.fixEvent(window.event);
 	console.log(e.which,(e.button |1),e.keyCode);
 })
-__.addEvent(document,'mousedown',function  (e) {
-	e = e || window.event;
-	console.log(e.which,(e.button |1),e.keyCode);
+__.addEvent(document,'mousedown',function  (e) {	
+	console.log(e)
+	e = __.fixEvent(e || window.event);
+	console.log(e.target.tagName,e.which,(e.button |1),e.keyCode);
 })
 __.addEvent(document,'mousewheel',function  (e) {
-	e = e || window.event;
+	e = e || __.fixEvent(window.event);
 	console.log(e.which,(e.button |1),e.keyCode);
 })
 // firefox的onmousewheel
 __.addEvent(document,'DOMMouseScroll',function  (e) {
-	e = e || window.event;
+	e = e || __.fixEvent(window.event);
 	console.log(e.which,(e.button |1),e.keyCode);
 })
 var safari = /Version\/(\d+\.\d+)(?:\.\d+)* (Safari)/;

@@ -69,14 +69,84 @@ var __ = function () {
 	} : function (par,chi) {
 		return !!(par.compareDocumentPosition(chi) & 16);
 	},
-	closest = function  (elm,fn) {
-		while(elm) {
-			if(fn(elm)) {
-				// par = elm;
-				// break;
-				return elm;
+	// 判断DOM节点是否符合指定判断条件
+	is = function  () {
+		var reg = /(^[A-Za-z]+\d?)|(\#|\.)([\w\d-]+)|\[([\w\-\:\d]+)([\!\|\^\$\~]?\=)?([^\s]+)?\]/g;
+		function checkAttr (elm,attr) {
+			// attr is an Object, contains [name],[operator],[value]
+			 //先取出节点对应的属性值
+		    var result = elm.getAttribute(attr.name),
+		    	operator = attr.operator,
+		    	check = attr.value;
+		 
+			// console.log(attr,result)
+		    //看看属性值有木有！
+		    if ( result == null ) {
+		      //如果操作符是不等号，返回真，因为当前属性为空 是不等于任何值的
+		      return operator === "!=";
+		    }
+		    //如果没有操作符，那就直接通过规则了
+		    if ( !operator ) {
+		      return true;
+		    }
+		 
+		    //转成字符串
+		    result += "";
+		 
+		 	// 以下代码摘自jQuery，解释摘自Aaron
+		    
+		    //如果是等号，判断目标值跟当前属性值相等是否为真
+		    return operator === "=" ? result === check :
+		 
+		      //如果是不等号，判断目标值跟当前属性值不相等是否为真
+		      operator === "!=" ? result !== check :
+		 
+		      //如果是起始相等，判断目标值是否在当前属性值的头部
+		      operator === "^=" ? check && result.indexOf( check ) === 0 :
+		 
+		      //这样解释： lang*=en 匹配这样 <html lang="xxxxenxxx">的节点
+		      operator === "*=" ? check && result.indexOf( check ) > -1 :
+		 
+		      //如果是末尾相等，判断目标值是否在当前属性值的末尾
+		      operator === "$=" ? check && result.slice( -check.length ) === check :
+		 
+		      //这样解释： lang~=en 匹配这样 <html lang="zh_CN en">的节点
+		      operator === "~=" ? ( " " + result + " " ).indexOf( check ) > -1 :
+		 
+		      //这样解释： lang=|en 匹配这样 <html lang="en-US">的节点
+		      operator === "|=" ? result === check || result.slice( 0, check.length + 1 ) === check + "-" :
+		      //其他情况的操作符号表示不匹配
+		      false;
+		 
+		}
+		return function  (elem,type) {
+			var res;			
+			var classes = ' '+elem.className+' ';
+			for(;res = reg.exec(type);) {
+				var match = res[0],first = match.substr(0,1);
+				if(first=='#') {
+					if(elem.getAttribute('id') != res[3]) return false;
+				} else if(first=='.') {
+					if(classes.indexOf(' '+res[3]+' ') <0 ) return false;
+				} else if(first=='[') {
+					if(checkAttr(elem,{name:res[4],operator:res[5],value:res[6]})==false) return false;
+				} else {
+					if(elem.tagName !== match.toUpperCase()) return false;
+				}
 			}
-			elm = elm.parentNode;
+			return true;
+		}
+	}(),
+	closest = function  (elm,fn) {
+		var isstring = isString(fn);
+		while(elm = elm.parentNode) {
+			if(isstring) {
+				if(is(elm,fn)) return elm;
+			} else {
+				if(fn(elm)) {
+					return elm;
+				}	
+			}			
 		}
 	},
 	hasClass = function (elm,cls) {
@@ -99,15 +169,57 @@ var __ = function () {
 			elm.className = elm.className.replace(RegExp('\\b'+cc+'\\b',"g"),'');
 		})
 	},
-	addEvent = window.addEventListener? function (elm,act,fn,t) {
-		elm.addEventListener(act,fn,t || false);
-	} : function  (elm,act,fn) {
-		elm.attachEvent('on'+act,fn);
+	fire_ie = function  (evt) {
+		var returnValue = true;
+		// grab the event object (IE uses a global event object)
+		evt = evt || ((this.ownerDocument || this.document || this).parentWindow || window).event;
+		// get a reference to the hash table of event handlers
+		var handlers = this.events[event.type];
+		// execute each event handler
+		for (var i in handlers) {
+			// this.$$handleEvent = handlers[i]; //修复this指向
+			// if (this.$$handleEvent(evt) === false) {
+			if (handlers[i].call(this,evt) === false) {
+				returnValue = false;
+			}
+		}
+		return returnValue;
 	},
-	removeEvent = window.addEventListener ? function (elm,act,fn,t) {
-		elm.removeEventListener(act,fn,t || false);
-	} : function  (elm,act,fn) {
-		elm.detachEvent('on'+act,fn);
+	event_id = 0,
+	addEvent=dom.addEventListener ? function  (el,type,handler) {
+		el.addEventListener(type,handler,false);
+	} : function  (el,type,handler) {
+		if(!handler.$$eventid) handler.$$eventid=event_id+=1;
+		if(!el.events) {el.events = {}};
+		if(!el.events[type]) {el.events[type] = {}};
+		var handlers = el.events[type];
+		handlers[event_id] = handler;
+		el['on'+type] = fire_ie;
+	},
+	removeEvent = dom.addEventListener ? function  (el,type,handler) {
+		el.removeEventListener(type,handler,false);
+	} : function  (el,type,handler) {
+		if(el.events && el.events[type]) delete el.events[type][handler.$$eventid];			
+	},
+	fireEvent = function (el,type,evt) {
+		// 最优先针对 a.click()这种原生事件,但IE下typeof a.click 是object，所以直接判断函数的apply是否存在
+		if(el[type] && el[type].apply) {
+			el[type]();
+		}else if(dom.createEvent) {
+			try {
+				evt = new Event(type); // 现代浏览器
+			}catch(e) {
+				evt = dom.createEvent('HTMLEvents'); //IE9
+				evt.initEvent(type,true,false);
+			}
+			el.dispatchEvent(evt);
+		} else {//IE8及以下
+			// el['on'+type] && el['on'+type]();
+			if(el.events && el.events[type]) {
+				var handlers = el.events[type];
+				for(var i in handlers) handlers[i].call(el);
+			}
+		}	
 	},
 	wrap = function  (nodes,par) {
 		par = par.cloneNode(true);
@@ -308,6 +420,7 @@ var __ = function () {
 	    }()),
 	    clone:clone,
 		hasClass: hasClass,
+		is:is,
 		removeClass: removeClass,
 		addClass: addClass,
 		toggleClass: function (elm,cls) {
@@ -409,7 +522,8 @@ var __ = function () {
 		fixEvent : function  (evt) {
 			evt = evt || window.event;
 			var ie = getBrowser().name = 'MSIE',iev = getBrowser().version;
-			if(ie && iev <9) {
+			console.log(ie,iev)
+			if(ie && iev <10) {
 				evt.target = evt.srcElement;
 				// IE8及以下，evt.button在按下鼠标中键时是4，(evt.button|1)则得到5，所幸的是很少用到按下鼠标中键的事件
 				evt.which = evt.keyCode || (evt.button|1);
@@ -419,8 +533,8 @@ var __ = function () {
 			  	evt.preventDefault = function  () {
 			   		evt.returnValue = false;
 			  	}
-			  	evt.pageX = evt.clientX + document.documentElement.scrollLeft;
-			  	evt.pageY = evt.clientY + document.documentElement.scrollTop;
+			  	evt.pageX = evt.clientX + dom.documentElement.scrollLeft;
+			  	evt.pageY = evt.clientY + dom.documentElement.scrollTop;
 			}
 			 // 自定义方法，会阻止默认行为，阻止冒泡，
 			if(!evt.stop) {
