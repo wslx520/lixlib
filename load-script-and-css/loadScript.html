@@ -19,18 +19,26 @@
 		console.log('syntax-error.js is loaded')
 	})
 	</pre>
-	其中第二个是调用的google上的jquery库，很慢，但他不会阻碍前面和后面的JS文件的加载，且加载成功（或失败）后依然会执行回调
+	其中第二个是调用的google上的jquery库，很慢，但他不会阻碍前面和后面的JS文件的加载，且加载成功（或失败）后依然会执行回调 <br />
+	IE8及以下，是通过 <b>onreadystatechange</b> 事件来判断载入状态，但如果JS文件是404且立即判断得到（本地测试时），则永远不会触发载入完成的事件（不论成功还是失败）。 <br />
+	如果此时同一队列中还有其他正常加载的JS文件，也会判断不到. <br />
+	通常，在服务器环境下测试，IE8及以下不会出现上面的问题，能正常判断。
 </body>
 <script src="loadScript.js"></script>
 <script>
-	loadScript(['ok.js','404.js'],function  () {
+	// 本地存在的JS及远程地址不存在的JS
+	loadScript(['ok.js','http://ab.com/1.js'],function  () {
 		console.log('ok.js is loaded')
+	})
+	// 本地不存在的JS,IE8及以下永远不会提示
+	loadScript(['404.js'],function  () {
+		console.log('ok.js and 404.js is loaded')
 	})
 	loadScript(['http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'],function  () {
 		console.log('jquery on google is loaded')
 	})
-	loadScript(['syntax-error.js'],function  () {
-		console.log('syntax-error.js is loaded')
-	})
+	// loadScript('syntax-error.js',function  () {
+	// 	console.log('syntax-error.js is loaded')
+	// })
 </script>
 </html>

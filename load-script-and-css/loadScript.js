@@ -28,6 +28,7 @@ var loadScript = function  () {
 	        onload();
 	      }
 	    }
+	    s.removeAttribute('defer');
 	    s.src = url;
 	    head.appendChild(s)
 	}
