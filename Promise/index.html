@@ -9,6 +9,21 @@
 </body>
 <script src="promise.js"></script>
 <script>
-	
+    var a = 10000;
+	var pm = new xPromise(function aa (resolve, reject) {
+        if(a<1000) {
+            reject('太小了')
+        } else {
+            setTimeout(function () {
+                resolve(a);
+            },1000)
+        }
+    });
+    console.log(pm)
+    pm.then(function (val) {
+        alert(val);
+    }).catch(function (ee) {
+        alert(ee)
+    })
 </script>
 </html>

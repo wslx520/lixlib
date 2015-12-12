@@ -1,22 +1,124 @@
-var xPromise = function  () {
-	this.then = function (resolve, reject) {
-        var defer = new defer();
-        return defer.promise;
-    }
+// Promise构造函数，接收一个参数：resolver
+// resolver 是一个函数，其有两个参数：resolve, reject
+// 如：
+// function resolver (resolve, reject) {
+//     if(a<3) {
+//         resolve(3);
+//     } else {
+//         reject(1);
+//     }
+// }
+// resolve供resolver成功的时候调用，reject则是resolver解决失败的时候调用
+var xPromise = function  (resolver) {
     var list = [],
         value = null,
         state = null,
-        self = this;
+        self = this,
+        l,ll;
+    // Promise实例对象，会返回一个then方法，then方法可以接收两个参数，依次是功能处理函数onFulfilled，失败处理函数onRejected
+    // then方法执行后，实际上又返回（生成）了一个新的Promise实例
+	this.then = function (onFulfilled, onRejected) {
+        // 这句话其实可以用new xPromise，但self.constructor可以无视xPromise的名字改变的情况
+        return new self.constructor(function(resolve, reject) {
+            // 当然，这个函数就是一个 resolver, 他接收的参数还是两个函数
+            // 此时的handle，是构造函数里面的handle
+          handle(Handler(onFulfilled, onRejected, resolve, reject));
+          // Handler的作用就很显然了，把then方法 接收到的两个参数，与 resolver 接收到的两个参数， 组合起来，供后续调用
+        })
+    }
+    // resolve与reject，都是在构造函数内定义的（每次初始化xPromise，都会重复定义）
+    // resolve与reject，都是先改变状态与值，再执行deferred队列 
+    // 他们的不同点，在于将状态设为成功还是失败
     function resolve (newValue) {
         value = newValue;
         state = true;
-
+        doList();
     }
     function reject (error) {
+        value = error;
         state = false;
+        doList();
     }
-    this.promise = new promise();
+    function handle(deferred) {
+
+        console.log(deferred)
+        // 当状态还是默认状态时，将deferred对象加入队列，就return
+        if (state === null) {
+          list.push(deferred);
+          return;
+        }
+        // 能走到这里，表示state已经改变了
+        setTimeout(function() {
+            // 根据状态，选择调用成功处理函数还是失败处理函数
+            var cb = state ? deferred.onFulfilled : deferred.onRejected;
+            if (cb === null) {
+                // 如果两个函数都没有，则
+                (state ? deferred.resolve : deferred.reject)(value);
+                return;
+            }
+            var ret;
+            try {
+                ret = cb(value);
+            }
+            catch (e) {
+                deferred.reject(e);
+                return;
+            } 
+            deferred.resolve(ret);
+        },0);
+    }
+    function doList () {
+        console.log('do')
+        for(l=0,ll = list.length;l<ll;l++) {
+            handle(list[l]);
+        }
+        list = null;
+    }
+    // 把构造函数内部生成的resolve与reject函数，传入doResolve
+    doResolve(resolver, resolve, reject)
 }
+xPromise.prototype.done = function (onFulfilled) {
+  var self = onFulfilled != undefined ? this.then.call(this, onFulfilled) : this
+  self.then(null, function (err) {
+    setTimeout(function () {
+      throw err;
+    },0)
+  })
+}
+// catch是关键字，在IE下会报语法错误，所以用fail代替
+// xPromise.prototype.catch = 
+xPromise.prototype.fail = function (onRejected) {
+    this.then(null, onRejected);
+}
+function doResolve(resolver, onFulfilled, onRejected) {
+    // done 确保 resolver里的resolve或reject只有一个会执行， 只执行一次
+  var done = false;
+  try {
+    // 前面说了resolver接收两个函数做参数，此时就是在执行 resolver，并生成了两个函数传进去执行
+    // 传给 resolver 的 resolve, reject 两个函数，只是暂时传进去了，但并不会立即执行
+    // 要在resolver内部，调用 resolve 或 reject，才会执行(如开头的例子)
+    resolver(function (value) {
+        // 第一个函数就是resolve
+      if (done) return;
+      done = true;
+      // 在 resolve 被调用时，执行传入 doResolve 函数的 onFulfilled 方法（即成功的回调）
+      onFulfilled(value);
+    }, function (reason) {
+        // 第二个函数就是reject
+      if (done) return;
+      done = true;
+      // 在 reject 被调用时，执行传入 doResolve 函数的 onRejected 方法（即失败的回调）
+      onRejected(reason);
+    })
+  } catch (ex) {
+    // 这表示如果resolver函数执行时遇到错误，也调用 onRejected
+    if (done) return;
+    done = true;
+    onRejected(ex);
+  }
+}
+// 此函数的作用就是返回一个对象，对象保存了传入的4个函数。
+// 在本实现中，此函数返回的对象我们称之为一个deferred对象，每个deferred对象就是包含了这4个函数
 function Handler(onFulfilled, onRejected, resolve, reject) {  
     return {
         onFulfilled: typeof onFulfilled === 'function' ? onFulfilled : null,
