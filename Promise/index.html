@@ -9,8 +9,8 @@
 </body>
 <script src="promise.js"></script>
 <script>
-    var a = 10000;
-	var pm = new xPromise(function aa (resolve, reject) {
+    var a = 100;
+	var pm = new Promise(function aa (resolve, reject) {
         if(a<1000) {
             reject('太小了')
         } else {
@@ -21,9 +21,30 @@
     });
     console.log(pm)
     pm.then(function (val) {
-        alert(val);
-    }).catch(function (ee) {
-        alert(ee)
+        console.log(val);
+    }).fail(function (ee) {
+        console.log(ee)
+    });
+    var p1 = new Promise(function (resolve, reject) {
+    	setTimeout(function () {
+    		resolve(100);
+    	},100)
+    })
+    var p2 = new Promise(function (resolve, reject) {
+    	setTimeout(function () {
+    		resolve(500);
+    	},500)
+    })
+    var p3 = new Promise(function (resolve, reject) {
+    	setTimeout(function () {
+    		resolve(1500);
+    	},1500)
+    })
+    Promise.all([p1,p2,p3]).then(function (list) {
+    	console.log(list);
+    })
+    Promise.race([p1,p2,p3]).then(function (list) {
+    	console.log(list);
     })
 </script>
 </html>
