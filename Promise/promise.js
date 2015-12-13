@@ -9,7 +9,7 @@
 //     }
 // }
 // resolve供resolver成功的时候调用，reject则是resolver解决失败的时候调用
-(function (window) {
+(function (window, nul) {
 	var nativePromise = window.Promise;
 	if(nativePromise) {
 		// 为原生Promise加上 fail 方法，以实现调用方式的统一
@@ -28,7 +28,6 @@
 		// list: deferred对象集
 	    var list = [],
 	    // 用变量保存nul值，可以在压缩代码时进一步减少字符
-	    	nul = null,
 	    // value：用于传入下次调用的值
 	        value = nul,
 	        // state: promise状态
@@ -224,4 +223,4 @@
 	        reject: reject
 	    }
 	}*/	
-}(window));
+}(window, null));
