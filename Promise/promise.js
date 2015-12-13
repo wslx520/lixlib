@@ -27,23 +27,26 @@
 	var Promise = window.Promise = function  (resolver) {
 		// list: deferred对象集
 	    var list = [],
+	    // 用变量保存nul值，可以在压缩代码时进一步减少字符
+	    	nul = null,
 	    // value：用于传入下次调用的值
-	        value = null,
+	        value = nul,
 	        // state: promise状态
-	        state = null,
+	        state = nul,
 	        self = this,
 	        l,ll;
 	    // Promise实例对象，会返回一个then方法，then方法可以接收两个参数，依次是功能处理函数onFulfilled，失败处理函数onRejected
 	    // then方法执行后，实际上又返回（生成）了一个新的Promise实例
 		this.then = function (onFulfilled, onRejected) {
 	        // 这句话其实可以用new Promise，但self.constructor可以无视Promise的名字改变的情况
-	        return new self.constructor(function(resolve, reject) {
+	        // return new self.constructor(function(resolve, reject) {
+	        return new Promise(function(resolve, reject) {
 	            // 当然，这个函数就是一个 resolver, 他接收的参数还是两个函数
 	            // 此时的handle，是构造函数里面的handle
 	          	// handle(Handler(onFulfilled, onRejected, resolve, reject));
 	          	handle({
-			        onFulfilled: isFunction(onFulfilled) ? onFulfilled : null,
-			        onRejected: isFunction(onRejected) ? onRejected : null,
+			        onFulfilled: isFunction(onFulfilled) ? onFulfilled : nul,
+			        onRejected: isFunction(onRejected) ? onRejected : nul,
 			        resolve: resolve,
 			        reject: reject
 			    });
@@ -69,32 +72,29 @@
 		          	then(onFulfilled, onRejected);
 		          }, resolve, reject);
 		        } else {
-		        	_change(true, newValue);	
+		        	state = true;
+					value = newValue;
+					doList();	
 		        }
 		      	
 		    } catch (e) { reject(e); }
 		}
-		// 写个私有函数来改变state, value，及调用doList
-		function _change (stat, val) {
-			state = stat;
-			value = val;
-			doList();
-		}
 	    function reject (error) {
-	        _change(false, error);
+	        state = false;
+			value = error;
+			doList();
 	    }
 	    function handle(deferred) {
-
 	        // console.log(deferred)
 	        // 当状态还是默认状态时，将deferred对象加入队列
-	        if (state === null) {
+	        if (state === nul) {
 	          list.push(deferred);
 	        } else {
 		        // 能走到这里，表示state已经改变了
 		        setTimeout(function() {
 		            // 根据状态，选择调用成功处理函数还是失败处理函数
 		            var cb = state ? deferred.onFulfilled : deferred.onRejected;
-		            if (cb === null) {
+		            if (cb === nul) {
 		                // 如果两个函数都没有，则
 		                (state ? deferred.resolve : deferred.reject)(value);
 		            } else {
@@ -115,7 +115,7 @@
 	        for(l=0,ll = list.length;l<ll;l++) {
 	            handle(list[l]);
 	        }
-	        list = null;
+	        list = nul;
 	    }
 	    // 把构造函数内部生成的resolve与reject函数，传入doResolve
 	    doResolve(resolver, resolve, reject)
@@ -124,7 +124,7 @@
 	Promise.prototype['catch'] = 
 	Promise.prototype.fail = function (onRejected) {
 		// 切记return, 供后续调用
-	    return this.then(null, onRejected);
+	    return this.then(nul, onRejected);
 	}
 	// Promise.all 接收一个promise数组，数组里的每一项都是一个promise（直接量也可以）
 	Promise.all = function (list) {
@@ -162,7 +162,7 @@
 			// 把resolve, reject直接传给 values里的每一项，这样，当其中有一项执行完成，则 resolve就会马上执行
 			for(var i = 0, len = values.length, vv; i < len; i++) {
 				vv = values[i];
-				if(vv != null && isFunction(vv.then)) {
+				if(vv != nul && isFunction(vv.then)) {
 					vv.then(resolve, reject);
 				} else {
 					try{resolve(vv)}
@@ -218,8 +218,8 @@
 	// 在本实现中，此函数返回的对象我们称之为一个deferred对象，每个deferred对象就是包含了这4个函数
 	/*function Handler(onFulfilled, onRejected, resolve, reject) {  
 	    return {
-	        onFulfilled: isFunction(onFulfilled) ? onFulfilled : null,
-	        onRejected: isFunction(onRejected) ? onRejected : null,
+	        onFulfilled: isFunction(onFulfilled) ? onFulfilled : nul,
+	        onRejected: isFunction(onRejected) ? onRejected : nul,
 	        resolve: resolve,
 	        reject: reject
 	    }
