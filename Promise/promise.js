@@ -12,11 +12,17 @@
 (function (window) {
 	var nativePromise = window.Promise;
 	if(nativePromise) {
+		// 为原生Promise加上 fail 方法，以实现调用方式的统一
 		nativePromise.prototype.fail = nativePromise.prototype['catch'];
 		return;
 	}
 	function isFunction (fn) {
 		return typeof fn === 'function';
+	}
+	function getThen (newValue) {
+		if(newValue && isFunction(newValue.then)) {
+			return newValue.then;
+		}
 	}
 	var Promise = window.Promise = function  (resolver) {
 		// list: deferred对象集
@@ -34,50 +40,75 @@
 	        return new self.constructor(function(resolve, reject) {
 	            // 当然，这个函数就是一个 resolver, 他接收的参数还是两个函数
 	            // 此时的handle，是构造函数里面的handle
-	          handle(Handler(onFulfilled, onRejected, resolve, reject));
+	          	// handle(Handler(onFulfilled, onRejected, resolve, reject));
+	          	handle({
+			        onFulfilled: isFunction(onFulfilled) ? onFulfilled : null,
+			        onRejected: isFunction(onRejected) ? onRejected : null,
+			        resolve: resolve,
+			        reject: reject
+			    });
 	          // Handler的作用就很显然了，把then方法 接收到的两个参数，与 resolver 接收到的两个参数， 组合起来，供后续调用
 	        })
 	    }
 	    // resolve与reject，都是在构造函数内定义的（每次初始化Promise，都会重复定义）
 	    // resolve与reject，都是先改变状态与值，再执行deferred队列 
 	    // 他们的不同点，在于将状态设为成功还是失败
-	    function resolve (newValue) {
+	    /*function resolve (newValue) {
 	        value = newValue;
 	        state = true;
 	        doList();
-	    }
+	    }*/
+	    function resolve(newValue) {
+		    try { //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+		      	if (newValue === self) throw new TypeError('A promise cannot be resolved with itself.');
+		      	var then = getThen(newValue);
+		      	if (then) {
+		          // doResolve(then.bind(newValue), resolve, reject);
+		          doResolve(function (onFulfilled, onRejected) {
+		          	// then.apply(newValue, arguments);
+		          	then(onFulfilled, onRejected);
+		          }, resolve, reject);
+		        } else {
+		        	_change(true, newValue);	
+		        }
+		      	
+		    } catch (e) { reject(e); }
+		}
+		// 写个私有函数来改变state, value，及调用doList
+		function _change (stat, val) {
+			state = stat;
+			value = val;
+			doList();
+		}
 	    function reject (error) {
-	        value = error;
-	        state = false;
-	        doList();
+	        _change(false, error);
 	    }
 	    function handle(deferred) {
 
 	        // console.log(deferred)
-	        // 当状态还是默认状态时，将deferred对象加入队列，就return
+	        // 当状态还是默认状态时，将deferred对象加入队列
 	        if (state === null) {
 	          list.push(deferred);
-	          return;
-	        }
-	        // 能走到这里，表示state已经改变了
-	        setTimeout(function() {
-	            // 根据状态，选择调用成功处理函数还是失败处理函数
-	            var cb = state ? deferred.onFulfilled : deferred.onRejected;
-	            if (cb === null) {
-	                // 如果两个函数都没有，则
-	                (state ? deferred.resolve : deferred.reject)(value);
-	                return;
-	            }
-	            var ret;
-	            try {
-	                ret = cb(value);
-	            }
-	            catch (e) {
-	                deferred.reject(e);
-	                return;
-	            } 
-	            deferred.resolve(ret);
-	        },0);
+	        } else {
+		        // 能走到这里，表示state已经改变了
+		        setTimeout(function() {
+		            // 根据状态，选择调用成功处理函数还是失败处理函数
+		            var cb = state ? deferred.onFulfilled : deferred.onRejected;
+		            if (cb === null) {
+		                // 如果两个函数都没有，则
+		                (state ? deferred.resolve : deferred.reject)(value);
+		            } else {
+			            try {
+			                var ret = cb(value);
+			            	deferred.resolve(ret);
+			            }
+			            catch (e) {
+			                deferred.reject(e);
+			            } 	
+		            }
+		            
+		        },0);	
+	        }	        
 	    }
 	    function doList () {
 	        // console.log('do')
@@ -89,18 +120,11 @@
 	    // 把构造函数内部生成的resolve与reject函数，传入doResolve
 	    doResolve(resolver, resolve, reject)
 	}
-	Promise.prototype.done = function (onFulfilled) {
-	  var self = onFulfilled != undefined ? this.then.call(this, onFulfilled) : this
-	  self.then(null, function (err) {
-	    setTimeout(function () {
-	      throw err;
-	    },0)
-	  })
-	}
 	// catch是关键字，在IE下会报语法错误，所以用fail代替
-	// Promise.prototype.catch = 
+	Promise.prototype['catch'] = 
 	Promise.prototype.fail = function (onRejected) {
-	    this.then(null, onRejected);
+		// 切记return, 供后续调用
+	    return this.then(null, onRejected);
 	}
 	// Promise.all 接收一个promise数组，数组里的每一项都是一个promise（直接量也可以）
 	Promise.all = function (list) {
@@ -111,19 +135,13 @@
 			var remaining = args.length;
 			function res(i, val) {
 				try {
-					if (val && (typeof val === 'object' || isFunction(val))) {
-						if(isFunction(val.then)) {
-							// 构造了一个resolve传给promise的then
-							// 此函数里又会回调res函数，并依然传入 i, val
-							// 但 val 已经是resolve接收到的值了
-							val.then(function (value) { res(i, value) }, reject);
-							return;
-						}
-						var then = val.then;
-						if (isFunction(then)) {
-							then.call(val, function (value) { res(i, value) }, reject);
-							return;
-						}
+					var then = getThen(val);
+		      		if (then) {
+						// 构造了一个resolve传给promise的then
+						// 此函数里又会回调res函数，并依然传入 i, val
+						// 但 val 已经是resolve接收到的值了
+						then(function (value) { res(i, value) }, reject);
+						return;
 					}
 					args[i] = val;
 					if (--remaining === 0) {
@@ -198,12 +216,12 @@
 	}
 	// 此函数的作用就是返回一个对象，对象保存了传入的4个函数。
 	// 在本实现中，此函数返回的对象我们称之为一个deferred对象，每个deferred对象就是包含了这4个函数
-	function Handler(onFulfilled, onRejected, resolve, reject) {  
+	/*function Handler(onFulfilled, onRejected, resolve, reject) {  
 	    return {
 	        onFulfilled: isFunction(onFulfilled) ? onFulfilled : null,
 	        onRejected: isFunction(onRejected) ? onRejected : null,
 	        resolve: resolve,
 	        reject: reject
 	    }
-	}	
+	}*/	
 }(window));
