@@ -5,7 +5,7 @@
 	<title>Promise原理及实现</title>
 </head>
 <body>
-	
+	Deferred对象很好用，比Promise好用。其实他也是个promise
 </body>
 <script src="promise.js"></script>
 <script>
@@ -26,7 +26,7 @@ function output(value) {
 var promise = Promise.resolve(1);
 promise
  .then(increment)
- // dobleUp 返回了一个promise, 原生Promise正常执行，但自实现的Promise就出问题了
+ // dobleUp 返回了一个promise, 原生Promise正常执行，但自实现的Promise就出问题了(已改进，resolve的问题)
  .then(doubleUp)
  .then(output)
  .fail(function(error){
@@ -49,21 +49,29 @@ promise
     }).fail(function (ee) {
         console.log(ee)
     });
-    console.log(11111111111)
+    console.log(11111111111);
     var p1 = new Promise(function(resolve, reject) { 
-	  setTimeout(resolve, 1000, "one"); 
+	  setTimeout(function () {
+            resolve("one")
+      }, 1000); 
 	}); 
 	var p2 = new Promise(function(resolve, reject) { 
-	  setTimeout(resolve, 2000, "two"); 
+	  setTimeout(function () {
+            resolve("two")
+      }, 2000); 
 	});
 	var p3 = new Promise(function(resolve, reject) {
-	  setTimeout(resolve, 3000, "three");
+	  setTimeout(function () {
+            resolve("three")
+      }, 3000);
 	});
 	var p4 = new Promise(function(resolve, reject) {
-	  setTimeout(resolve, 4000, "four");
+	  setTimeout(function () {
+            resolve("four")
+      }, 4000);
 	});
 	var p5 = new Promise(function(resolve, reject) {
-	  reject("reject");
+	  reject("reject p5");
 	});
     Promise.all([p1,p2,p3,p4,p5]).then(function (list) {
     	console.log(list);
@@ -73,5 +81,20 @@ promise
     Promise.race([p1,p2,p3,p4]).then(function (list) {
     	console.log(list);
     })
+
+    // d1是一个比较正常的function，使用Deferred对象，同样实现了Promise类似的调用链方式
+    var d1 = function (dd) {
+        var defer = new Deferred();
+        setTimeout(function () {
+            defer.resolve(dd);
+        },1234);
+        // 实际上依然是返回了一个promise
+        return defer.promise;
+    }
+
+    d1('deferred').then(function (v) {
+        console.log(v);
+    })
+
 </script>
 </html>
