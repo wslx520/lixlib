@@ -1,7 +1,8 @@
-var SS,
-simpleSelector = SS = function  () {
+var ss,
+simpleSelector = ss = function  () {
 	var 
 	dom = document,
+    html = dom.documentElement,
 	body = dom.body,
 	undif,
 	nativeQuery = dom.querySelectorAll,
@@ -11,6 +12,7 @@ simpleSelector = SS = function  () {
 	routineStr = '[\\w-_]+',
 	attrStr = '\\[([\\w-_]+)([\\!\\*\\^\\$\\~|]?\\=)?(\\w+)?\\]',
 	characters = '',
+    validNodeIndex = [],
 	regexp = function  (str,gi) {
 		return new RegExp(str,gi||'');
 	},
@@ -55,13 +57,14 @@ simpleSelector = SS = function  () {
 	: function (cls,tag,par,attr) {
 		var list = byTag(tag || '*',par),
 			resultArr = [],			
-			g,i, item,ifattr = !!attr;
+			g,i, item, className,
+            ifattr = !!attr;
 		cls = trim(cls).split(blank);
 		for (i = 0; item = list[i++]; ) {
 			if(ifattr && !checkAttr(item,attr)) {
 				continue;
 			}
-			var className = ' '+item.className+' ', f = 1;
+			className = ' '+item.className+' ', f = 1;
 			for(g=cls.length;g--;) {
 				//先判断class字符串是不是空的，以防出现传首尾有空格的参数'a b c   '时判断出错
 				if(className.indexOf(' '+cls[g]+' ') == -1) {
@@ -111,13 +114,13 @@ simpleSelector = SS = function  () {
 		class: function  (elm,str) {
 			var eClasses = elm.className,
 			str = str.split(blank),
-			yes = true;
-			for(var s=str.length;s--;) {
+            s=str.length;
+			for(;s--;) {
 				if(eClasses.search(regexp('\\b'+str[s]+'\\b')) === -1) {
-					yes = false; break;
+					return false;
 				}
 			}
-			return yes;
+			return true;
 		},
 		tag: function  (elm,str) {
 			return elm.tagName === str.toUpperCase();
@@ -136,12 +139,8 @@ simpleSelector = SS = function  () {
 		'nth-child': function  (argument) {
 			// body...
 		}
-	}
-	;
-	// 获取上个DOM兄弟节点
-	function getPrevNode (elem) {
-		
-	}
+	};
+
 	// 获取兄弟节点（可前可后）
 	function getNode (elem,dir) {
 		dir = dir || 'nextSibling';
@@ -156,16 +155,10 @@ simpleSelector = SS = function  () {
 		while(p) {
 			if(isNode(p)) {
 				return p;
-				break;
 			}
 			p = p[dir];
 		}
 		return null;
-	}
-
-	// 获取下个兄弟DOM节点
-	function getNextNode (elem) {
-		
 	}
 
 	function isNode (el) {
@@ -186,11 +179,12 @@ simpleSelector = SS = function  () {
 	function matcher (str,i,strArr) {
 		var prop = {
 			string: str
-		},res;
+		},res, classes, id;
 		for(var i in selectorReg) {
 			res = selectorReg[i].exec(str);
 			if(res) {
-				var classes = id = '';
+				classes = '';
+                id = '';
 				prop.type = i;
 				prop.id = (i==='id') ? res[0].slice(1) : (id=str.match(selectorFilter.id)) && id[0].slice(1);
 				
@@ -216,14 +210,13 @@ simpleSelector = SS = function  () {
 		}
 		// console.log(fns)
 		return function  (elm) {
-			var yes=true;
 			for(var f=fns.length;f--;) {
 				// console.log(fns[f])
 				if(false === fns[f](elm,prop[fns[f].type])) {
-					yes = false; break;
+					return false;
 				}
 			}
-			return yes;
+			return true;
 		}
 	}
 	// 主函数
@@ -289,10 +282,11 @@ simpleSelector = SS = function  () {
 			} else if(prop.tag){
 				tempPool = byTag(prop.tag);
 			}
-			console.log(tempPool)
+			// console.log(prop, tempPool)
 			// 对元素集做预先过滤
 			tempPool = checkList(tempPool,prop);
 			// 再往上级过滤
+            // res = ss.length ? filterElements_old(tempPool,ss) : tempPool;
 			res = ss.length ? filterElements(tempPool,ss) : tempPool;
 			// console.log(prop,res)
 		}
@@ -303,31 +297,30 @@ simpleSelector = SS = function  () {
 		type = prop.type,
 			// 得到要检查的属性
 		will = function  () {
-			var r =[];
-			for(var p in prop) {
+			var r =[], p;
+			for(p in prop) {
 				if(p!== 'string' && p!== 'type' && p !==prop['type'] && prop[p]) {
 					r.push(p);
 				}
 			}
 			return r;
 		}();
-		console.log(prop,will)
+		// console.log(prop,will)
 		// 如果没有要检查的属性，就直接返回原list
 		if(will.length<1) return list;
-		for(var i=0,l=list.length,res = [],ll;i<l;i++) {
+        var i=0,l=list.length,res = [],ll,
+            t, w, p, pp;
+		for(;i<l;i++) {
 			ll = list[i];
-			var t = true;
-			for(var w=will.length;w--;) {
-				var p = will[w], pp = prop[p];
-				if(pp) {
-					// console.log(p,filterFns[p](ll,pp))
-					if(filterFns[p](ll,pp) == false) {
-						t = !t;
-						break;
-					}
+			for(t = true, w=will.length;w--;) {
+				p = will[w], pp = prop[p];
+                // console.log(p,  pp)
+				if(pp && filterFns[p](ll,pp) == false) {
+					t = !t;
+					break;
 				}
 			}
-			if(t) res.push(ll);
+			t && res.push(ll);
 		}
 		return res;
 	}
@@ -378,7 +371,8 @@ simpleSelector = SS = function  () {
 	      false;
 	 
 	}
-	function  filterElements(list,ss) {
+	function filterElements(list,ss) {
+        // console.log(ss)
 		// 此时的ss是剩下的选择器字符串
 		var str = ss.pop(),
 			// 这样写比用正则或indexOf快得多
@@ -389,34 +383,100 @@ simpleSelector = SS = function  () {
 			prop = matcher(str),
 			fn = matchFilter(prop),
 			res = [],
-			l=0,ll = list.length
+			l=0,ll,
+            elm, par, 
+            validNodeIndex, vi, vali
 		;
-		console.log(str,operator)
 		// 如果取得的字符段是关系符，则再进一步取下一字符段
 		if(operator) {
-			if(operator !== '>') {target = 'previousSibling';}
+			if(operator !== '>')  {target = 'previousSibling';}
 			justOne = operator !== '~';
 		} 
-		// console.log(list);
-		for(;l<ll;l++) {
-			var elm = list[l],par = elm[target];
-
-					// console.log(target,par,justOne)
-			while(par && par !== dom) {
-				if(par.nodeType==1) {
-					if(fn(par) === true) {
-						res.push(elm);
-						break;	
-					}
-					if(justOne) {
-						break;
-					}					
-				}
-				par = par[target];
-			}
-		}
-		return ss[0] && res[0] ? filterElements(res,ss) : res;
+        if(!list.validNodeIndex) {
+            list.validNodeIndex = [];
+            // list.validNodeIndex.length = list.length;
+        }
+        validNodeIndex = list.validNodeIndex;
+        ll = validNodeIndex.length || list.length;
+        // console.log(list);
+        for(;l<ll;l++) {
+            vi = validNodeIndex[l];
+            // if(vi === false) continue;
+            if(vi !== false) {
+            elm = list[l];
+            par = elm[target];
+            vali = false;
+            // console.log(target,par,justOne)
+            while(par && par.nodeType==1) {
+                if(par === dom.body || par === html) {
+                    break;
+                }
+                if(fn(par) === true) {
+                    vali = true;
+                    // 如果已经没有过滤条件了，则可以生成最终节点数组了
+                    if(ss.length === 0) {
+                        res.push(elm);
+                    }                            
+                    break;  
+                }
+                if(justOne) {
+                    break;
+                }
+                par = par[target];
+            }    
+            validNodeIndex[l] = vali;    
+            }
+            
+        }
+        if(!ss.length) {
+            delete list.validNodeIndex;
+            return res.length ? res : null;
+        } else {
+            return filterElements(list, ss);
+        }
 	}
+    function filterElements_old(list,ss) {
+        // 此时的ss是剩下的选择器字符串
+        var str = ss.pop(),
+            // 这样写比用正则或indexOf快得多
+            operator = (str==='>' || str==='~' || str === '+') && str,
+            str = operator ? ss.pop() : str,
+            target = 'parentNode',
+            justOne, //是否查找到一个元素就停止
+            prop = matcher(str),
+            fn = matchFilter(prop),
+            res = [],
+            l=0,ll = list.length,
+            elm, par
+        ;
+        if(!list.validNodeIndex) {
+            list.validNodeIndex = [];
+        }
+        // 如果取得的字符段是关系符，则再进一步取下一字符段
+        if(operator) {
+            if(operator !== '>')  {target = 'previousSibling';}
+            justOne = operator !== '~';
+        } 
+        // console.log(list);
+        for(;l<ll;l++) {
+            elm = list[l],par = elm[target];
+            // console.log(target,par,justOne)
+            while(par && par !== dom) {
+                if(par.nodeType==1) {
+                    if(fn(par) === true) {
+                        res.push(elm);
+                        break;  
+                    }
+                    if(justOne) {
+                        break;
+                    }                   
+                }
+                par = par[target];
+            }
+        }
+        // 根据选择器字符串剩余，选择递归过滤或返回结果
+        return ss[0] && res[0] ? filterElements_old(res,ss) : res;
+    }
 	return selector;
 }();	
 

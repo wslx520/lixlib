@@ -5,10 +5,13 @@
 	<title>Promise原理及实现</title>
 </head>
 <body>
-	Deferred对象很好用，比Promise好用。其实他也是个promise
+	Deferred对象很好用，比Promise好用。其实他也是个promise <br />
+    Promise用法需要使用new Promise(fn)把原始的函数包起来，<br />
+    而Deferred对象，则可以在一个正常的函数内声明，而不需要把整个函数包起来
 </body>
 <script src="promise.js"></script>
 <script>
+// 接收一个value，返回一个promise
 function doubleUp(value) {
 	var retPromise = new Promise(function (resolve, reject) {
        // reject(new Error("this promise is rejected"));
