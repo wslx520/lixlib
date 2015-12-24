@@ -16,11 +16,11 @@ simpleSelector = ss = function  () {
 	regexp = function  (str,gi) {
 		return new RegExp(str,gi||'');
 	},
-	// 只有一个选择器，如#id,.class,div,div.class
+	// 只有一个选择器，如#id,.classes,div,div.classes
 	simpleReg = /^([\w-_]+)?(#|\.)?([\w-_]+)$/,
 	selectorReg = {
 		id:regexp('^#'+letterStr+'[\\w-_\\:\\.]*'),
-		class:regexp('^\\.'+letterStr+'[\\w-_\\:\\.]*'),
+		classes:regexp('^\\.'+letterStr+'[\\w-_\\:\\.]*'),
 		tag:regexp('^'+letterStr+'\+[1-6]?'),
 		// attr:/^\[([\w-_]+)([\!\*\^\$\~\|]?\=)?(\w+)?\]/,
 		attr:regexp('^'+attrStr),
@@ -32,9 +32,20 @@ simpleSelector = ss = function  () {
 	},
 	selectorFilter = {
 		id: /#([\w-_])+/,
-		class: /\.\w+/g,
+		classes: /\.\w+/g,
 		attr:regexp(attrStr,'g')
 	},
+    nodesToArray = function(nodes) {
+        try {
+            return Array.prototype.slice.call(nodes);
+        } catch (e) {
+            var res = [];
+            for(var n=0, nl = nodes.length; n< nl; n++) {
+                res.push(nodes[n]);
+            }
+            return res;
+        }
+    },
 	byId= function (id){
 		return dom.getElementById(id);
 	},
@@ -77,7 +88,7 @@ simpleSelector = ss = function  () {
 	},
 
 	GET = {
-		id:byId,tag:byTag,class:byClass,name:byName
+		id:byId,tag:byTag,classes:byClass,name:byName
 	},
 	trim = function  (str) {
 		return str.replace(/^\s+/,'').replace(/\s+$/,'');
@@ -111,7 +122,7 @@ simpleSelector = ss = function  () {
 		id: function  (elm,str) {
 			return elm.getAttribute('id') === str;
 		},
-		class: function  (elm,str) {
+		classes: function  (elm,str) {
 			var eClasses = elm.className,
 			str = str.split(blank),
             s=str.length;
@@ -189,7 +200,7 @@ simpleSelector = ss = function  () {
 				prop.id = (i==='id') ? res[0].slice(1) : (id=str.match(selectorFilter.id)) && id[0].slice(1);
 				
 				prop.tag = i==='tag' && res[0];
-				prop.class = (classes = str.match(selectorFilter.class)) && (classes+"").replace(',','').replace(/\./g,' ');
+				prop.classes = (classes = str.match(selectorFilter.classes)) && (classes+"").replace(',','').replace(/\./g,' ');
 				prop.attr = attrMatcher(str);
 				if(prop.attr && prop.attr.name=='name' && prop.attr.operator=='=' && prop.attr.value) {
 					prop.type='name';
@@ -271,14 +282,14 @@ simpleSelector = ss = function  () {
 			} else if(prop.type === 'name') {
 				// 针对name做特别处理
 				tempPool = byName(prop.attr.value);
-			} else if(prop.class) {
+			} else if(prop.classes) {
 				// 如果有tag，则byClass就会在返回前循环一遍以判断tag符合与否。
 				// 如果此时除了tag和class外，还有attribute，就需要进一步过滤
 				// 为提高效率，此时可以加入回调函数判断attribute，供循环时调用，进一步剔除不符合的元素
 				// 此时不过滤，后面还是要循环过滤，但就多一次循环
 				var fn;
 				
-				tempPool = byClass(prop.class,prop.tag,doc,prop.attr);
+				tempPool = byClass(prop.classes,prop.tag,doc,prop.attr);
 			} else if(prop.tag){
 				tempPool = byTag(prop.tag);
 			}
@@ -287,7 +298,9 @@ simpleSelector = ss = function  () {
 			tempPool = checkList(tempPool,prop);
 			// 再往上级过滤
             // res = ss.length ? filterElements_old(tempPool,ss) : tempPool;
+            tempPool.validNodeIndex = {};
 			res = ss.length ? filterElements(tempPool,ss) : tempPool;
+            // res = ss.length ? filterElements_new(tempPool,ss) : tempPool;
 			// console.log(prop,res)
 		}
 		return res;
@@ -307,7 +320,7 @@ simpleSelector = ss = function  () {
 		}();
 		// console.log(prop,will)
 		// 如果没有要检查的属性，就直接返回原list
-		if(will.length<1) return list;
+		if(will.length<1) return list.splice ? list : nodesToArray(list);
         var i=0,l=list.length,res = [],ll,
             t, w, p, pp;
 		for(;i<l;i++) {
@@ -378,62 +391,59 @@ simpleSelector = ss = function  () {
 			// 这样写比用正则或indexOf快得多
 			operator = (str==='>' || str==='~' || str === '+') && str,
 			str = operator ? ss.pop() : str,
+            // 是否还需要继续过滤
+            notcontinue = ss.length === 0,
 			target = 'parentNode',
 			justOne, //是否查找到一个元素就停止
 			prop = matcher(str),
 			fn = matchFilter(prop),
 			res = [],
-			l=0,ll,
+			l=0,ll = list.length,
             elm, par, 
-            validNodeIndex, vi, vali
+            validNodeIndex, vali,
+            // 是否此次过滤全部失败
+            allFailed = true;
 		;
 		// 如果取得的字符段是关系符，则再进一步取下一字符段
 		if(operator) {
 			if(operator !== '>')  {target = 'previousSibling';}
 			justOne = operator !== '~';
-		} 
-        if(!list.validNodeIndex) {
-            list.validNodeIndex = [];
-            // list.validNodeIndex.length = list.length;
-        }
+		}
         validNodeIndex = list.validNodeIndex;
-        ll = validNodeIndex.length || list.length;
         // console.log(list);
         for(;l<ll;l++) {
-            vi = validNodeIndex[l];
-            // if(vi === false) continue;
-            if(vi !== false) {
-            elm = list[l];
-            par = elm[target];
-            vali = false;
-            // console.log(target,par,justOne)
-            while(par && par.nodeType==1) {
-                if(par === dom.body || par === html) {
-                    break;
-                }
-                if(fn(par) === true) {
-                    vali = true;
-                    // 如果已经没有过滤条件了，则可以生成最终节点数组了
-                    if(ss.length === 0) {
-                        res.push(elm);
-                    }                            
-                    break;  
-                }
-                if(justOne) {
-                    break;
-                }
-                par = par[target];
-            }    
-            validNodeIndex[l] = vali;    
-            }
-            
+            if(validNodeIndex[l] !== false) {
+                elm = list[l];
+                par = elm[target];
+                vali = false;
+                // console.log(target,par,justOne)
+                while(par && par.nodeType==1) {
+                    if(par === dom.body || par === html) {
+                        break;
+                    }
+                    if(fn(par) === true) {
+                        vali = true;
+                        if(notcontinue) {
+                            res.push(elm);
+                        }                            
+                        break;  
+                    }
+                    if(justOne) {
+                        break;
+                    }
+                    par = par[target];
+                }    
+                validNodeIndex[l] = vali;
+                if(vali && allFailed) allFailed = false; 
+            }            
         }
-        if(!ss.length) {
-            delete list.validNodeIndex;
+        if(allFailed) return null;
+        if(notcontinue) {
+            // 直接使用 delete IE7报错
+            list.validNodeIndex = undif;
             return res.length ? res : null;
-        } else {
-            return filterElements(list, ss);
         }
+        return filterElements(list, ss);
 	}
     function filterElements_old(list,ss) {
         // 此时的ss是剩下的选择器字符串
@@ -449,9 +459,9 @@ simpleSelector = ss = function  () {
             l=0,ll = list.length,
             elm, par
         ;
-        if(!list.validNodeIndex) {
-            list.validNodeIndex = [];
-        }
+        // if(!list.validNodeIndex) {
+        //     list.validNodeIndex = [];
+        // }
         // 如果取得的字符段是关系符，则再进一步取下一字符段
         if(operator) {
             if(operator !== '>')  {target = 'previousSibling';}
@@ -476,6 +486,57 @@ simpleSelector = ss = function  () {
         }
         // 根据选择器字符串剩余，选择递归过滤或返回结果
         return ss[0] && res[0] ? filterElements_old(res,ss) : res;
+    }
+    function filterElements_new(list,ss) {
+        // 此时的ss是剩下的选择器字符串
+        var str = ss.pop(),
+            // 这样写比用正则或indexOf快得多
+            operator = (str==='>' || str==='~' || str === '+') && str,
+            str = operator ? ss.pop() : str,
+            target = 'parentNode',
+            justOne, //是否查找到一个元素就停止
+            prop = matcher(str),
+            fn = matchFilter(prop),
+            l=0,ll = list.length,
+            elm, par,
+            vali
+        ;
+        // if(!list.validNodeIndex) {
+        //     list.validNodeIndex = [];
+        // }
+        // 如果取得的字符段是关系符，则再进一步取下一字符段
+        if(operator) {
+            if(operator !== '>')  {target = 'previousSibling';}
+            justOne = operator !== '~';
+        } 
+        // console.log(list);
+        for(;l<ll;l++) {
+            elm = list[l],par = elm[target];
+            vali = false;
+            // console.log(target,par,justOne)
+            while(par && par !== dom) {
+                if(par.nodeType==1) {
+                    if(fn(par) === true) {
+                        vali = true;
+                        break;  
+                    }
+                    if(justOne) {
+                        break;
+                    }                   
+                }
+                par = par[target];
+            }
+            if(!vali) {
+                list.splice(l,1);
+                ll--;
+            }
+        }
+        // console.log(ss.length, list.length)
+        if(ss.length && list.length) {
+            return filterElements_new(list,ss);
+        }
+        // 根据选择器字符串剩余，选择递归过滤或返回结果
+        return list;
     }
 	return selector;
 }();	

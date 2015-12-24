@@ -136,6 +136,9 @@
 <script type="text/javascript" src="simpleSelector.js">
 </script> 
 <script>
+    /*var $$ = function (sel) {
+        return document.querySelectorAll(sel);
+    }*/
 	// console.log(ss('#d-3'))
 	// console.log(ss('#d-3 li.a .AAA'))
 	// console.log(ss('#d-3 li.a.b .AAA'))
@@ -144,16 +147,29 @@
 	// console.log(ss('p strong'))
 	// console.log(ss('body'))
     var t = Date.now();
-    console.log(ss('#go input[checked]'));
-    console.log(ss('#d2 li a'));
-    console.log(ss('#d2 li a'));
-    console.log(ss('#d-3 li a'));
-    console.log(ss('#d2 li a'));
-    console.log(ss('#d2 li a'));
-    console.log(ss('#d2 li a'));
-    console.log(ss('#d-4 li a'));
-    console.log(ss('#d2 li a'));
-    console.log(Date.now() - t)
+    ss('#go input[checked]');
+    ss('#d2 li a');
+    ss('#d2 li a');
+    ss('#d-3 li a');
+    ss('#d2 li a');
+    ss('#d2 li a');
+    ss('#d2 li a');
+    ss('#d-4 li a');
+    ss('#d2 li a');
+    console.log(Date.now() - t);
+
+    /*var t = Date.now();
+    $$('#go input[checked]');
+    $$('#d2 li a');
+    $$('#d2 li a');
+    $$('#d-3 li a');
+    $$('#d2 li a');
+    $$('#d2 li a');
+    $$('#d2 li a');
+    $$('#d-4 li a');
+    $$('#d2 li a');
+    document.getElementsByTagName('a');
+    console.log(Date.now() - t)*/
     setTimeout(function () {
         // var t = Date.now();
         // console.log(ss('#go div.div input[checked]'));
