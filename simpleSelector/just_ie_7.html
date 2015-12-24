@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+ 	<meta charset="utf-8" />
+  <title>ie7 querySelectorAll</title>
+  <meta name="generator" content="editplus" />
+  <meta name="author" content="" />
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+	<style>
+
+	</style>
+
+ </head>
+
+ <body>
+ 	jq選擇器返回的結果，是個數組，但其原型中帶有一系列的自有方法，如attr,addClass等。
+ 		<h2>选择器使用纪要</h2>
+	<p>因为本选择器及jQuery选择器等，均是从右到左解析选择字符串，所以尽量在最右边就过滤掉大部分不合格元素</p>
+	<p>
+		如#div1 li a,如果只想找属于li的直接子元素的a标签，则应写成#div1 li>a ,这样就能快速过滤掉不合条件的A标签
+	</p>
+	<p>
+		另外，#div1 li>a也比#div1 li a效率更高
+	</p>
+	<div>作一个自己的选择器</div>
+	<!-- <p>p</p> -->
+	<strong>外面的strong</strong>
+	<p class="abc">p.abc
+		<strong>strong1 in p.abc</strong> <br />
+		<strong>strong2</strong>	<br/>
+		<strong>strong3</strong>
+	</p>
+	隔一行纯字，无标签
+	<form action="" id="go">
+        <fieldset>
+            表表单
+        </fieldset>
+        <div class="div" style="background-color: #eee;">
+            div in form <br />
+            3个单选框：1 <input type="radio" name="rrr1" id="" />
+            2 <input type="radio" name="rrr1" id="" />
+            3 <input type="radio" name="rrr1" id="" checked="true" /> <br />
+            2个复选框：
+            <input type="checkbox" name="ck1" id="" value="22" /> 22
+            <input type="checkbox" name="ck1" id="" value="33" checked="true" /> 33
+        </div>
+        <div style="background-color: #ddd;">
+            a div 
+            <input type="radio" name="dddd" id="" value="21231231" checked="true" /> 21231231
+        </div>
+		两个单选框：1 <input type="radio" name="rrr" id="" />
+		2 <input type="radio" name="rrr" id="" checked="true" /> <br />
+        3个复选框：
+        <input type="checkbox" name="ck" id="" value="11" /> 11 
+        <input type="checkbox" name="ck" id="" value="22" /> 22
+        <input type="checkbox" name="ck" id="" value="33" checked="true" /> 33
+	</form>
+	<div id="d2">div#d2
+		<ul>
+			<li>li<a href="#" name="a">a name=a</a></li>
+			<li>li<a href="#" class="a b">a.a</a></li>
+			<li>li<a href="#" id="a">a#a</a></li>
+		</ul>
+	</div>
+	<div id="d-3" title="">div#d-3
+		<ul>
+			<li class="a">li.a<a href="#" name="a">a name=a</a>
+				<a href="#" class="AAA">一个超链接,class="AAA"</a>
+			</li>
+			<li class="a b">li.a.b<a href="#" name="a">a name=a</a>
+				<a href="#" class="AAA">一个超链接,class="AAA"</a>
+			</li>
+			<li>li<a href="#" class="a e">a.a.e</a></li>
+			<li class="a b">li.a.b 
+				<p>
+				P in li
+					<a href="#" class="AAA">a.AAA in p</a>
+				</p>
+			</li>
+		</ul>
+	</div>
+	<div id="d_4" 32="aa">div#d_4
+		<ul>
+			<li>li<a href="#" name="a">a name=a</a></li>
+			<li>li<a href="#" class="a e">a.a</a></li>
+			<li>li<a href="#" id="a">a#a</a></li>
+		</ul>
+	</div>
+	<a href="#" class="AAA">一个超链接,class="AAA"</a>
+	<form action="aaa.jsp">
+		<table border="1">
+			<thead>
+				<tr>
+					<th colspan="2">
+						
+						这是 一个表单
+					</th>
+				</tr>
+			</thead>
+			<tr>
+				<td>
+					文本框name=atext,class=in1: <input type="text" name="atext" id="atext" class="in1" />
+				</td>
+				<td>
+					文本框name=btext: <input type="text" name="btext" id="btext" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					文本框name=atext,class=in: <input type="text" name="atext" id="atext" class="in" />
+				</td>
+				<td>
+					文本框name=btext: <input type="text" name="btext" id="btext" />
+				</td>
+			</tr>
+			<tr>
+				<td>input:text no name <input type="text" name="" id="" /></td>
+				<td>input:radio <input type="radio" name="" id=""></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="submit" value="提交">
+				</td>
+			</tr>
+		</table>
+
+	</form>
+<div style="background-color: #eee;">这下面有500个隐藏着的A标签,为了测试当大量节点不合过滤要求时的选择器效率
+    <div style="display: none;">
+        <a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a><a href="#">A标签</a>
+    </div>
+</div>    
+<script>
+http://stackoverflow.com/questions/16478350/how-to-add-queryselectorall-function-to-element-for-ie-7
+https://gist.github.com/chrisjlee/8960575
+http://www.codecouch.com/2012/05/adding-document-queryselectorall-support-to-ie-7/
+https://gist.github.com/connrs/2724353
+if (!document.querySelectorAll) {
+    document.querySelectorAll = function(selector) {
+        var doc = document,
+            head = doc.documentElement.firstChild,
+            styleTag = doc.createElement('STYLE');
+        head.appendChild(styleTag);
+        doc.__qsaels = [];
+
+        styleTag.styleSheet.cssText = selector + "{x:expression(document.__qsaels.push(this))}";
+        window.scrollBy(0, 0);
+
+        return doc.__qsaels;
+    }
+}
+console.log(document.querySelectorAll('div')[1].innerHTML)
+</script>
+ </body>
+</html>
