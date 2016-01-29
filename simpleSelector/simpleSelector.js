@@ -141,11 +141,10 @@ simpleSelector = ss = function  () {
 	// 伪元素选择器:first-child 等
 	pseudoSelector = {
 		'first-child': function  (elm) {
-			return elm === elm.parentNode.children[0];
+			return elm === getFirst(elm.parentNode);
 		},
 		'last-child': function  (elm) {
-			var children = elm.parentNode.children,l = children.length;
-			return elm === children[l-1];
+			return elm === getLast(elm.parentNode);
 		},
 		'nth-child': function  (argument) {
 			// body...
@@ -171,7 +170,20 @@ simpleSelector = ss = function  () {
 		}
 		return null;
 	}
-
+    function getFirst (elem) {
+        var first = elem.firstChild;
+        while(first && first.nodeType !== 1) {
+            first = first.nextSibling;
+        }
+        return first;
+    }
+    function getLast (elem) {
+        var last = elem.lastChild;
+        while(last && last.nodeType !== 1) {
+            last = last.previousSibling;
+        }
+        return last;
+    }
 	function isNode (el) {
 		return (el.nodeType==1) && el.tagName; 
 	}
@@ -212,8 +224,8 @@ simpleSelector = ss = function  () {
 	}
 	// 根据字符串的类型等属性，生成元素验证函数
 	function matchFilter (prop) {
-		var fns = [];
-		for(var p in prop) {
+		var fns = [], p;
+		for(p in prop) {
 			if(prop[p] && filterFns[p]) {
 				filterFns[p].type = p;
 				fns.push(filterFns[p]);
