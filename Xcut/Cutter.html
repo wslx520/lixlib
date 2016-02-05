@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>图片切割效果，无canvas</title>
+	<meta name="description" content="用html5 canvas实现的一个图片切割程序，来自脚儿网。可以载入本地图片，切割并保存" />
+
+	<link rel="stylesheet" href="Cutter.css" />
+</head>
+<body>
+<div class="uploadlogo-wrap">
+    <div class="bg"></div>
+    <div class="uploadlogo">
+        <div class="title clearfix">
+            <div class="layout-left">上传企业LOGO</div>
+            <div class="layout-right"><i class="i icon_xx"></i></div>
+        </div>
+        <div id="defaultui" style="display:none;">
+            <div class="body">
+                <form class="pull-left" target="frameFile" action="../vcard/uploadPic.do" id="uploadPicForm" method="post" enctype="multipart/form-data">
+                    <div class="clicktoshow">
+                        <i class="i icon_big_comera"></i>
+                        <button type="button" class="btn primary">选择LOGO文件</button>  
+                        <input type="file" class="logofile" name="logofile" id="logofile" size="40" /> 
+                    </div>
+                    <div class="file-tips">要求格式为 jpg, jpeg, png，大小不超过 4MB。</div> 
+                </form>
+            </div>
+            <div class="foot">
+                <button class="btn mr16">取消</button><button class="btn primary" disabled="true">下一步</button>
+            </div>            
+        </div>
+        <div id="cutting">
+            <div class="body">
+                <div class="cutimage clearfix">
+                    <div class="cutbox layout-left">
+                        <div class="va"></div><img src="gangqin.jpg" alt="" id="sample" />                        
+                    </div>
+                    <div class="previewbox layout-left">
+                        <h3 class="title">LOGO预览</h3>
+                        <div class="bigone"></div>
+                        <h3 class="title">主LOGO 168*168</h3>
+                        <div class="smallone"></div>
+                        <h3 class="title">小LOGO 48*48</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="foot">
+                <button class="btn mr16">取消</button><button class="btn primary" disabled="true">下一步</button>
+            </div>  
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="Cutter.js"></script>
+<script>
+    new Cutter(document.getElementById('sample'), {
+        size:168,
+        onmousemove: function (rect) {
+            // console.log(rect)
+        }
+    })
+</script>
+</html>

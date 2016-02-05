@@ -1,0 +1,178 @@
+.opacity (@op) {
+    opacity: @op;
+    filter:~'Alpha(Opacity=@{op*100})';
+}
+.layout-left {
+    float: left;
+}
+.layout-right {
+    float: right;
+}
+.clearfix {
+    *zoom: 1;
+}
+.clearfix:after {
+    display: block;
+    visibility: hidden;
+    content:'\002B';
+    height: 0;
+    font-size: 0;
+    clear: both;
+}
+.uploadlogo-wrap {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    text-align: center;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -o-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+    .bg {
+        background-color: #000;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        .opacity(0.4);
+    }
+    .uploadlogo {
+        margin: 88px auto 0;
+        width: 640px;
+        position: relative;
+        background-color: #fff;
+        border-radius: 2px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        .title {
+            height: 40px;
+            line-height: 40px;
+            color: #666;
+            padding: 0 16px;
+            font-size: 12px;
+            text-align: left;
+        }
+        .body {
+            border-bottom: 1px solid #eee;
+            border-top: 1px solid #eee;
+            background-color: #f9f9f9;
+            height: 332px;
+            .clicktoshow {
+                position: relative;
+                .logofile {
+                    position: absolute;
+                    height: 100%;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    .opacity(0);
+                }
+            }
+            .file-tips {
+                color: #999;
+                font-size: 12px;
+            }
+            .cutimage {
+                padding: 16px;
+                .cutbox {
+                    width: 400px;
+                    height: 300px;
+                    margin-right: 16px;
+                    text-align: left;
+                    background-color: #eee;
+                    position: relative;
+                    .va {
+                        display: inline-block;
+                        *display: inline;
+                        *zoom: 1;
+                        height: 100%;
+                        line-height: 100%;
+                        font-size: 0;
+                        width: 0;
+                        vertical-align: middle;
+                    }
+                    img {
+                        max-width: 100%;
+                        max-height: 100%;
+                        display: inline-block;
+                        *display: inline;
+                        *zoom: 1;
+                        vertical-align: middle;
+                    }
+                    .cutbox-wrap {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        img {
+                            position: absolute;
+                        }
+                    }
+                    .cutbox-mask {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        background-color: #fff;
+                        opacity: 0.64;
+                    }
+                    .cutbox-rect {
+                        position: absolute;
+                        border: 1px solid #f00;
+                        cursor: move;
+                        .resizer {
+                            width: 8px;
+                            height: 8px;
+                            font-size: 0;
+                            background-color: #f00;
+                            position: absolute;
+                            cursor: pointer;
+                            &.tl {
+                                left: -4px;
+                                top: -4px;
+                            }
+                            &.tr {
+                                right: -4px;
+                                top: -4px;
+                            }
+                            &.bl {
+                                left: -4px;
+                                bottom: -4px;
+                            }
+                            &.br {
+                                right: -4px;
+                                bottom: -4px;
+                            }
+                        }
+                    }
+                }
+                .previewbox {
+                    padding-left: 16px;
+                    color: #666;
+                    height: 300px;
+                    border-left: 1px solid #eee;
+                    .title {
+                        margin: 0;
+                        line-height: 100%;
+                    }
+                    .bigone {
+                        width: 168px;
+                        height: 168px;
+                        border: 1px solid #e6e6e6;
+                    }
+                    .smallone {
+                        width: 48px;
+                        height: 48px;
+                        border: 1px solid #e6e6e6;
+                    }
+                }
+            }
+        }
+        .foot {
+            padding: 16px 0;
+        }
+    }
+}
