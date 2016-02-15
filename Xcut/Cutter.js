@@ -99,11 +99,11 @@
     // 默认选项
     var defaults = {
         keepScale: false,
-        size:0
+        minSize:0
     };
     /*
     * options选项：
-    * * size:最小尺寸，默认值无。可以是一个数组，两个值依次表示width,height;也可以是一个数字，则矩形会变成正方形
+    * * minSize:最小尺寸，默认值无。可以是一个数组，两个值依次表示width,height;也可以是一个数字，则矩形会变成正方形
     * * onmousemove:当按下鼠标并拖动时，要执行的回调，此回调会接收一个Object参数，即rect的范围
     * * onmousemove:当按下鼠标并拖动时，要执行的回调，此回调会接收一个Object参数，即rect的范围
     
@@ -127,40 +127,26 @@
             va, mask,
             getCoords,
             // 由于有最小范围，实现可以更简单
-            size = root.size = options.size || 0,
+            minSize,
             cutbox, rect, rectBox, boxes = [], copy,
             _width,_height,
             Options;
         root.options = extend({}, defaults);
         extend(root.options, options);
         Options = root.options;
-        if(typeof Options.size === 'number') {
+        minSize = Options.minSize;
+        if(typeof minSize === 'number') {
             // root.keepScale = true; //保持缩放比例，正方形也是其中 一种
-            root._width = root._height = Options.size;
-        } else {
-            root._width = Options.size[0];
-            root._height = Options.size[1];
+            Options.minSize = minSize = [minSize, minSize];
         }
         function getMouse(e) {
-            mouse.x = e.clientX - cutbox.L;
-            mouse.y = e.clientY - cutbox.T + dom.body.scrollTop + dom.documentElement.scrollTop;
+            mouse.x = e.clientX - cutbox.left;
+            mouse.y = e.clientY - cutbox.top + dom.body.scrollTop + dom.documentElement.scrollTop;
             mouse.x = min(max(0, mouse.x), cutbox.width);
             mouse.y = min(max(0, mouse.y), cutbox.height);
             return mouse;
         }
-        function checkRect () {
-            return rect.w > root._width && rect.h > root._height;
-        }
-        function resetRect () {
-            rect.w = root._width;
-            rect.h = root._height;
-            rect.X = rect.x+rect.w;
-            rect.Y = rect.y+rect.h;
-        }
-        function fixVR (vr) {  
-            console.log(vr.X, cutbox.width)     
-            vr.X = min(vr.X, cutbox.width);
-            vr.Y = min(vr.Y, cutbox.height);     
+        function fixXY (vr) {  
             vr.x = min(max(vr.x, 0), cutbox.width - vr.w);
             vr.y = min(max(vr.y, 0), cutbox.height - vr.h);
             return vr;
@@ -177,46 +163,39 @@
         cutbox.appendChild(copy);
         cutbox.appendChild(rectBox);
         elem.parentNode.appendChild(cutbox);
-        rectBox.style.cssText = 'width:'+root._width+'px;height:'+root._height+'px;';
-        
-        if('number' === typeof Options.size){
-            rectBox.style.left = (cutbox.offsetWidth - size)/2 + 'px';
-            rectBox.style.top = (cutbox.offsetHeight - size)/2 + 'px';
-        }else {
-            rectBox.style.left = (cutbox.offsetWidth - size[0])/2 + 'px';
-            rectBox.style.top = (cutbox.offsetHeight - size[1])/2 + 'px';
-        }
-        cutbox.L = cutbox.getBoundingClientRect().left;
-        cutbox.T = cutbox.getBoundingClientRect().top;
+        rectBox.style.cssText = 'width:'+minSize[0]+'px;height:'+minSize[1]+'px;';
+
+        rectBox.style.left = (cutbox.offsetWidth - minSize[0])/2 + 'px';
+        rectBox.style.top = (cutbox.offsetHeight - minSize[1])/2 + 'px';
+
+        cutbox.left = cutbox.getBoundingClientRect().left;
+        cutbox.top = cutbox.getBoundingClientRect().top;
         cutbox.height = cutbox.offsetHeight;
         cutbox.width = cutbox.offsetWidth;
+        if('function' === typeof Options.oninit) {
+            Options.oninit.call(root, Options);
+        }
         var dire;
         function documentOnMouseMove (e) {
             e = e || window.event;
             e.preventDefault();
             mouse = getMouse(e);
-            if(!checkRect()) {
-                resetRect();
-            }
             if(root.status==='move') {
                 visualRect.x += mouse.x - start.x;
                 visualRect.y += mouse.y - start.y; 
                 // 修正范围
-                visualRect = fixVR(visualRect);
+                visualRect = fixXY(visualRect);
                 root.move(visualRect.x, visualRect.y); 
                 // root.move(min(max(visualRect.x,0), cutbox.width - visualRect.w), min(max(visualRect.y,0), cutbox.height - visualRect.h));  
                 // 必须是赋值而不是覆盖
                 start.x = mouse.x;
                 start.y = mouse.y;
             } else {
-                if(visualRect.X - mouse.x < root._width || visualRect.Y - mouse.y < root._height) {
-                    // return;
-                }
                 // visualRect = calculate(start, mouse, rect, visualRect);
                 getCoords(mouse, rect, visualRect);
-                _width = max(visualRect.X - visualRect.x, root._width);
-                _height = max(visualRect.Y - visualRect.y, root._height);
-                if(_width <= root._width ||  _height <= root._height) return;
+                _width = max(visualRect.X - visualRect.x, minSize[0]);
+                _height = max(visualRect.Y - visualRect.y, minSize[1]);
+                // if(_width <= minSize[0] ||  _height <= minSize[1]) return;
                 if(Options.keepScale) {
                     var dist = Math.abs(_width - _height);
                     _width = _height = min(_width, _height);
@@ -225,14 +204,14 @@
                 
                 visualRect.w = _width;
                 visualRect.h = _height;
-                visualRect = xz(visualRect);
+                visualRect = fixVR(visualRect);
                 root.draw(visualRect);
             }
             if(root.onmousemove && root.status) {
                 root.onmousemove(visualRect);
             }
             // by hefeng
-            function xz(vr){
+            function fixVR(vr){
                 var cu = getBound(rectBox),
                     vw = vr.w - cu.w,
                     vh = vr.h - cu.h;
@@ -298,7 +277,7 @@
     }
     Cutter.prototype = {
         draw: function (rect) {
-            console.log(rect);
+            // console.log(rect);
             // rect.w = rect.X - rect.x;
             // rect.h = rect.Y - rect.y;
             this.rect.style.cssText = 'left:'+rect.x+'px;top:'+rect.y+'px;width:'+rect.w+'px;height:'+rect.h+'px';
