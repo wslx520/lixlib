@@ -111,16 +111,18 @@
   bottom: 0;
 }
 .uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-wrap img {
-  position: absolute;
+  /*position: absolute;*/
 }
-.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-mask {
+.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-mask,.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .imgbox {
   position: absolute;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
+}
+.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-mask {
   background-color: #fff;
-  opacity: 0.64;
+  opacity: 0.64;    
 }
 .uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-rect {
   position: absolute;

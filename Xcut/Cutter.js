@@ -129,6 +129,8 @@
             // 由于有最小范围，实现可以更简单
             minSize,
             cutbox, rect, rectBox, boxes = [], copy,
+            // 此乃装复制图的容器
+            imgbox,
             _width,_height,
             Options;
         root.options = extend({}, defaults);
@@ -151,18 +153,24 @@
             vr.y = min(max(vr.y, 0), cutbox.height - vr.h);
             return vr;
         }
-        this.onmousemove = options.onmousemove;    
-        this.cutbox = cutbox = create('cutbox-wrap');    
-        this.mask = mask = create('cutbox-mask');
+        root.onmousemove = options.onmousemove;    
+        root.cutbox = cutbox = create('cutbox-wrap'); 
+        root.imgbox = imgbox = create('imgbox');   
+        root.mask = mask = create('cutbox-mask');
         va = create('va');
-        this.rect = rectBox = createByHTML('<div class="cutbox-rect" style=""><b class="resizer tl" data="tl"></b><b class="resizer tr" data="tr"></b><b class="resizer bl" data="bl"></b><b class="resizer br" data="br"></b></div>');
-        this.copy = copy = elem.cloneNode();
-        // copy.style.left = 
+        root.rect = rectBox = createByHTML('<div class="cutbox-rect" style=""><b class="resizer tl" data="tl"></b><b class="resizer tr" data="tr"></b><b class="resizer bl" data="bl"></b><b class="resizer br" data="br"></b></div>');
+        root.copy = copy = elem.cloneNode();
+        // 先生成复制图容器
+        imgbox.appendChild(va);
+        imgbox.appendChild(copy);
+        // 再依叠放次序放入cutbox
         cutbox.appendChild(mask);
-        cutbox.appendChild(va);
-        cutbox.appendChild(copy);
+        cutbox.appendChild(imgbox);
         cutbox.appendChild(rectBox);
+        // 最后时刻装入dom中
         elem.parentNode.appendChild(cutbox);
+        // 由于被切的图始终要水平、垂直都居中，当图片无法填满框时，要获取他的偏移量
+        root.departure = [copy.offsetLeft, copy.offsetTop];
         rectBox.style.cssText = 'width:'+minSize[0]+'px;height:'+minSize[1]+'px;';
 
         rectBox.style.left = (cutbox.offsetWidth - minSize[0])/2 + 'px';
@@ -172,6 +180,11 @@
         cutbox.top = cutbox.getBoundingClientRect().top;
         cutbox.height = cutbox.offsetHeight;
         cutbox.width = cutbox.offsetWidth;
+
+        root.getRect = function () {
+            return getBound(rectBox);
+        }
+        // 执行初始函数
         if('function' === typeof Options.oninit) {
             Options.oninit.call(root, Options);
         }

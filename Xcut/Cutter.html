@@ -69,19 +69,30 @@ window.onload = function () {
     var bigone = document.getElementById('bigone'),smallone = document.getElementById('smallone');
     var bigimg,smallimg;
     var primitiveSize;
-    var leftImg;
+    var leftImg, imgbox;
     var scaleX, scaleY;
     var previewSize;
+    var previewFn = function  (previewSize) {
+        bigimg.style.width = Math.floor(previewSize.width) + 'px';
+        bigimg.style.height = Math.floor(previewSize.height) + 'px';
+        bigimg.style.left = -Math.floor(previewSize.left) + 'px';
+        bigimg.style.top = -Math.floor(previewSize.top) + 'px';
+        smallimg.style.width = Math.floor(previewSize.width * scale) + 'px';
+        smallimg.style.height = Math.floor(previewSize.height * scale) + 'px';
+        smallimg.style.left = -Math.floor(previewSize.left * scale) + 'px';
+        smallimg.style.top = -Math.floor(previewSize.top * scale) + 'px';
+    }
+    var clipFn = function (rect) {
+        imgbox.style.clip = 'rect('+ (rect.y) +'px,'+ (rect.x + rect.w) +'px,'+ (rect.y + rect.h) +'px,'+ rect.x +'px'+')';
+    }
     var cutter = new Cutter(document.getElementById('sample'), {
         minSize:168,
         keepScale:true,
         oninit: function (options) {
             console.log(this, options);
-        },
-        onmousemove: function (rect) {
-            console.log(rect);
             if(!bigimg || !smallimg) {
                 leftImg = this.copy;
+                imgbox = leftImg.parentNode;
                 bigimg = leftImg.cloneNode();
                 bigone.appendChild(bigimg);
                 primitiveSize = {
@@ -91,23 +102,29 @@ window.onload = function () {
                 // console.log(primitiveSize)
                 smallimg = leftImg.cloneNode();
                 smallone.appendChild(smallimg);
+                var rect = this.getRect();
+                previewSize = {
+                    width:primitiveSize.width,
+                    height:primitiveSize.height,
+                    left:rect.x - this.departure[0],
+                    top:rect.y - this.departure[1]
+                };
+                previewFn(previewSize);
+                clipFn(rect);
             }
+        },
+        onmousemove: function (rect) {
+            console.log(rect);
             // console.log(rect.w / big);
             scaleX =  big/rect.w , scaleY = big / rect.h;
             previewSize = {
                 width:primitiveSize.width * scaleX,
                 height:primitiveSize.height * scaleY,
-                left:rect.x * scaleX,
-                top:rect.y * scaleY
+                left:(rect.x - this.departure[0]) * scaleX,
+                top:(rect.y - this.departure[1]) * scaleY
             };
-            bigimg.style.width = Math.floor(previewSize.width) + 'px';
-            bigimg.style.height = Math.floor(previewSize.height) + 'px';
-            bigimg.style.left = -Math.floor(previewSize.left) + 'px';
-            bigimg.style.top = -Math.floor(previewSize.top) + 'px';
-            smallimg.style.width = Math.floor(previewSize.width * scale) + 'px';
-            smallimg.style.height = Math.floor(previewSize.height * scale) + 'px';
-            smallimg.style.left = -Math.floor(previewSize.left * scale) + 'px';
-            smallimg.style.top = -Math.floor(previewSize.top * scale) + 'px';
+            previewFn(previewSize);
+                clipFn(rect);
         }
     })    
 }
