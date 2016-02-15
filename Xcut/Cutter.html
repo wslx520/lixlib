@@ -6,8 +6,18 @@
 	<meta name="description" content="用html5 canvas实现的一个图片切割程序，来自脚儿网。可以载入本地图片，切割并保存" />
 
 	<link rel="stylesheet" href="Cutter.css" />
+    <style>
+    .preview {
+        overflow: hidden;
+        position: relative;
+    }
+    .preview img {
+        position: absolute;
+    }
+    </style>
 </head>
 <body>
+<img src="../images/s1.jpg" alt="" width="500" style="position: absolute;clip:rect(20px,20px,400px,0)" />
 <div class="uploadlogo-wrap">
     <div class="bg"></div>
     <div class="uploadlogo">
@@ -38,9 +48,9 @@
                     </div>
                     <div class="previewbox layout-left">
                         <h3 class="title">LOGO预览</h3>
-                        <div class="bigone"></div>
+                        <div class="bigone oh preview" id="bigone"></div>
                         <h3 class="title">主LOGO 168*168</h3>
-                        <div class="smallone"></div>
+                        <div class="smallone preview" id="smallone"></div>
                         <h3 class="title">小LOGO 48*48</h3>
                     </div>
                 </div>
@@ -54,11 +64,50 @@
 </body>
 <script type="text/javascript" src="Cutter.js"></script>
 <script>
-    new Cutter(document.getElementById('sample'), {
+window.onload = function () {
+    var big = 168, small = 48, scale = small/big;
+    var bigone = document.getElementById('bigone'),smallone = document.getElementById('smallone');
+    var bigimg,smallimg;
+    var primitiveSize;
+    var leftImg;
+    var scaleX, scaleY;
+    var previewSize;
+    var cutter = new Cutter(document.getElementById('sample'), {
         size:168,
+        keepScale:true,
         onmousemove: function (rect) {
-            // console.log(rect)
+            console.log(rect);
+            if(!bigimg || !smallimg) {
+                leftImg = this.copy;
+                bigimg = leftImg.cloneNode();
+                bigone.appendChild(bigimg);
+                primitiveSize = {
+                    width: leftImg.offsetWidth,
+                    height: leftImg.offsetHeight
+                };
+                // console.log(primitiveSize)
+                smallimg = leftImg.cloneNode();
+                smallone.appendChild(smallimg);
+            }
+            // console.log(rect.w / big);
+            scaleX =  big/rect.w , scaleY = big / rect.h;
+            previewSize = {
+                width:primitiveSize.width * scaleX,
+                height:primitiveSize.height * scaleY,
+                left:rect.x * scaleX,
+                top:rect.y * scaleY
+            };
+            bigimg.style.width = Math.floor(previewSize.width) + 'px';
+            bigimg.style.height = Math.floor(previewSize.height) + 'px';
+            bigimg.style.left = -Math.floor(previewSize.left) + 'px';
+            bigimg.style.top = -Math.floor(previewSize.top) + 'px';
+            smallimg.style.width = Math.floor(previewSize.width * scale) + 'px';
+            smallimg.style.height = Math.floor(previewSize.height * scale) + 'px';
+            smallimg.style.left = -Math.floor(previewSize.left * scale) + 'px';
+            smallimg.style.top = -Math.floor(previewSize.top * scale) + 'px';
         }
-    })
+    })    
+}
+    
 </script>
 </html>
