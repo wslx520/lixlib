@@ -55,6 +55,32 @@
         bound.Y = bound.y + bound.h;
         return bound;
     }
+
+    // by hefeng
+    function fixVR(vr, dire, rect){
+        var cu = rect,
+            vw = vr.w - cu.w,
+            vh = vr.h - cu.h;
+            // console.log(cu.x,vr.x,cu.y,vr.y);
+        switch(dire){
+            case 'tl':
+                vr.x = cu.x - vw;
+                vr.y = cu.y - vh;
+                break;
+            case 'tr':
+                vr.x = cu.x;
+                vr.y = cu.y - vh;
+                break;
+            case 'bl':
+                vr.x = cu.x - vw;
+                vr.y = cu.y;
+                break;
+            default:
+                vr.x = cu.x;
+                vr.y = cu.y;
+        }
+        return vr;
+    }
     var resizer = (function(min, max) {
         // 采用起止点办法
         // 分为上下左右四个函数(左上则是由上和左拼起来的，依此类推)
@@ -193,6 +219,9 @@
             e = e || window.event;
             e.preventDefault();
             mouse = getMouse(e);
+            // 避免不必要的计算
+            if(mouse.x <= 0 || mouse.y <= 0 || mouse.x >= cutbox.width || mouse.y >= cutbox.height) return;
+            // console.log('in')
             if(root.status==='move') {
                 visualRect.x += mouse.x - start.x;
                 visualRect.y += mouse.y - start.y; 
@@ -210,43 +239,20 @@
                 _height = max(visualRect.Y - visualRect.y, minSize[1]);
                 // if(_width <= minSize[0] ||  _height <= minSize[1]) return;
                 if(Options.keepScale) {
-                    var dist = Math.abs(_width - _height);
-                    _width = _height = min(_width, _height);
-                    
+                    _width = _height = max(_width, _height);                    
                 }
                 
                 visualRect.w = _width;
                 visualRect.h = _height;
-                visualRect = fixVR(visualRect);
+                visualRect = fixVR(visualRect, dire, rect);
+                visualRect.Y = visualRect.y + visualRect.h;
+                visualRect.X = visualRect.x + visualRect.w;
+                // 避免不必要的绘制
+                if(visualRect.X > cutbox.width || visualRect.Y > cutbox.height || visualRect.x <0 || visualRect.y < 0) return;
                 root.draw(visualRect);
             }
             if(root.onmousemove && root.status) {
                 root.onmousemove(visualRect);
-            }
-            // by hefeng
-            function fixVR(vr){
-                var cu = getBound(rectBox),
-                    vw = vr.w - cu.w,
-                    vh = vr.h - cu.h;
-                    // console.log(cu.x,vr.x,cu.y,vr.y);
-                switch(dire){
-                    case 'tl':
-                        vr.x = cu.x - vw;
-                        vr.y = cu.y - vh;
-                        break;
-                    case 'tr':
-                        vr.x = cu.x;
-                        vr.y = cu.y - vh;
-                        break;
-                    case 'bl':
-                        vr.x = cu.x - vw;
-                        vr.y = cu.y;
-                        break;
-                    default:
-                        vr.x = cu.x;
-                        vr.y = cu.y;
-                }
-                return vr;
             }
         }
         rectBox.onmousedown = function (e) {
