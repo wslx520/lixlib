@@ -170,8 +170,8 @@
         function getMouse(e) {
             mouse.x = e.clientX - cutbox.left;
             mouse.y = e.clientY - cutbox.top + dom.body.scrollTop + dom.documentElement.scrollTop;
-            mouse.x = min(max(0, mouse.x), cutbox.width);
-            mouse.y = min(max(0, mouse.y), cutbox.height);
+            // mouse.x = min(max(0, mouse.x), cutbox.width);
+            // mouse.y = min(max(0, mouse.y), cutbox.height);
             return mouse;
         }
         function fixXY (vr) {  
@@ -220,8 +220,8 @@
             e.preventDefault();
             mouse = getMouse(e);
             // 避免不必要的计算
-            if(mouse.x <= 0 || mouse.y <= 0 || mouse.x >= cutbox.width || mouse.y >= cutbox.height) return;
-            // console.log('in')
+            if(mouse.x < 0 || mouse.y < 0 || mouse.x > cutbox.width || mouse.y > cutbox.height) return;
+            console.log('in')
             if(root.status==='move') {
                 visualRect.x += mouse.x - start.x;
                 visualRect.y += mouse.y - start.y; 
