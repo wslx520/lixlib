@@ -169,7 +169,8 @@
         }
         function getMouse(e) {
             mouse.x = e.clientX - cutbox.left;
-            mouse.y = e.clientY - cutbox.top + dom.body.scrollTop + dom.documentElement.scrollTop;
+            mouse.y = e.clientY - cutbox.top;
+            // mouse.y = e.clientY - cutbox.top + dom.body.scrollTop + dom.documentElement.scrollTop;
             // mouse.x = min(max(0, mouse.x), cutbox.width);
             // mouse.y = min(max(0, mouse.y), cutbox.height);
             return mouse;
@@ -180,17 +181,17 @@
             return vr;
         }
         root.onmousemove = options.onmousemove;    
-        root.cutbox = cutbox = create('cutbox-wrap'); 
+        root.cutbox = cutbox = create('cut-wrap'); 
         root.imgbox = imgbox = create('imgbox');   
-        root.mask = mask = create('cutbox-mask');
+        // root.mask = mask = create('cutbox-mask');
         va = create('va');
-        root.rect = rectBox = createByHTML('<div class="cutbox-rect" style=""><b class="resizer tl" data="tl"></b><b class="resizer tr" data="tr"></b><b class="resizer bl" data="bl"></b><b class="resizer br" data="br"></b></div>');
+        root.rect = rectBox = createByHTML('<div class="cutbox-rect" style=""><b class="resizer top-left" data="tl"></b><b class="resizer top-right" data="tr"></b><b class="resizer bottom-left" data="bl"></b><b class="resizer bottom-right" data="br"></b></div>');
         root.copy = copy = elem.cloneNode();
         // 先生成复制图容器
         imgbox.appendChild(va);
         imgbox.appendChild(copy);
         // 再依叠放次序放入cutbox
-        cutbox.appendChild(mask);
+        // cutbox.appendChild(mask);
         cutbox.appendChild(imgbox);
         cutbox.appendChild(rectBox);
         // 最后时刻装入dom中

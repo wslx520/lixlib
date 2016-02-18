@@ -100,22 +100,24 @@
                         *zoom: 1;
                         vertical-align: middle;
                     }
-                    .cutbox-wrap {
-                        position: absolute;
-                        left: 0;
-                        top: 0;
-                        right: 0;
-                        bottom: 0;
-                        img {
-                            position: absolute;
-                        }
+                    > img {
+                        opacity: 0.36;
                     }
-                    .cutbox-mask {
+                    .cut-wrap {
                         position: absolute;
                         left: 0;
                         top: 0;
                         right: 0;
                         bottom: 0;
+                    }
+                    .cutbox-mask,.imgbox {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                    }
+                    .cutbox-mask {                        
                         background-color: #fff;
                         opacity: 0.64;
                     }
@@ -130,21 +132,25 @@
                             background-color: #f00;
                             position: absolute;
                             cursor: pointer;
-                            &.tl {
+                            &.top-left {
+                                top:-4px;
                                 left: -4px;
-                                top: -4px;
+                                cursor: nw-resize;
                             }
-                            &.tr {
+                            &.top-right {
+                                top:-4px;
                                 right: -4px;
-                                top: -4px;
+                                cursor: ne-resize;
                             }
-                            &.bl {
+                            &.bottom-left {
+                                bottom: -4px;
                                 left: -4px;
-                                bottom: -4px;
+                                cursor:sw-resize;
                             }
-                            &.br {
-                                right: -4px;
+                            &.bottom-right {
                                 bottom: -4px;
+                                right:-4px;
+                                cursor:se-resize;
                             }
                         }
                     }

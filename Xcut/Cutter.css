@@ -103,17 +103,18 @@
   *zoom: 1;
   vertical-align: middle;
 }
-.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-wrap {
+.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox > img {
+  opacity: 0.36;
+}
+.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cut-wrap {
   position: absolute;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
 }
-.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-wrap img {
-  /*position: absolute;*/
-}
-.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-mask,.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .imgbox {
+.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-mask,
+.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .imgbox {
   position: absolute;
   left: 0;
   top: 0;
@@ -122,7 +123,7 @@
 }
 .uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-mask {
   background-color: #fff;
-  opacity: 0.64;    
+  opacity: 0.64;
 }
 .uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-rect {
   position: absolute;
@@ -137,21 +138,25 @@
   position: absolute;
   cursor: pointer;
 }
-.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-rect .resizer.tl {
-  left: -4px;
+.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-rect .resizer.top-left {
   top: -4px;
-}
-.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-rect .resizer.tr {
-  right: -4px;
-  top: -4px;
-}
-.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-rect .resizer.bl {
   left: -4px;
-  bottom: -4px;
+  cursor: nw-resize;
 }
-.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-rect .resizer.br {
+.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-rect .resizer.top-right {
+  top: -4px;
   right: -4px;
+  cursor: ne-resize;
+}
+.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-rect .resizer.bottom-left {
   bottom: -4px;
+  left: -4px;
+  cursor: sw-resize;
+}
+.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-rect .resizer.bottom-right {
+  bottom: -4px;
+  right: -4px;
+  cursor: se-resize;
 }
 .uploadlogo-wrap .uploadlogo .body .cutimage .previewbox {
   padding-left: 16px;
