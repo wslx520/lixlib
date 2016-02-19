@@ -34,7 +34,7 @@
   height: 100%;
   position: absolute;
   opacity: 0.4;
-  filter: Alpha(Opacity=@{op*100});
+  filter: alpha(opacity=40);
 }
 .uploadlogo-wrap .uploadlogo {
   margin: 88px auto 0;
@@ -68,7 +68,7 @@
   top: 0;
   width: 100%;
   opacity: 0;
-  filter: Alpha(Opacity=@{op*100});
+  filter: alpha(opacity=0);
 }
 .uploadlogo-wrap .uploadlogo .body .file-tips {
   color: #999;
@@ -105,6 +105,7 @@
 }
 .uploadlogo-wrap .uploadlogo .body .cutimage .cutbox > img {
   opacity: 0.36;
+  filter: alpha(opacity=36);
 }
 .uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cut-wrap {
   position: absolute;
@@ -128,6 +129,9 @@
 .uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-rect {
   position: absolute;
   border: 1px solid #f00;
+}
+.uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-rect .cutbox-rect-inner {
+  height: 100%;
   cursor: move;
 }
 .uploadlogo-wrap .uploadlogo .body .cutimage .cutbox .cutbox-rect .resizer {

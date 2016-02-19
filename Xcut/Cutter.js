@@ -1,13 +1,51 @@
-(function (dom) {
+(function (doc) {
     'use strict';
     var min = Math.min, max = Math.max;
+    var dom = {
+        addEventListener: doc.addEventListener ? function (elem, type, handler) {
+            elem.addEventListener(type, handler, false);
+        } : function (elem, type, handler) {
+            elem.attachEvent('on' + type, handler);
+        },
+        removeEventListener: doc.removeEventListener ? function (elem, type, handler) {
+            elem.removeEventListener(type, handler);
+        } : function (elem, type, handler) {
+            elem.detachEvent('on' + type, handler);
+        }
+    },
+    wrapEvent = function  (evt) {
+        evt = evt || window.event;
+        var ie = /MSIE (\d{1,2})/.test(navigator.userAgent), iev = RegExp.$1;
+        // console.log(ie,iev)
+        if(ie && iev <10) {
+            evt.target = evt.srcElement;
+            // IE8及以下，evt.button在按下鼠标中键时是4，(evt.button|1)则得到5，所幸的是很少用到按下鼠标中键的事件
+            evt.which = evt.keyCode || (evt.button|1);
+            evt.stopPropagation = function  () {
+                evt.cancelBubble = true;
+            }
+            evt.preventDefault = function  () {
+                evt.returnValue = false;
+            }
+            evt.pageX = evt.clientX + doc.documentElement.scrollLeft;
+            evt.pageY = evt.clientY + doc.documentElement.scrollTop;
+        }
+         // 自定义方法，会阻止默认行为，阻止冒泡，
+        if(!evt.exit) {
+            evt.exit = function  () {
+                evt.preventDefault();
+                evt.stopPropagation();
+            }
+        }
+        return evt;
+    };
     function create(cls, tag) {
-        tag = dom.createElement(tag || 'div');
+        tag = doc.createElement(tag || 'div');
         tag.className = cls;
         return tag;
     }
     function createByHTML(str) {
-        var temp = dom.createElement('div');
+        var temp = doc.createElement('div');
         temp.innerHTML = str;
         return temp.firstChild;
     }
@@ -159,6 +197,7 @@
             imgbox,
             _width,_height,
             Options;
+        root.elem = elem;
         root.options = extend({}, defaults);
         extend(root.options, options);
         Options = root.options;
@@ -170,7 +209,7 @@
         function getMouse(e) {
             mouse.x = e.clientX - cutbox.left;
             mouse.y = e.clientY - cutbox.top;
-            // mouse.y = e.clientY - cutbox.top + dom.body.scrollTop + dom.documentElement.scrollTop;
+            // mouse.y = e.clientY - cutbox.top + doc.body.scrollTop + doc.documentElement.scrollTop;
             // mouse.x = min(max(0, mouse.x), cutbox.width);
             // mouse.y = min(max(0, mouse.y), cutbox.height);
             return mouse;
@@ -185,7 +224,7 @@
         root.imgbox = imgbox = create('imgbox');   
         // root.mask = mask = create('cutbox-mask');
         va = create('va');
-        root.rect = rectBox = createByHTML('<div class="cutbox-rect" style=""><b class="resizer top-left" data="tl"></b><b class="resizer top-right" data="tr"></b><b class="resizer bottom-left" data="bl"></b><b class="resizer bottom-right" data="br"></b></div>');
+        root.rect = rectBox = createByHTML('<div class="cutbox-rect" style=""><div class="cutbox-rect-inner" style=""></div><b class="resizer top-left" data="tl"></b><b class="resizer top-right" data="tr"></b><b class="resizer bottom-left" data="bl"></b><b class="resizer bottom-right" data="br"></b></div>');
         root.copy = copy = elem.cloneNode();
         // 先生成复制图容器
         imgbox.appendChild(va);
@@ -198,10 +237,7 @@
         elem.parentNode.appendChild(cutbox);
         // 由于被切的图始终要水平、垂直都居中，当图片无法填满框时，要获取他的偏移量
         root.departure = [copy.offsetLeft, copy.offsetTop];
-        rectBox.style.cssText = 'width:'+minSize[0]+'px;height:'+minSize[1]+'px;';
-
-        rectBox.style.left = (cutbox.offsetWidth - minSize[0])/2 + 'px';
-        rectBox.style.top = (cutbox.offsetHeight - minSize[1])/2 + 'px';
+        root.reset();
 
         cutbox.left = cutbox.getBoundingClientRect().left;
         cutbox.top = cutbox.getBoundingClientRect().top;
@@ -216,13 +252,17 @@
             Options.oninit.call(root, Options);
         }
         var dire;
+        var oldOnMove = doc.onmousemove;
         function documentOnMouseMove (e) {
-            e = e || window.event;
-            e.preventDefault();
+            e = wrapEvent(e);
+            e.exit();
             mouse = getMouse(e);
+            doc.onselectstart = function () {
+                return false;
+            }
             // 避免不必要的计算
             if(mouse.x < 0 || mouse.y < 0 || mouse.x > cutbox.width || mouse.y > cutbox.height) return;
-            console.log('in')
+            // console.log('in')
             if(root.status==='move') {
                 visualRect.x += mouse.x - start.x;
                 visualRect.y += mouse.y - start.y; 
@@ -257,7 +297,7 @@
             }
         }
         rectBox.onmousedown = function (e) {
-            e = e || window.event;
+            e = wrapEvent(e);
             e.preventDefault();
             //e.stopPropagation();
             // 进入移动状态
@@ -266,14 +306,14 @@
             // 必须是赋值而不是覆盖
             start.x = mouse.x;
             start.y = mouse.y;
-            console.log(start);
+            // console.log(start);
             visualRect = getBound(rectBox);
-            dom.addEventListener('mousemove', documentOnMouseMove);
+            // dom.addEventListener(doc, 'mousemove', documentOnMouseMove);
+            doc.onmousemove = documentOnMouseMove;
         };
         cutbox.onmousedown = function (e) {
-            e = e || window.event;
-            e.preventDefault();
-            e.stopPropagation();
+            e = wrapEvent(e);
+            e.exit();
 
             var target = e.target; 
             if(target.tagName === 'B') {
@@ -282,17 +322,16 @@
                 dire = target.getAttribute('data');
                 rect = getBound(rectBox);
                 getCoords = resizer[dire];
-                // mouse = getMouse(e);
-                // start.x = mouse.x;
-                // start.y = mouse.y;
-                // console.log(getStart(rect, dire), mouse)
-                dom.addEventListener('mousemove', documentOnMouseMove);
+                // dom.addEventListener(doc, 'mousemove', documentOnMouseMove);
+                doc.onmousemove = documentOnMouseMove;
             }
             
         };
-        dom.addEventListener('mouseup', function(e) {
-            // console.log(d.onmousemove);
-            dom.removeEventListener('mousemove', documentOnMouseMove);
+        dom.addEventListener(doc, 'mouseup', function(e) {
+            // console.log(doc.onmousemove);
+            // dom.removeEventListener(doc, 'mousemove', documentOnMouseMove);
+            doc.onmousemove = oldOnMove;
+            doc.onselectstart = null;
         });
     }
     Cutter.prototype = {
@@ -305,6 +344,16 @@
         move: function (x,y) {
             this.rect.style.left = x + 'px';
             this.rect.style.top = y + 'px';
+        },
+        reset: function () {
+            var rectBox = this.rect, minSize = this.options.minSize;
+            rectBox.style.cssText = 'width:'+minSize[0]+'px;height:'+minSize[1]+'px;';
+
+            rectBox.style.left = (this.cutbox.offsetWidth - minSize[0])/2 + 'px';
+            rectBox.style.top = (this.cutbox.offsetHeight - minSize[1])/2 + 'px';
+            if(this.copy !== this.elem) {
+                this.copy = this.copy.parentNode.replaceChild(this.elem.cloneNode());
+            }
         }
     }
     window.Cutter = Cutter;
