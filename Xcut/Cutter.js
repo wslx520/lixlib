@@ -119,6 +119,12 @@
         }
         return vr;
     }
+    // set styles
+    function setStyles (elem, styles) {
+        for(var s in styles) {
+            elem.style[s] = styles[s];
+        }
+    }
     var resizer = (function(min, max) {
         // 采用起止点办法
         // 分为上下左右四个函数(左上则是由上和左拼起来的，依此类推)
@@ -202,6 +208,7 @@
         extend(root.options, options);
         Options = root.options;
         minSize = Options.minSize;
+        root.start = options.start || [0,0];
         if(typeof minSize === 'number') {
             // root.keepScale = true; //保持缩放比例，正方形也是其中 一种
             Options.minSize = minSize = [minSize, minSize];
@@ -220,7 +227,8 @@
             return vr;
         }
         root.onmousemove = options.onmousemove;    
-        root.cutbox = cutbox = create('cut-wrap'); 
+        root.cutbox = cutbox = create('cut-wrap');
+        // cutbox.id = 'cutbox';
         root.imgbox = imgbox = create('imgbox');   
         // root.mask = mask = create('cutbox-mask');
         va = create('va');
@@ -235,14 +243,8 @@
         cutbox.appendChild(rectBox);
         // 最后时刻装入dom中
         elem.parentNode.appendChild(cutbox);
-        // 由于被切的图始终要水平、垂直都居中，当图片无法填满框时，要获取他的偏移量
-        root.departure = [copy.offsetLeft, copy.offsetTop];
         root.reset();
 
-        cutbox.left = cutbox.getBoundingClientRect().left;
-        cutbox.top = cutbox.getBoundingClientRect().top;
-        cutbox.height = cutbox.offsetHeight;
-        cutbox.width = cutbox.offsetWidth;
 
         root.getRect = function () {
             return getBound(rectBox);
@@ -346,14 +348,34 @@
             this.rect.style.top = y + 'px';
         },
         reset: function () {
-            var rectBox = this.rect, minSize = this.options.minSize;
-            rectBox.style.cssText = 'width:'+minSize[0]+'px;height:'+minSize[1]+'px;';
-
-            rectBox.style.left = (this.cutbox.offsetWidth - minSize[0])/2 + 'px';
-            rectBox.style.top = (this.cutbox.offsetHeight - minSize[1])/2 + 'px';
-            if(this.copy !== this.elem) {
-                this.copy = this.copy.parentNode.replaceChild(this.elem.cloneNode());
+            var root = this, 
+                rectBox = this.rect,
+                cutbox = this.cutbox,
+                copy = root.copy,
+                minSize = this.options.minSize,
+                // 由于图片是绝对居中的，所以bottom=top,right=left
+                imgBound = {left:0,top:0};
+            if(root.copy.src !== root.elem.src) {
+                root.copy.src = root.elem.src;
             }
+            imgBound.left = copy.offsetLeft;
+            imgBound.top = copy.offsetTop;
+            // 由于被切的图始终要水平、垂直都居中，当图片无法填满框时，要获取他的偏移量
+            root.departure = [imgBound.left, imgBound.top];
+            setStyles(cutbox, {
+                left: imgBound.left + 'px',
+                right: imgBound.left + 'px',
+                top: imgBound.top + 'px',
+                bottom:imgBound.top + 'px'
+            })
+            cutbox.left = cutbox.getBoundingClientRect().left;
+            cutbox.top = cutbox.getBoundingClientRect().top;
+            cutbox.height = cutbox.offsetHeight;
+            cutbox.width = cutbox.offsetWidth;
+            // 确定了cutbox的范围，再设置rectbox的位置
+            rectBox.style.cssText = 'width:'+minSize[0]+'px;height:'+minSize[1]+'px;';
+            rectBox.style.left = (cutbox.offsetWidth - minSize[0])/2 + 'px';
+            rectBox.style.top = (cutbox.offsetHeight - minSize[1])/2 + 'px';
         }
     }
     window.Cutter = Cutter;
