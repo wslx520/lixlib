@@ -227,6 +227,7 @@
             return vr;
         }
         root.onmousemove = options.onmousemove;    
+        root.onmoveend = options.onmoveend;    
         root.cutbox = cutbox = create('cut-wrap');
         // cutbox.id = 'cutbox';
         root.imgbox = imgbox = create('imgbox');   
@@ -259,9 +260,6 @@
             e = wrapEvent(e);
             e.exit();
             mouse = getMouse(e);
-            doc.onselectstart = function () {
-                return false;
-            }
             // 避免不必要的计算
             if(mouse.x < 0 || mouse.y < 0 || mouse.x > cutbox.width || mouse.y > cutbox.height) return;
             // console.log('in')
@@ -311,12 +309,12 @@
             // console.log(start);
             visualRect = getBound(rectBox);
             // dom.addEventListener(doc, 'mousemove', documentOnMouseMove);
-            doc.onmousemove = documentOnMouseMove;
+            doc.onmousemove = documentOnMouseMove;         
         };
         cutbox.onmousedown = function (e) {
             e = wrapEvent(e);
             e.exit();
-
+            if(cutbox.width < minSize[0] || cutbox.height < minSize[1]) return;
             var target = e.target; 
             if(target.tagName === 'B') {
                 // 进入draw状态
@@ -326,12 +324,18 @@
                 getCoords = resizer[dire];
                 // dom.addEventListener(doc, 'mousemove', documentOnMouseMove);
                 doc.onmousemove = documentOnMouseMove;
+            }   
+            doc.onselectstart = function () {
+                return false;
             }
             
         };
         dom.addEventListener(doc, 'mouseup', function(e) {
             // console.log(doc.onmousemove);
             // dom.removeEventListener(doc, 'mousemove', documentOnMouseMove);
+            if(root.onmoveend) {
+                root.onmoveend(visualRect);
+            }
             doc.onmousemove = oldOnMove;
             doc.onselectstart = null;
         });
@@ -355,6 +359,7 @@
                 minSize = this.options.minSize,
                 // 由于图片是绝对居中的，所以bottom=top,right=left
                 imgBound = {left:0,top:0};
+            setStyles(cutbox, {left:0, right:0, bottom:0, top:0});
             if(root.copy.src !== root.elem.src) {
                 root.copy.src = root.elem.src;
             }
@@ -373,10 +378,20 @@
             cutbox.height = cutbox.offsetHeight;
             cutbox.width = cutbox.offsetWidth;
             // 确定了cutbox的范围，再设置rectbox的位置
-            rectBox.style.cssText = 'width:'+minSize[0]+'px;height:'+minSize[1]+'px;';
-            rectBox.style.left = (cutbox.offsetWidth - minSize[0])/2 + 'px';
-            rectBox.style.top = (cutbox.offsetHeight - minSize[1])/2 + 'px';
+            var wh, left, top, Min;
+            // 当切割框的某一边已经小于最小尺寸了，则限制切割矩形为最小边的方形
+            if(cutbox.height < minSize[1] || cutbox.width < minSize[0]) {
+                Min = min(cutbox.height, cutbox.width);
+                wh = 'width:'+Min+'px;height:'+Min+'px;';
+                left = (cutbox.width - Min)/2;
+                top = (cutbox.height - Min)/2;
+            } else {        
+                wh = 'width:'+minSize[0]+'px;height:'+minSize[1]+'px;';        
+                left = (cutbox.width - minSize[0])/2;
+                top = (cutbox.height - minSize[1])/2;
+            }
+            rectBox.style.cssText = wh + 'left:' + left + 'px;top:' + top + 'px;';
         }
     }
     window.Cutter = Cutter;
-}(document))
+}(document));

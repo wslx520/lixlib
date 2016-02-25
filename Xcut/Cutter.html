@@ -49,7 +49,7 @@
             <div class="body">
                 <div class="cutimage clearfix">
                     <div class="cutbox layout-left">
-                        <div class="va"></div><img src="gangqin.jpg" alt="" id="sample" />                        
+                        <div class="va"></div><img src="1.png" alt="" id="sample" />                        
                     </div>
                     <div class="previewbox layout-left">
                         <h3 class="title">LOGO预览</h3>
@@ -130,6 +130,9 @@ window.onload = function () {
             };
             previewFn(previewSize);
                 clipFn(rect);
+        },
+        onmoveend: function (rect) {
+            console.log(rect)
         }
     })    
 }
