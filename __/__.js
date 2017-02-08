@@ -522,7 +522,7 @@ var __ = function () {
 		fixEvent : function  (evt) {
 			evt = evt || window.event;
 			var ie = getBrowser().name = 'MSIE',iev = getBrowser().version;
-			console.log(ie,iev)
+			// console.log(ie,iev)
 			if(ie && iev <10) {
 				evt.target = evt.srcElement;
 				// IE8及以下，evt.button在按下鼠标中键时是4，(evt.button|1)则得到5，所幸的是很少用到按下鼠标中键的事件

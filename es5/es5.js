@@ -133,7 +133,7 @@
 		}
 	}
 	// JSON
-    this.JSON = {
+    if(!window.JSON) window.JSON = {
         parse: function (data) {
             return (new Function('return (' + data + ')'))();
         },
@@ -200,5 +200,10 @@
 	Date.now = Date.now || function  () {
 		return new Date().getTime();
 	}
-
+    Function.prototype.bind = function (t) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return function () {
+            this.apply(t, args.concat(arguments));
+        }
+    }
 }();

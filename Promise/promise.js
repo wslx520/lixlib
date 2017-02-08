@@ -1,5 +1,5 @@
 // Promise构造函数，接收一个参数：resolver
-// resolver 是一个函数，其有两个参数：resolve, reject
+// resolver 是一个函数，其有两个参数：resolve, reject。均是函数
 // 如：
 // function resolver (resolve, reject) {
 //     if(a<3) {
@@ -13,7 +13,7 @@
     // 用变量保存nul值，可以在压缩代码时进一步减少字符
     var 
     Deferred, 
-    Promise = window.Promise || function () {
+    Promise = window.Promise = function () {
         var 
         isFunction = function (fn) {
             return typeof fn === 'function';
@@ -32,25 +32,56 @@
                 state = nul,
                 self = this,
                 l, ll;
-            // Promise实例对象，会返回一个then方法，then方法可以接收两个参数，依次是功能处理函数onFulfilled，失败处理函数onRejected
+
+            // 处理deferred对象;
+            // deferred 对象是一个plain object.他包含4个函数: onFulfilled, onRejected, resolve, reject
+            function handle(deferred) {
+                // 当状态还是默认状态时，将deferred对象加入队列
+                console.log('handle', state, deferred);
+                if (state === nul) {
+                    list.push(deferred);
+                    return;
+                }
+                console.log('handle', state, deferred);
+                // 能走到这里，表示state已经改变了
+                execute(deferred);
+            }
+            // 执行
+            function execute(deferred) {
+                setTimeout(function() {
+                    // 根据状态，选择调用成功处理函数还是失败处理函数
+                    var cb = state ? deferred.onFulfilled : deferred.onRejected;
+                    if (cb === nul) {
+                        // 如果两个函数都没有，则
+                        (state ? deferred.resolve : deferred.reject)(value);
+                    } else {
+                        try {
+                            var ret = cb(value);
+                            deferred.resolve(ret);
+                        } catch (e) {
+                            deferred.reject(e);
+                        }
+                    }
+
+                }, 1);
+            }
+            // Promise实例对象，会返回一个then方法，then方法可以接收两个参数，依次是成功处理函数onFulfilled，失败处理函数onRejected
             // then方法执行后，实际上又返回（生成）了一个新的Promise实例
             this.then = function(onFulfilled, onRejected) {
                 // 这句话其实可以用new Promise，但self.constructor可以无视Promise的名字改变的情况
                 // return new self.constructor(function(resolve, reject) {
                 return new Promise(function(resolve, reject) {
                     // 当然，这个函数就是一个 resolver, 他接收的参数还是两个函数
-                    // 此时的handle，是构造函数里面的handle
-                    // handle(Handler(onFulfilled, onRejected, resolve, reject));
+                    // 此时的 handle，是构造函数里面的 handle
                     handle({
                         onFulfilled: isFunction(onFulfilled) ? onFulfilled : nul,
                         onRejected: isFunction(onRejected) ? onRejected : nul,
                         resolve: resolve,
                         reject: reject
                     });
-                    // Handler的作用就很显然了，把then方法 接收到的两个参数，与 resolver 接收到的两个参数， 组合起来，供后续调用
                 })
-            }
-                // resolve与reject，都是在构造函数内定义的（每次初始化Promise，都会重复定义）
+            };
+                // resolve与reject，都是在构造函数内定义的（即每次初始化Promise，都会重复定义）
                 // resolve与reject，都是先改变状态与值，再执行deferred队列 
                 // 他们的不同点，在于将状态设为成功还是失败
             function resolve(newValue) {
@@ -70,6 +101,7 @@
                             // 当再次 resolve 的时候, newValue 就不再是个promise了，就会进入到else, 走正常的 resolve流程
                         }, resolve, reject);
                     } else {
+                        // 设置状态为完成
                         state = true;
                         value = newValue;
                         doList();
@@ -81,53 +113,34 @@
             }
 
             function reject(error) {
+                // 设置状态为失败
                 state = false;
                 value = error;
                 doList();
             }
 
-            function handle(deferred) {
-                // 当状态还是默认状态时，将deferred对象加入队列
-                if (state === nul) {
-                    list.push(deferred);
-                } else {
-                    // 能走到这里，表示state已经改变了
-                    setTimeout(function() {
-                        // 根据状态，选择调用成功处理函数还是失败处理函数
-                        var cb = state ? deferred.onFulfilled : deferred.onRejected;
-                        if (cb === nul) {
-                            // 如果两个函数都没有，则
-                            (state ? deferred.resolve : deferred.reject)(value);
-                        } else {
-                            try {
-                                var ret = cb(value);
-                                deferred.resolve(ret);
-                            } catch (e) {
-                                deferred.reject(e);
-                            }
-                        }
-
-                    }, 0);
-                }
-            }
 
             function doList() {
                 for (l = 0, ll = list.length; l < ll; l++) {
-                    handle(list[l]);
+                    execute(list[l]);
                 }
                 list = nul;
             }
             // 把构造函数内部生成的resolve与reject函数，传入doResolve
-            doResolve(resolver, resolve, reject)
-        }        
+            doResolve(resolver, resolve, reject);
+        };
         _Promise.prototype['catch'] = function(onRejected) {
             // 切记return, 供后续调用
             return this.then(nul, onRejected);
         }
         // Promise.all 接收一个promise数组，数组里的每一项都是一个promise（直接量也可以）
-        _Promise.all = function(list) {
+        _Promise.all = function(args) {
             // 通过数组特有的splice判断参数类型
-            var args = (list && list.splice) ? list : Array.prototype.slice.call(arguments);
+            // 不是数组则抛错，与原生一致
+            if (!args || !args.splice) {
+                throw new Error('Promise.all needs array as param.')
+            }
+            // var args = (args && args.splice) ? args : Array.prototype.slice.call(arguments);
             // 依然是返回一个 promise
             return new Promise(function(resolve, reject) {
                 if (args.length === 0) return resolve([]);
@@ -197,9 +210,9 @@
             // done 确保 resolver里的resolve或reject只有一个会执行， 只执行一次
             var done = false;
             try {
-                // 前面说了resolver接收两个函数做参数，此时就是在执行 resolver，并生成了两个函数传进去执行
+                // 前面说了 resolver 接收两个函数做参数，此时就是在执行 resolver，并生成了两个函数传进去执行
                 // 传给 resolver 的 resolve, reject 两个函数，只是暂时传进去了，但并不会立即执行
-                // 要在resolver内部，调用 resolve 或 reject，才会执行(如开头的例子)
+                // 要在 resolver 内部，调用 resolve 或 reject，才会执行(如开头的例子)
                 resolver(function(value) {
                     // 第一个函数就是resolve
                     if (!done) {
@@ -242,7 +255,8 @@
     }
     // 此函数的作用就是返回一个对象，对象保存了传入的4个函数。
     // 在本实现中，此函数返回的对象我们称之为一个deferred对象，每个deferred对象就是包含了这4个函数
-    /*function Handler(onFulfilled, onRejected, resolve, reject) {  
+    // 为了省代码，去掉
+    /*function Handler(onFulfilled, onRejected, resolve, reject) {
         return {
             onFulfilled: isFunction(onFulfilled) ? onFulfilled : nul,
             onRejected: isFunction(onRejected) ? onRejected : nul,

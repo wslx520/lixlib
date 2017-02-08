@@ -1,0 +1,15 @@
+{
+  "name": "lx",
+  "version": "1.0.0",
+  "description": "get files list in directorys, like glob",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "like",
+    "glob"
+  ],
+  "author": "XLee",
+  "license": "ISC"
+}

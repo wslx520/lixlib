@@ -18,7 +18,6 @@ function doubleUp(value) {
        resolve(value * 2)
     });
     return retPromise;
- // return ;
 }
 function increment(value) {
  return value + 1;
@@ -32,11 +31,11 @@ promise
  // dobleUp 返回了一个promise, 原生Promise正常执行，但自实现的Promise就出问题了(已改进，resolve的问题)
  .then(doubleUp)
  .then(output)
- .fail(function(error){
+ .catch(function(error){
  // promise chain中出现异常的时候会被调用
  console.error(error);
  });
-    var a = 100;
+    /*var a = 100;
 	var pm = new Promise(function aa (resolve, reject) {
         if(a<1000) {
             reject('太小了')
@@ -49,10 +48,10 @@ promise
     console.log(pm)
     pm.then(function (val) {
         console.log(val);
-    }).fail(function (ee) {
+    }).catch(function (ee) {
         console.log(ee)
     });
-    console.log(11111111111);
+    // console.log(11111111111);
     var p1 = new Promise(function(resolve, reject) { 
 	  setTimeout(function () {
             resolve("one")
@@ -78,26 +77,26 @@ promise
 	});
     Promise.all([p1,p2,p3,p4,p5]).then(function (list) {
     	console.log(list);
-    }).fail(function (err) {
+    }).catch(function (err) {
     	console.log(err,'err')
-    })
-    Promise.race([p1,p2,p3,p4]).then(function (list) {
-    	console.log(list);
-    })
+    })*/
+    // Promise.race([p1,p2,p3,p4]).then(function (list) {
+    // 	console.log(list);
+    // })
 
     // d1是一个比较正常的function，使用Deferred对象，同样实现了Promise类似的调用链方式
-    var d1 = function (dd) {
-        var defer = new Deferred();
-        setTimeout(function () {
-            defer.resolve(dd);
-        },1234);
-        // 实际上依然是返回了一个promise
-        return defer.promise;
-    }
+    // var d1 = function (dd) {
+    //     var defer = new Deferred();
+    //     setTimeout(function () {
+    //         defer.resolve(dd);
+    //     },1234);
+    //     // 实际上依然是返回了一个promise
+    //     return defer.promise;
+    // }
 
-    d1('deferred').then(function (v) {
-        console.log(v);
-    })
+    // d1('deferred').then(function (v) {
+    //     console.log(v);
+    // })
 
 </script>
 </html>

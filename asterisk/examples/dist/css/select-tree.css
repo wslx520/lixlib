@@ -1,0 +1,450 @@
+.modal-back,
+.modal-dialog {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1000
+}
+
+.modal-back {
+    background: #000;
+    opacity: .3;
+    filter: alpha(opacity=30)
+}
+
+.modal-dialog {
+    text-align: center
+}
+
+.modal-dialog-wrapper {
+    width: auto;
+    min-width: 200px;
+    display: inline-block;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+    text-align: left
+}
+
+.modal-dialog-header {
+    padding: 0 20px
+}
+
+.modal-dialog-header div {
+    border-bottom: 1px solid #f0f0f0
+}
+
+.modal-dialog-header .icon-close {
+    display: inline-block;
+    float: right;
+    cursor: pointer;
+    margin-top: 24px
+}
+
+.modal-dialog-header h4 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+    line-height: 60px
+}
+
+.modal-dialog-body {
+    padding: 20px
+}
+
+.tree {
+    font-size: 14px;
+    color: #333;
+    width: 210px;
+    background: #fff;
+    box-shadow: 3px 0 16px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid #fefefe\9;
+    position: relative;
+    z-index: 100
+}
+
+.tree .icon-close {
+    position: absolute;
+    top: 18px;
+    right: 10px;
+    cursor: pointer
+}
+
+.tree .tree-header {
+    height: 48px;
+    line-height: 48px;
+    padding-left: 10px;
+    background: #fafafa;
+    border-bottom: 1px solid #d9d9d9
+}
+
+.tree-container {
+    padding: 12px 0;
+    background: #fff;
+    height: 600px;
+    overflow: auto
+}
+
+.tree-container li {
+    padding: 0;
+    font-size: 12px;
+    color: #333;
+    min-height: 28px;
+    line-height: 28px;
+    cursor: pointer
+}
+
+.tree-container li.spreaded>.parent-title i {
+    background-position: -41px 0;
+    width: 9px;
+    height: 5px;
+    margin-right: 4px
+}
+
+.tree-container li i {
+    margin-right: 8px
+}
+
+.tree-container li span {
+    display: inline-block
+}
+
+.tree-container li .parent-title {
+    height: 28px;
+    line-height: 28px;
+    position: relative
+}
+
+.tree-container li .parent-title:hover {
+    background: #f0f0f0
+}
+
+.tree-container li .parent-title i {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.tree-container li .parent-title span {
+    position: absolute;
+    overflow: hidden;
+    right: 0;
+    top: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 12px
+}
+
+.tree-container li .tree-avatar {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    margin-right: 8px;
+    line-height: 20px;
+    border-radius: 50%;
+    background: #47bb64;
+    color: #fff;
+    overflow: hidden;
+    margin-top: 4px
+}
+
+.tree-container li .tree-avatar img {
+    width: 100%;
+    height: 100%
+}
+
+.tree-container li.cnode {
+    position: relative
+}
+
+.tree-container li.cnode span {
+    vertical-align: middle
+}
+
+.tree-container li.cnode span.tree-avatar {
+    vertical-align: top
+}
+
+.tree-container li.cnode .tree-leaf-name {
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.tree-container li.cnode:hover {
+    background: #f0f0f0;
+    color: #47bb64
+}
+
+.tree-container li.cnode.selected {
+    color: #47bb64;
+    background: #f0f0f0
+}
+
+.select-friend-tree {
+    width: 558px;
+    margin: auto;
+    padding: 0 20px
+}
+
+.tree-modal-wrapper {
+    font-size: 0
+}
+
+.modal-dialog-header h4 {
+    font-size: 18px;
+    color: #333
+}
+
+.footer-btns {
+    overflow: hidden;
+    margin-top: 20px;
+    float: right
+}
+
+.footer-btns .btn {
+    width: 90px;
+    height: 30px
+}
+
+.footer-btns .btn.border {
+    margin-right: 10px
+}
+
+.sa {
+    display: inline-block;
+    width: 9px
+}
+
+.friend-tree {
+    display: none
+}
+
+.friend-tree .friend-no-content {
+    height: 100%;
+    text-align: center
+}
+
+.friend-tree .friend-no-content div {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.friend-tree .friend-no-content p {
+    font-size: 12px;
+    color: #999;
+    line-height: 22px;
+    margin-top: 14px
+}
+
+.tree,
+.tree-list-wrapper,
+.friend-tree {
+    height: 282px;
+    width: 210px;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 4px;
+    border: 1px solid #cfcfcf
+}
+
+.control,
+.left-section,
+.selected-nodes {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.control {
+    width: 78px;
+    margin: 40px 10px 0 10px
+}
+
+.control .btn {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 4px;
+    color: #333;
+    border: 1px solid #c8c8c8;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.08)
+}
+
+.control .btn:hover {
+    background: #38bd609;
+    background: -webkit-linear-gradient(#3dc766 0, #38bd60 100%);
+    background: -o-linear-gradient(#3dc766 0, #38bd60 100%);
+    background: linear-gradient(#3dc766 0, #38bd60 100%);
+    border: 0;
+    color: #fff
+}
+
+.control .btn:hover i {
+    background-position: -60px 0
+}
+
+.control .btn.add,
+.control .btn.all {
+    margin-bottom: 20px
+}
+
+.control .btn.del {
+    margin-bottom: 70px
+}
+
+.control .btn.add,
+.control .btn.del {
+    font-size: 0
+}
+
+.control .btn.add span,
+.control .btn.del span {
+    font-size: 14px;
+    line-height: 1;
+    margin-right: 4px
+}
+
+.control .btn span,
+.control .btn i {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.left-section {
+    width: 210px
+}
+
+.left-section .btns {
+    font-size: 0;
+    margin-bottom: 10px
+}
+
+.left-section .btn {
+    width: 105px;
+    height: 30px;
+    font-size: 14px;
+    color: #666;
+    border: 1px solid #cfcfcf;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.08)
+}
+
+.left-section .btn.current {
+    background: #38bd60;
+    background: -webkit-linear-gradient(#3dc766 0, #38bd60 100%);
+    background: -o-linear-gradient(#3dc766 0, #38bd60 100%);
+    background: linear-gradient(#3dc766 0, #38bd60 100%);
+    color: #fff;
+    box-shadow: none;
+    border: 0
+}
+
+.left-section .btn.left {
+    border-radius: 4px 0 0 4px;
+    border-right: 0
+}
+
+.left-section .btn.right {
+    border-radius: 0 4px 4px 0;
+    border-left: 0
+}
+
+.selected-nodes h5 {
+    font-weight: normal;
+    font-size: 14px;
+    color: #333;
+    line-height: 30px;
+    margin: 0;
+    margin-bottom: 10px
+}
+
+.selected-nodes .tree-list-wrapper {
+    overflow: auto;
+    position: relative
+}
+
+.selected-nodes li {
+    padding: 0;
+    font-size: 12px;
+    color: #333;
+    min-height: 28px;
+    line-height: 28px;
+    cursor: pointer;
+    padding-left: 16px
+}
+
+.selected-nodes li.cnode {
+    position: relative
+}
+
+.selected-nodes li.cnode span {
+    vertical-align: middle
+}
+
+.selected-nodes li.cnode span.tree-avatar {
+    vertical-align: top
+}
+
+.selected-nodes li.cnode .tree-leaf-name {
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.selected-nodes li.cnode.selected {
+    color: #47bb64;
+    background: #f0f0f0
+}
+
+.selected-nodes li span {
+    display: inline-block
+}
+
+.selected-nodes li .tree-avatar {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    margin-right: 8px;
+    line-height: 20px;
+    border-radius: 50%;
+    background: #47bb64;
+    color: #fff;
+    overflow: hidden;
+    vertical-align: top;
+    margin-top: 4px
+}
+
+.selected-nodes li .tree-avatar img {
+    width: 100%;
+    height: 100%
+}
+
+.selected-nodes li .tree-leaf-name {
+    left: 46px
+}
+
+.selected-nodes .tree-no-select {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0
+}
+
+.selected-nodes .tree-no-select div {
+    height: 28px;
+    background: #fafafa;
+    margin-top: 28px
+}
+
+.selected-nodes-list {
+    position: relative;
+    z-index: 1
+}

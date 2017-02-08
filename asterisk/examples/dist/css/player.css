@@ -1,0 +1,243 @@
+.player-wrapper {
+  position: relative;
+  background: #000;
+}
+
+.player-wrapper h4 {
+  font-weight: normal;
+  font-size: 18px;
+  margin-bottom: 30px;
+  color: #fff;
+}
+
+.modal-wrapper, .player-error, .free-end, .next-video, .play-end {
+  z-index: 100;
+  color: #999;
+  font-size: 14px;
+}
+
+.modal-button, .free-end .btn, .next-video .btn {
+  width: 200px;
+  font-size: 18px;
+  height: 52px;
+  line-height: normal;
+  display: inline-block;
+}
+
+.modal-wrapper-middle, .player-error .error-wrapper, .free-end .free-end-wrapper, .next-video .next-video-wrapper, .play-end .play-end-wrapper {
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.player-error h4 {
+  margin: 8px 0;
+  font-weight: normal;
+}
+
+.player-error p {
+  font-size: 12px;
+  line-height: 2;
+  color: #999;
+  margin: 0;
+}
+
+.player-purchase {
+  font-size: 14px;
+  height: 40px;
+  line-height: 40px;
+  text-indent: 2em;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+}
+
+.player-purchase a {
+  color: #eb6100;
+}
+
+.player-purchase i {
+  position: absolute;
+  top: 14px;
+  right: 30px;
+}
+
+.free-end h4 {
+  margin: 30px 0;
+}
+
+.free-end .btn {
+  background: #eb6100;
+  line-height: 52px;
+}
+
+.next-video .next-video-wrapper .icon-reload {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.next-video .next-video-wrapper h4 {
+  margin: 30px 0;
+}
+
+.next-video .next-video-wrapper div {
+  font-size: 0;
+  margin-top: 30px;
+}
+
+.next-video .next-video-wrapper span {
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.next-video .next-video-wrapper .reload:hover {
+  cursor: pointer;
+  color: #38bd60;
+}
+
+.next-video .next-video-wrapper .reload:hover i {
+  background-position: -335px -164px;
+}
+
+.next-video .btn {
+  background: #38bd60;
+}
+
+.play-end {
+  font-size: 0;
+}
+
+.play-end .play-end-wrapper {
+  width: 100%;
+}
+
+.play-end .play-end-wrapper h4 {
+  margin: 30px 0;
+}
+
+.play-end .play-end-wrapper div {
+  font-size: 0;
+}
+
+.play-end .play-end-wrapper .reload,
+.play-end .play-end-wrapper .recommend-to-friend {
+  display: inline-block;
+}
+
+.play-end .play-end-wrapper .reload:hover,
+.play-end .play-end-wrapper .recommend-to-friend:hover {
+  cursor: pointer;
+  color: #38bd60;
+}
+
+.play-end .play-end-wrapper .reload:hover .rf,
+.play-end .play-end-wrapper .recommend-to-friend:hover .rf {
+  border: 1px solid #38bd60;
+}
+
+.play-end .play-end-wrapper span {
+  font-size: 14px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.play-end .play-end-wrapper span.rf {
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  border: 1px solid #999;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.play-end .play-end-wrapper .reload {
+  margin-right: 30px;
+}
+
+.play-end .play-end-wrapper .reload:hover i {
+  background-position: -322px -164px;
+}
+
+.play-end .recommend-list {
+  margin-top: 50px;
+  display: inline-block;
+  position: relative;
+}
+
+.play-end .recommend-list .list-wrapper {
+  width: 840px;
+  overflow: hidden;
+}
+
+.play-end .recommend-list img {
+  width: 100%;
+  height: 100%;
+}
+
+.play-end .recommend-list ul {
+  width: 1260px;
+}
+
+.play-end li {
+  float: left;
+  margin: 0 5px;
+  width: 200px;
+  cursor: pointer;
+}
+
+.play-end li div {
+  height: 110px;
+}
+
+.play-end li p {
+  font-size: 14px;
+  color: #999999;
+  background: transparent;
+  text-align: left;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  -ms-word-break: keep-all;
+  word-break: keep-all;
+  overflow: hidden;
+}
+
+.play-end .icon-reload {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.play-end .icon-prev,
+.play-end .icon-next {
+  position: absolute;
+  line-height: 110px;
+  top: 42px;
+  cursor: pointer;
+}
+
+.play-end .icon-prev {
+  left: -34px;
+}
+
+.play-end .icon-next {
+  right: -34px;
+}
+
+.flowplayer .fp-message .play-end li {
+  float: left;
+  margin: 0 5px;
+  width: 200px;
+}
+
+.flowplayer .fp-message .play-end li div {
+  height: 110px;
+}
+
+.flowplayer .fp-message .play-end li p {
+  font-size: 14px;
+  color: #999999;
+  background: transparent;
+  text-align: left;
+}

@@ -331,6 +331,8 @@
             
         };
         dom.addEventListener(doc, 'mouseup', function(e) {
+            if(!root.status) return;
+            root.status = null;
             // console.log(doc.onmousemove);
             // dom.removeEventListener(doc, 'mousemove', documentOnMouseMove);
             if(root.onmoveend) {
