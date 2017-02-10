@@ -65,7 +65,7 @@ var asteriskMatch = (function () {
         console.log(pathString);
         pathString = path.normalize(pathString);
         let pathObj = path.parse(pathString);
-        let baseDir = pathObj.root + getBase(pathObj.dir);
+        let baseDir = path.resolve(pathObj.root + getBase(pathObj.dir));
         console.log(pathObj, baseDir, pathObj.base);
         // 取 pathObj.base ，作为匹配最终文件的表达式
         let fileExpression = new RegExp('^' + pathToRegstr(pathObj.base) + '$');
@@ -85,9 +85,42 @@ var asteriskMatch = (function () {
             })
         });
     }
+    // 通过正则表达式匹配
+    // 不能对 正则表达式 字符串调用 path.normalize
+    const byRegexp = (regString, customCheck) => {
+        
+    }
     return main;
 })();
 
-
-
+var getBaseInReg = regString => {
+    // regString = path.normalize(regString);
+    console.log(1, regString);
+    let r = 0, letter;
+    let regLetter = /[\.\*\[\?\!\{\\]/;
+    let regLetterIndex = -1;
+    while (letter = regString[r]) {
+        // 如果碰到转义符
+        if (letter === '\\') {
+            // 且其下一个字符是 正则字符
+            console.log(regString[r+1], regLetter.test(regString[r+1]))
+            if (regLetter.test(regString[r+1])) {
+                // 则跳过下一个字符（即，跟在转义符后面的正则字符，将不被作为正则字符解析）
+                r+=2;
+                continue;
+            }
+            
+        }
+        if (regLetter.test(letter)) {
+            regLetterIndex = r;
+            break;
+        }
+        r++;
+    }
+    console.log(regLetterIndex);
+    return ~regLetterIndex ? regString.substring(0, regString.lastIndexOf(path.sep, regLetterIndex)) : regString;
+    return ~regLetterIndex ? regString.substring(0, regString.lastIndexOf('/', regLetterIndex)) : regString;
+}
+// console.log(1111, getBaseInReg('a/\\[1-3]b*/**/b\s*.js'));
+console.log(22, getBaseInReg('a/\\[1-3]/b*/**/b\s*.js'));
 module.exports = asteriskMatch;
