@@ -5,217 +5,115 @@
 const path = require('path');
 const fs = require('fs'), {readdir} = fs;
 
-var Deferred = function () {
-    var root = this;
-    this.promise = new Promise(function (resolve, reject) {
-        root._resolve = resolve;
-        root._reject = reject;
-    });
-}
-Deferred.prototype.resolve = function (newValue) {
-    this._resolve.call(this.promise, newValue);
-}
-Deferred.prototype.reject = function (err) {
-    this._reject.call(this.promise, err);
-}
-function strToObj(str) {
-    let obj = {};
-    for (let s = 0; s < str.length; s++) {
-        obj[str[s]] = true;
-    }
-    return obj;
-}
-// 文件名不能包含的字符
-var canNotInFileName = strToObj('|\\/*:?<>"');
-// console.log(canNotInFileName);
-// 以及有特殊意义的表达式字符（不能当成普通字符对待）
-// 如果出现，且前置字符不是转义符，就会被当成表达式的一部分
-// 如果要查找包含这些字符的文件名，前面必须加转义符，如 \\{
-var mustBeEscape = strToObj('!@*?+([{}])');
-var mustBeforeParentheses = strToObj('!@?+*')
-// 修饰符（会出现在 ( 之前）。如果 是 ! ，但后续字符不是 (，则直接报错
-// 其中 * ，可以脱离 ( 表示独立意义
-'!+*@';
-// 分隔符。只会出现在 () 中
-'|';
-let somePaths = [
-    'src/**/*.js',
-    '/src/js/*.js',
-    'examples/dist/**/n*.css',
-    'examples/dist/c*/n*.css',
-];
-function loopTest(reg, ...strs) {
-    console.log('[RegExp]', reg);
-    strs.forEach(function (str) {
-        console.log(str, reg.test(str));
-    });
-}
-let s = '*.js';
-let m = /[^\\]\*/g.test(s);
-// console.log(path.normalize('dist/a(!(b|c)/!(@(c|d|e)).js'));
-// console.log(path.parse('aaa/b**/*(a|a1|b).js'));
-// console.log(path.parse('aaa/b!(b|c*)\\**/**.*js'));
-// console.log(path.parse('**.*js'));
-// console.log(globParse('dist/a(!(b|c)/gg)!(@(c|d|e)).js'));
-let notInPath = '[^\\/]+';
+
+
+let notInPath = '[^\\\\\\/]+';
 function pathToRegstr(str) {
-    return str.replace(/(\*+)/g, function function_name(m, $1, $2) {
-        // console.log(m);
-        if (m.length > 1) {
-            return '.*';
-        }
-        return notInPath;
-    }).replace(/\?+/g, function (m) {
-        return m.length === 1 ? notInPath : notInPath + '{1,' + m.length + '}';
-    })
+    // 先将 windows 目录分隔符 \\ 替换为 \\\\
+    return str.replace(/\\/g, '\\\\')
+        // 替换 *
+        .replace(/\*+/g, function function_name(m) {
+            // console.log(m);
+            if (m.length > 1) {
+                return '.*';
+            }
+            return notInPath;
+        })
+        // 替换 ?
+        .replace(/\?+/g, function (m) {
+            return m.length === 1 ? notInPath : notInPath + '{1,' + m.length + '}';
+        })
 }
 // console.log(replaceAsterisk('dist/*.js'));
-
-// console.log(transform('dist/*(a|b\\/)*.js'));
-var am = (function () {
-    function getBase(str) {
-        return str.substring(0, str.lastIndexOf('/', str.indexOf('*')));
-    }
-    function readdirWalk (dir, check) {
-        var result = [];
-        var defer = new Deferred();
-        readdir(dir, function (err, files) {
-            if (err) {
-                throw (err);
-            }
-            // console.log(files);
-            var curPath = dir;
-            var len = files.length;
-            files.forEach(function (file, i) {
-                // file = curPath + '/' + file;
-                file = path.resolve(curPath, file);
-                fs.stat(file, function (err, stat) {
-                    len--;
-                    if (err) {
-                        console.log(err);
-                    }
-                    let isFolder = stat.isDirectory();
-                    if (isFolder) {
-                        // console.log(file, 'isFolder');
-                        result = result.concat(readdirWalk(file, check));
-                    }
-                    else {
-                        if (check(file)) result.push(file);
-                    }
-                    
-                    if (!len) {
-                        defer.resolve(result);
+// 遍历目录树，并对 file 执行检测，完成后调用 done
+var walkCheck = function(dir, check, done) {
+    fs.lstat(dir, function (err, dirstat) {
+        if (err) return done(err);
+        if (!dirstat.isDirectory()) return done(new Error(`Path:<${dir} , is not a directory.`))
+        var results = [];
+        fs.readdir(dir, function(err, list) {
+            if (err) return done(err);
+            var pending = list.length;
+            if (!pending) return done(null, results);
+            list.forEach(function(file) {
+                // 使用 path.resolve 会将 file 变成从根出发的绝对路径，不好
+                file = path.join(dir, file);
+                fs.stat(file, function(err, stat) {
+                    if (stat && stat.isDirectory()) {
+                        // 递归调用
+                        // 但此时传入的函数不再是 done
+                        walkCheck(file, check, function(err, res) {
+                            // 这个 res ,已经通过 check 检测
+                            results = results.concat(res);
+                            if (!--pending) done(null, results);
+                        });
+                    } else {
+                        if (check && check(file)) results.push(file);
+                        if (!--pending) done(null, results);
                     }
                 });
             });
         });
-        // return result;
-        return defer.promise;
+    });    
+};
+// console.log(transform('dist/*(a|b\\/)*.js'));
+var asteriskMatch = (function () {
+    function getBase(str) {
+        let asterIndex = str.indexOf('*');
+        return ~asterIndex ? str.substring(0, str.lastIndexOf(path.sep, asterIndex)) : str;
     }
-    var promisify = function (fn) {
-        return function (...args) {
-            return new Promise(function (resolve, reject) {
-                fn(...args, function (err, res) {
-                    if (err) return reject(err);
-                    resolve(res);
-                });
-            })
-        }
-    }
-    var readdirPromisy = promisify(fs.readdir);
-    var readdirStep = function *(dir, check) {
-        var result = [];
-        console.log(dir);
-
-        function* recur() {
-            var files = yield readdirPromisy(dir);
-            console.log(files);
-            for(let file of files) {
-                file = path.join(dir, file);
-                console.log(file);
-                let stat = fs.lstatSync(file);
-                console.log(stat);
-                let isFolder = stat.isDirectory();
-                if (isFolder) {
-                    // console.log(file, 'isFolder');
-                    let temp = yield readdirPromisy(file);
-                    result = result.concat(temp.filter(check));
-                }
-                else {
-                    if (check(file)) result.push(file);
-                }
-            }    
-        }
-        
-        return result;
-    }
-
-    const main = (pathString) => {
+    // 支持 自定义 file 检测函数，如传入，则默认的检测规则会被忽略
+    const main = (pathString, customCheck) => {
+        console.log(pathString);
         pathString = path.normalize(pathString);
-        // 将 windows 的分隔符 换成正常的
-        pathString = pathString.replace(/\\/g,'/');
-        let paths, baseDir, base;
         let pathObj = path.parse(pathString);
-        baseDir = pathObj.root + getBase(pathObj.dir);
+        let baseDir = pathObj.root + getBase(pathObj.dir);
         console.log(pathObj, baseDir, pathObj.base);
-        // 直接按 / 拆分字符串，简单粗暴
-        // 因为，任何系统中，/ 都不会是文件名或目录名的一部分
-        paths = pathObj.dir.split('/');
-        // 取最后一项，作为匹配最终文件的表达式
+        // 取 pathObj.base ，作为匹配最终文件的表达式
         let fileExpression = new RegExp('^' + pathToRegstr(pathObj.base) + '$');
-        let dirExpression = new RegExp('^' + pathToRegstr(pathObj.dir) + '$');
-        // readdirWalk(baseDir, file => {
-        //     // console.log(file);
-        //     let basename = path.basename(file);
-        //     let ext = path.extname(file);
-        //     let nameWithoutExt = basename.slice(0, -ext.length);
-        //     // console.log(file, fileExpression, basename, fileExpression.test(basename));
-        //     // console.log(file, dirExpression, file.slice(0, -basename.length), dirExpression.test(file.slice(0, -basename.length - 1)));
-        //     return fileExpression.test(basename) && dirExpression.test(file.slice(0, -basename.length - 1));
-        // }).then(function (files) {
-        //     console.log(171, files);
-        // });
-        
-        // console.log(gen.next());
-        // console.log(gen.next());
-        // console.log(gen.next());
-        run(readdirStep, baseDir, file => {
-            // console.log(file);
+        // 为目录最后补上 / 或 \\
+        let dirExpression = new RegExp('^' + pathToRegstr(pathObj.dir) + '\\' + path.sep + '?$');
+        // console.log(fileExpression, dirExpression);
+        let check = typeof customCheck === 'function' ? customCheck : file => {
             let basename = path.basename(file);
-            let ext = path.extname(file);
-            let nameWithoutExt = basename.slice(0, -ext.length);
             // console.log(file, fileExpression, basename, fileExpression.test(basename));
-            // console.log(file, dirExpression, file.slice(0, -basename.length), dirExpression.test(file.slice(0, -basename.length - 1)));
-            return fileExpression.test(basename) && dirExpression.test(file.slice(0, -basename.length - 1));
-        }).then(files => console.log(files));
-        // console.log(files);
+            // console.log(file, dirExpression, file.slice(0, -basename.length), dirExpression.test(file.slice(0, -basename.length)));
+            return fileExpression.test(basename) && dirExpression.test(file.slice(0, -basename.length));
+        };
         return new Promise(function(resolve, reject) {
-
+            walkCheck(baseDir, check, function (err, res) {
+                if (err) reject(err);
+                else resolve(res);
+            })
         });
     }
     return main;
 })();
 
-somePaths.forEach(function (p) {
-    // console.log(pathToRegstr(p));
-});
-am(somePaths[3]);
+let somePaths = [
+    'src/**/*.js',
+    '/src/js/*.js',
+    'examples/dist/**/v*.css',
+    './examples/dist/c*/n*.css'
+];
 
-
-var readdirPromisy = function (dir) {
-    return new Promise(function (resolve, reject) {
-        fs.readdir(dir, function (err, files) {
-            if (err) return reject(err);
-            resolve(files);
-        })
-    })
-};
+console.log(somePaths);
+// console.log(somePaths.map(p => asteriskMatch(p)));
+// Promise.all(somePaths.map(p => asteriskMatch(p))).then(all => console.log(all), err => console.error(err));
 
 function* aaa(dir){
     var files = yield readdirPromisy(dir);
     console.log(files);
 }
 
+asteriskMatch('./examples/dist/**/**').then(function (csses) {
+    csses.forEach(function (cs) {
+        fs.writeFile(cs, '', function (err) {
+            if (err) throw err;
+            console.log(cs, 'is empty now');
+        })
+    })
+}, err => console.error(err))
 
 function run(gen, ...arg){
   return new Promise((resolve, reject) => {
@@ -232,4 +130,5 @@ function run(gen, ...arg){
     next();
   })
 }
-// console.log(run(aaa, 'examples/dist'));
+
+module.exports = asteriskMatch;
