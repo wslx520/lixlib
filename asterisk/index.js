@@ -1,13 +1,11 @@
-// 'use strict';
-// 精力有限，能力也有限，并不想此包变成另外一个 glob
-// 打算做成一个无依赖，只匹配 **、* 筛选条件的文件查找器
-// 对我来说够用了
+'use strict';
+
 const path = require('path');
 const fs = require('fs'), {readdir} = fs;
 
 
 
-let notInPath = '[^\\\\\\/]+';
+let notInPath = '[^\\\\\\/]';
 function pathToRegstr(str) {
     // 先将 windows 目录分隔符 \\ 替换为 \\\\
     return str.replace(/\\/g, '\\\\')
@@ -15,13 +13,13 @@ function pathToRegstr(str) {
         .replace(/\*+/g, function function_name(m) {
             // console.log(m);
             if (m.length > 1) {
-                return '.*';
+                return '.+';
             }
-            return notInPath;
+            return notInPath + '+';
         })
         // 替换 ?
         .replace(/\?+/g, function (m) {
-            return m.length === 1 ? notInPath : notInPath + '{1,' + m.length + '}';
+            return notInPath + (m.length === 1 ? '' : '{' + m.length + '}');
         })
 }
 // console.log(replaceAsterisk('dist/*.js'));
@@ -73,7 +71,7 @@ var asteriskMatch = (function () {
         let fileExpression = new RegExp('^' + pathToRegstr(pathObj.base) + '$');
         // 为目录最后补上 / 或 \\
         let dirExpression = new RegExp('^' + pathToRegstr(pathObj.dir) + '\\' + path.sep + '?$');
-        // console.log(fileExpression, dirExpression);
+        console.log(fileExpression, dirExpression);
         let check = typeof customCheck === 'function' ? customCheck : file => {
             let basename = path.basename(file);
             // console.log(file, fileExpression, basename, fileExpression.test(basename));
@@ -90,45 +88,6 @@ var asteriskMatch = (function () {
     return main;
 })();
 
-let somePaths = [
-    'src/**/*.js',
-    '/src/js/*.js',
-    'examples/dist/**/v*.css',
-    './examples/dist/c*/n*.css'
-];
 
-console.log(somePaths);
-// console.log(somePaths.map(p => asteriskMatch(p)));
-// Promise.all(somePaths.map(p => asteriskMatch(p))).then(all => console.log(all), err => console.error(err));
-
-function* aaa(dir){
-    var files = yield readdirPromisy(dir);
-    console.log(files);
-}
-
-asteriskMatch('./examples/dist/**/**').then(function (csses) {
-    csses.forEach(function (cs) {
-        fs.writeFile(cs, '', function (err) {
-            if (err) throw err;
-            console.log(cs, 'is empty now');
-        })
-    })
-}, err => console.error(err))
-
-function run(gen, ...arg){
-  return new Promise((resolve, reject) => {
-    var g = gen(...arg);
-
-    function next(data){
-        var result = g.next(data);
-        if (result.done) return resolve(result.value);
-        result.value.then(function(data){
-            next(data);
-        });
-    }
-
-    next();
-  })
-}
 
 module.exports = asteriskMatch;

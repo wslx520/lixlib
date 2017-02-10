@@ -1,15 +1,17 @@
 {
-  "name": "lx",
-  "version": "1.0.0",
-  "description": "get files list in directorys, like glob",
+  "name": "asterisk-match",
+  "version": "0.1.0",
+  "description": "get files list in directorys, but just match glob: *, ** and ? ",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "like",
-    "glob"
+    "path-matcher",
+    "file-search",
+    "non-dependences",
+    "just *, **, ?"
   ],
-  "author": "XLee",
+  "author": "XLee <master@jo2.org>",
   "license": "ISC"
 }
