@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>etpl examples</title>
+</head>
+<body>
+    <script type="template" id="tpl1">
+        <ul>
+<!-- for: ${persons} as ${p} -->
+    <!-- use: item(main=${p.name}, sub=${p.email}) -->
+<!-- /for -->
+</ul>
+
+<!-- target: item --><li>${main}[${sub}]</li>
+    </script>
+    <script src="etpl.source.custom.js"></script>
+    <script>
+        var renderer1 = etpl.compile(document.getElementById('tpl1').innerHTML);
+        console.log(renderer1);
+        console.log(renderer1({persons:[{name: 'Tom', email:'tom@111.com'},{name: 'Bob', email:'bob@222.com'}]}))
+    </script>
+</body>
+</html>
