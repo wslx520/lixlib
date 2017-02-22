@@ -343,12 +343,13 @@
         var level = 0;
         // 存放最终结果的数组
         var buf = [];
-
+        // texts 是按 open 拆分，所以 texts[0] 绝对
         for (var i = 0, len = texts.length; i < len; i++) {
             var text = texts[i];
-            // i = 0 时，不会进入本段
+            // i = 0 时，不会进入本段，本段代码起码会在 i = 1 才执行
             if (i) {
                 var openBegin = 1;
+                // 将 level + 1
                 level++;
                 /* eslint-disable no-constant-condition */
                 // 一个不主动 break 就会死循环的 while
@@ -362,6 +363,10 @@
                         // 此时level > 1且 openBegin 为真
                         // 就会将 open 和 本 text 添加到结果数组中
                         // 顺便一提，push 方法支持同时 push 几个元素的
+                        // 注：这里可能会 push 一个空串，整个模板编译下来，肯定会产生很多空串
+                        // 这里为了省代码才写成这样的。但为了节省push不必要的空串，应该这样写
+                        // ===> if (level > 1 && openBegin) buf.push(open);
+                        // ===> buf.push(text);
                         buf.push(level > 1 && openBegin ? open : '', text);
                         // 跳出 while
                         break;
@@ -370,6 +375,7 @@
                     // 如果是 贪婪模式，则将 level - 1；否则，level就被置 0
                     level = greedy ? level - 1 : 0;
                     // 往结果数组中 push 字符串
+                    // 以下 push 也可以拆成 3 个
                     buf.push(
                         // 需要 level 不是0，且有 openBegin，就 push open串，否则 push 空串
                         level > 0 && openBegin ? open : '',
@@ -378,7 +384,10 @@
                         // 如果有 level，则 push close 段
                         level > 0 ? close : ''
                     );
-                    // 将 text 切割掉，供 下个迭代使用
+                    // 将 text 切割掉，供 下个迭代(或 for 的下一次迭代)使用
+                    // 切割后的 text，就只有原 text 刨除 close之前的串剩下的一部分了
+                    // 如：/for --></ul>，close === --> ，则切割后 text = </ul>
+                    // 这剩下的一段，会交给 onOutBlock 执行
                     text = text.slice(closeIndex + closeLen);
                     // 只要 while 执行过一次，则 openBegin就会变成 0，将会参与前面的判断
                     openBegin = 0;
@@ -396,7 +405,7 @@
                     buf = [];
                 }
             }
-            // i = 0 时，执行
+            // i = 0 时，执行（即 for 循环的第一次迭代，永远只会执行这里）
             else {
                 // 对源码拆分后的的第一段，执行 onOutBlock
                 text && onOutBlock(text);
@@ -1067,9 +1076,9 @@
 
         if (this.isReady()) {
             // console.log(this.name + ' ------------------');
-            // console.log(RENDERER_BODY_START + RENDER_STRING_DECLATION
-            //     + this.getRendererBody()
-            //     + RENDER_STRING_RETURN);
+            console.log(RENDERER_BODY_START + RENDER_STRING_DECLATION
+                + this.getRendererBody()
+                + RENDER_STRING_RETURN);
 
             /* jshint -W054 */
             var realRenderer = new Function(

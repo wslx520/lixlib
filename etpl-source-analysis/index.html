@@ -8,17 +8,34 @@
     <script type="template" id="tpl1">
         <ul>
 <!-- for: ${persons} as ${p} -->
+    <!-- import: li -->
     <!-- use: item(main=${p.name}, sub=${p.email}) -->
 <!-- /for -->
 </ul>
 
+
 <!-- target: item --><li>${main}[${sub}]</li>
     </script>
+    <script id="li" type="template">
+<!-- target: li --><li>${p.name}: ${p.email}</li>       
+    </script>
+    <script id="tpl2" type="template">
+<!-- for: ${users} as ${p} -->
+    <p>${p.name}</p>
+    <!-- use: item(main=${p.name}, sub=${p.email}) -->
+<!-- /for -->        
+    </script>
     <script src="etpl.source.custom.js"></script>
+    <script src="compiled1.js"></script>
     <script>
+        // 如果不先编译 li，则没有名为 li 的target，则 renderer1 中import li时会报错，则 renderer1 会最终变成 null
+        // 下面这句，注释掉，renderer1 的编译就会报错
+        // var li = etpl.compile(document.getElementById('li').innerHTML);
         var renderer1 = etpl.compile(document.getElementById('tpl1').innerHTML);
+        var renderer2 = etpl.compile(document.getElementById('tpl2').innerHTML);
         console.log(renderer1);
-        console.log(renderer1({persons:[{name: 'Tom', email:'tom@111.com'},{name: 'Bob', email:'bob@222.com'}]}))
+        console.log(renderer1({persons:[{name: 'Tom', email:'tom@111.com'},{name: 'Bob', email:'bob@222.com'}]}));
+        // console.log(renderer2({users:[{name: 'uTom', email:'utom@222.com'},{name: 'uBob', email:'buob@2.com'}]}));
     </script>
 </body>
 </html>
