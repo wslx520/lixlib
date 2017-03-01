@@ -5,6 +5,20 @@
     <title>etpl examples</title>
 </head>
 <body>
+<form action="">
+    <input type="text" pattern="^[0-9]{4}$" required="true" title="4个数字" name="num">    
+    <button>submit</button>
+</form>
+
+<input type="text" list="dl">
+<datalist id="dl">
+    <option value="1">香蕉</option>
+    <option value="2">苹果</option>
+    <option value="3">橘子</option>
+    <option value="4">西瓜</option>
+    <option value="5">草莓</option>
+    <option value="6">柚子</option>
+</datalist>
     <script type="template" id="tpl1">
         <ul>
 <!-- for: ${persons} as ${p} -->
@@ -29,8 +43,8 @@
     <script src="compiled1.js"></script>
     <script>
         // 如果不先编译 li，则没有名为 li 的target，则 renderer1 中import li时会报错，则 renderer1 会最终变成 null
-        // 下面这句，注释掉，renderer1 的编译就会报错
-        // var li = etpl.compile(document.getElementById('li').innerHTML);
+        // 下面这句，注释掉或移动到 renderer1 语句后，都会让renderer1 的编译报错
+        var li = etpl.compile(document.getElementById('li').innerHTML);
         var renderer1 = etpl.compile(document.getElementById('tpl1').innerHTML);
         var renderer2 = etpl.compile(document.getElementById('tpl2').innerHTML);
         console.log(renderer1);

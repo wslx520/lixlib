@@ -1622,10 +1622,14 @@
         var commandSyntax = engine.options.commandSyntax;
 
         var stack = new Stack();
+        // 这个即贯穿所有命令所需的参数：context
         var analyseContext = {
+            // context 中包含 engine, 一个 stack
             engine: engine,
+            // 此数组用于保存所有的 target names
             targets: [],
             stack: stack,
+            // 此 target 会引用当前编译到的 target（即会不停变化）
             target: null
         };
 
@@ -1639,11 +1643,13 @@
          */
         function flushTextBuf() {
             var text;
+            // 先判断缓冲区是否有值
             if (textBuf.length > 0 && (text = textBuf.join(''))) {
                 var textNode = new TextNode(text, engine);
                 textNode.beforeAdd(analyseContext);
 
                 stack.top().addChild(textNode);
+                // 清空缓冲区
                 textBuf = [];
 
                 if (engine.options.strip

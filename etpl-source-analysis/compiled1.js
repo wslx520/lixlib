@@ -25,7 +25,7 @@ if (___178246 instanceof Array)
     for (var ___178248 = 0, ___178249 = ___178246.length; ___178248 < ___178249; ___178248++) { v["___178247"] = ___178248;
         v["p"] = ___178246[___178248];
         // start：import item.
-        // 实际上是简单的将 target 编译过后的代码插入了这里
+        // 实际上是简单的将 target 的代码插入了这里（然后才进行编译）
         // 优点：效率高；缺点：1. 如果生成本渲染函数时，import 对应的 target 还没编译出来，就会报错；2. 生成的函数体代码会变大
         r += "\n    ";
         r += "<li>";
@@ -37,7 +37,7 @@ if (___178246 instanceof Array)
         // 期望改成如下模样
         r += engine.targets['item']();
         // 实际上 targets 中名为的item的渲染函数长这样
-        // engine.targets['item'] = function () {
+        // engine.targets['item'] = function (DATA, engine) {
         //     var r = '';
         //     r += "\n    ";
         //     r += "<li>";

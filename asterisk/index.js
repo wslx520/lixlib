@@ -54,73 +54,48 @@ var walkCheck = function(dir, check, done) {
         });
     });    
 };
-// console.log(transform('dist/*(a|b\\/)*.js'));
-var asteriskMatch = (function () {
-    function getBase(str) {
-        let asterIndex = str.indexOf('*');
-        return ~asterIndex ? str.substring(0, str.lastIndexOf(path.sep, asterIndex)) : str;
+var getBase = regString => {
+    // regString = path.normalize(regString);
+    // console.log(1, regString);
+    regString = path.normalize(regString);
+    let r = 0, letter;
+    let regLetter = /[\.\*\[\?\!\{]/;
+    let regLetterIndex = -1;
+    while (letter = regString[r++]) {
+        // console.log(letter, regLetter.test(letter));
+        if (regLetter.test(letter)) {
+            regLetterIndex = r;
+            break;
+        }
     }
-    // 支持 自定义 file 检测函数，如传入，则默认的检测规则会被忽略
-    const main = (pathString, customCheck) => {
-        console.log(pathString);
+    // console.log(regLetterIndex);
+    return ~regLetterIndex ? regString.substring(0, regString.lastIndexOf(path.sep, regLetterIndex)) : regString;
+    return ~regLetterIndex ? regString.substring(0, regString.lastIndexOf('/', regLetterIndex)) : regString;
+};
+var asteriskMatch = (function () {
+    const main = (pathString, callback) => {
+        // console.log(pathString);
         pathString = path.normalize(pathString);
         let pathObj = path.parse(pathString);
-        let baseDir = path.resolve(pathObj.root + getBase(pathObj.dir));
-        console.log(pathObj, baseDir, pathObj.base);
+        let baseDir = path.resolve(pathObj.root, getBase(pathObj.dir));
+        // console.log(pathObj, baseDir, pathObj.base);
         // 取 pathObj.base ，作为匹配最终文件的表达式
         let fileExpression = new RegExp('^' + pathToRegstr(pathObj.base) + '$');
         // 为目录最后补上 / 或 \\
         let dirExpression = new RegExp('^' + pathToRegstr(pathObj.dir) + '\\' + path.sep + '?$');
-        console.log(fileExpression, dirExpression);
-        let check = typeof customCheck === 'function' ? customCheck : file => {
+        // console.log(fileExpression, dirExpression);
+        let check = file => {
             let basename = path.basename(file);
             // console.log(file, fileExpression, basename, fileExpression.test(basename));
             // console.log(file, dirExpression, file.slice(0, -basename.length), dirExpression.test(file.slice(0, -basename.length)));
             return fileExpression.test(basename) && dirExpression.test(file.slice(0, -basename.length));
         };
-        return new Promise(function(resolve, reject) {
-            walkCheck(baseDir, check, function (err, res) {
-                if (err) reject(err);
-                else resolve(res);
-            })
-        });
-    }
-    // 通过正则表达式匹配
-    // 不能对 正则表达式 字符串调用 path.normalize
-    const byRegexp = (regString, customCheck) => {
-        
+        walkCheck(baseDir, check, callback);
     }
     return main;
 })();
 
-var getBaseInReg = regString => {
-    // regString = path.normalize(regString);
-    console.log(1, regString);
-    let r = 0, letter;
-    let regLetter = /[\.\*\[\?\!\{\\]/;
-    let regLetterIndex = -1;
-    while (letter = regString[r]) {
-        // 如果碰到转义符
-        if (letter === '\\') {
-            // 且其下一个字符是 正则字符
-            console.log(regString[r+1], regLetter.test(regString[r+1]))
-            if (regLetter.test(regString[r+1])) {
-                // 则跳过下一个字符（即，跟在转义符后面的正则字符，将不被作为正则字符解析）
-                r+=2;
-                continue;
-            }
-            
-        }
-        if (regLetter.test(letter)) {
-            regLetterIndex = r;
-            break;
-        }
-        r++;
-    }
-    console.log(regLetterIndex);
-    return ~regLetterIndex ? regString.substring(0, regString.lastIndexOf(path.sep, regLetterIndex)) : regString;
-    return ~regLetterIndex ? regString.substring(0, regString.lastIndexOf('/', regLetterIndex)) : regString;
-}
-// console.log(1111, getBaseInReg('a/\\[1-3]b*/**/b\s*.js'));
-console.log(22, getBaseInReg('a/\\[1-3]/b*/**/b\s*.js'));
+// 将 getBase 绑到 asteriskMatch，可供外部调用
+asteriskMatch.getBase = getBase;
+
 module.exports = asteriskMatch;
