@@ -6,20 +6,20 @@
 
 对我来说够用了
 
-## 调用方式
+## 调用方式示例
 
     var am = require('asterisk-match');
-    am('./examples/dist/**/**').then(function (csses) {
+    am('./examples/dist/**/**', function (err, csses) {
+        if (err) {throw err};
         csses.forEach(function (cs) {
             fs.writeFile(cs, '', function (err) {
                 if (err) throw err;
                 console.log(cs, 'is empty now');
             })
         })
-    }, err => console.error(err))
+    });
 
 
-如上，返回的是一个 promise。
 
 ### 常见用法：
 
@@ -29,6 +29,7 @@
     am('src/**/*-polyfill.js', callback);
     am('src/**/vip-*.js', callback);    
     am('aa/b[c-g]{1,3}/**/*.js', callback);
+    am('aa/b[^a-g]{2,5}/*', callback);
     am('aa/b?d/*.css', callback);
     am('b/???/d*.js', callback);
 
@@ -41,4 +42,4 @@
 1. `*` --> `[^\\\/]+`
 2. `**` --> `.+`
 3. `?` --> `[^\\\/]`。如果有连续的 ? ，比如 3 个，则会转换成 `[^\\\/]{1,3}`
-4. `[]`, `{}` --> 不转换，直接传入 new RegExp 生成最终正则
+4. `[]`, `{}` --> 不转换，直接传入 new RegExp 生成最终正则。如 `[1-9a-z]{2,5}`, `[^a-z]{1,}`
