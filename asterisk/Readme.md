@@ -23,22 +23,22 @@
 
 ### 常见用法：
 
-    am('src/**/*.js');
-    am('src/**/*.css');
-    am('src/**/v*.js');
-    am('src/**/*-polyfill.js');
-    am('src/**/vip-*.js');    
-    am('aa/b[c-g]{1,3}/**/*.js');
-    am('aa/b?d/*.css');
-    am('b/???/d*.js');
+    am('src/**/*.js', function (err, resultArray) {});
+    am('src/**/*.css', callback);
+    am('src/**/v*.js', callback);
+    am('src/**/*-polyfill.js', callback);
+    am('src/**/vip-*.js', callback);    
+    am('aa/b[c-g]{1,3}/**/*.js', callback);
+    am('aa/b?d/*.css', callback);
+    am('b/???/d*.js', callback);
 
-可查看 `examples/test.js` 了解常见用法
+可查看git仓库中 `examples/test.js` 了解常见用法
 
 ### 实现思路
 
 非常简单，就是将字符串解析成正则表达式，下面是转换关系：
 
-1. * --> [^\\\/]+
-2. ** --> .+
-3. ? --> [^\\\/]。如果有连续的 ? ，比如 3 个，则会转换成 [^\\\/]{1,3}
-4. [], {} --> 不转换，直接传入 new RegExp 生成最终正则
+1. `*` --> `[^\\\/]+`
+2. `**` --> `.+`
+3. `?` --> `[^\\\/]`。如果有连续的 ? ，比如 3 个，则会转换成 `[^\\\/]{1,3}`
+4. `[]`, `{}` --> 不转换，直接传入 new RegExp 生成最终正则

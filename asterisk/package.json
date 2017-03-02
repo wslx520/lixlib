@@ -1,17 +1,21 @@
 {
   "name": "asterisk-match",
-  "version": "0.1.0",
-  "description": "get files list in directorys, but just match glob: *, ** and ? ",
+  "version": "0.1.1",
+  "description": "matching files in directorys, but just with patterns: *, **, ? , [], {}",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "path-matcher",
+    "file matching",
     "file-search",
     "non-dependences",
-    "just *, **, ?"
+    "just *, **, ?, [], {}"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wslx520/lixlib/tree/master/asterisk"
+  },
   "author": "XLee <master@jo2.org>",
   "license": "ISC"
 }
