@@ -69,15 +69,19 @@ var getBase = regString => {
         }
     }
     // console.log(regLetterIndex);
-    return ~regLetterIndex ? regString.substring(0, regString.lastIndexOf(path.sep, regLetterIndex)) : regString;
-    return ~regLetterIndex ? regString.substring(0, regString.lastIndexOf('/', regLetterIndex)) : regString;
+    if (regLetterIndex === 0) return '';
+    let sepIndex = regString.lastIndexOf(path.sep, regLetterIndex);
+    // console.log(sepIndex)
+    return ~sepIndex ? regString.substring(0, sepIndex) : '';
 };
 var asteriskMatch = (function () {
     const main = (pathString, callback) => {
         // console.log(pathString);
         pathString = path.normalize(pathString);
         let pathObj = path.parse(pathString);
-        let baseDir = path.resolve(pathObj.root, getBase(pathObj.dir));
+        let baseDir = getBase(pathObj.dir) || __dirname;
+        // console.log(baseDir);
+        baseDir = path.resolve(pathObj.root, baseDir);
         // console.log(pathObj, baseDir, pathObj.base);
         // 取 pathObj.base ，作为匹配最终文件的表达式
         let fileExpression = new RegExp('^' + pathToRegstr(pathObj.base) + '$');

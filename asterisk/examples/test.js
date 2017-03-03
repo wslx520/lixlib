@@ -4,6 +4,8 @@ var getBase = am.getBase;
 
 
 let somePaths = [
+    '**/*.ttf',
+    '**/c*/s*.css',
     // 查找下级目录中 名为 logos 的目录下的所有文件
     'dist/**/logos/*',
     'dist/css/**/**',
@@ -31,7 +33,8 @@ let somePaths = [
 // console.log(path.join('D:\\', 'D:\\lixlib\\lixlib\\asterisk\\examples\\dist\\c*'));
 
 somePaths.map(function (p) {
-    am(path.resolve(__dirname, p), function (err, res) {
+    // am(path.resolve(__dirname, p), function (err, res) {
+    am(p, function (err, res) {
         
         console.log(p, getBase(p));
         if (err) console.error(err);
