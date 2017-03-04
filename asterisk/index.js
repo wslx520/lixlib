@@ -78,10 +78,10 @@ var asteriskMatch = (function () {
     const main = (pathString, callback) => {
         // console.log(pathString);
         pathString = path.normalize(pathString);
+        pathString = path.resolve(process.cwd(), pathString);
         let pathObj = path.parse(pathString);
-        let baseDir = getBase(pathObj.dir) || __dirname;
-        // console.log(baseDir);
-        baseDir = path.resolve(pathObj.root, baseDir);
+        let baseDir = getBase(pathObj.dir);
+        
         // console.log(pathObj, baseDir, pathObj.base);
         // 取 pathObj.base ，作为匹配最终文件的表达式
         let fileExpression = new RegExp('^' + pathToRegstr(pathObj.base) + '$');
