@@ -78,7 +78,7 @@ var asteriskMatch = (function () {
     const main = (pathString, callback) => {
         // console.log(pathString);
         pathString = path.normalize(pathString);
-        pathString = path.resolve(process.cwd(), pathString);
+        pathString = path.resolve('./', pathString);
         let pathObj = path.parse(pathString);
         let baseDir = getBase(pathObj.dir);
         
