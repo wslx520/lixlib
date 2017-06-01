@@ -37,12 +37,12 @@
             // deferred 对象是一个plain object.他包含4个函数: onFulfilled, onRejected, resolve, reject
             function handle(deferred) {
                 // 当状态还是默认状态时，将deferred对象加入队列
-                console.log('handle', state, deferred);
+                // console.log('handle', state, deferred);
                 if (state === nul) {
                     list.push(deferred);
                     return;
                 }
-                console.log('handle', state, deferred);
+                // console.log('handle', state, deferred);
                 // 能走到这里，表示state已经改变了
                 execute(deferred);
             }
@@ -50,6 +50,7 @@
             function execute(deferred) {
                 setTimeout(function() {
                     // 根据状态，选择调用成功处理函数还是失败处理函数
+                    console.log(deferred);
                     var cb = state ? deferred.onFulfilled : deferred.onRejected;
                     if (cb === nul) {
                         // 如果两个函数都没有，则
@@ -65,14 +66,14 @@
 
                 }, 1);
             }
-            // Promise实例对象，会返回一个then方法，then方法可以接收两个参数，依次是成功处理函数onFulfilled，失败处理函数onRejected
-            // then方法执行后，实际上又返回（生成）了一个新的Promise实例
+            // Promise实例，会拥有一个then方法，then方法可以接收两个参数，依次是成功处理函数onFulfilled，失败处理函数onRejected
+            // then方法执行后，实际上又返回（生成）了一个新的Promise实例(也就可以继续 then )
             this.then = function(onFulfilled, onRejected) {
                 // 这句话其实可以用new Promise，但self.constructor可以无视Promise的名字改变的情况
                 // return new self.constructor(function(resolve, reject) {
                 return new Promise(function(resolve, reject) {
                     // 当然，这个函数就是一个 resolver, 他接收的参数还是两个函数
-                    // 此时的 handle，是构造函数里面的 handle
+                    // handle 的作用是根据 state 决定是将 deferred 对象加入队列还是调用
                     handle({
                         onFulfilled: isFunction(onFulfilled) ? onFulfilled : nul,
                         onRejected: isFunction(onRejected) ? onRejected : nul,
@@ -81,10 +82,10 @@
                     });
                 })
             };
-                // resolve与reject，都是在构造函数内定义的（即每次初始化Promise，都会重复定义）
-                // resolve与reject，都是先改变状态与值，再执行deferred队列 
+                // onFulfilled与onRejected，都是在构造函数内定义的（即每初始化一个Promise，都会重复定义）
+                // onFulfilled与onRejected，都是先改变状态与值，再执行deferred队列 
                 // 他们的不同点，在于将状态设为成功还是失败
-            function resolve(newValue) {
+            function onFulfilled(newValue) {
                 try { //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
                     // if (newValue === self) throw new TypeError('A promise cannot be resolved with itself.');
                     // resolve 会遇到 newValue 就是个promise的情况
@@ -92,27 +93,31 @@
                     if (then) {
                         // 如果newValue本身就是个promise，则构造一个resolver，传给doResolve调用
                         // 且不会发生改变state
-                        // doResolve(then.bind(newValue), resolve, reject);
-                        doResolve(function(onFulfilled, onRejected) {
+                        // doResolve(then.bind(newValue), onFulfilled, onRejected);
+                        doResolve(function(resolve, reject) {
                             // then.apply(newValue, arguments);
-                            then(onFulfilled, onRejected);
-                            // 把resolve自身也传进去了，onFulfiled执行后会调用到这个resolve
-                            // 也就是如果 newValue 是个promise，则resolve一次后，会再resolve一次
+                            then(resolve, reject);
+                            // 把 onFulfilled 自身也传进去了， resolve 执行后会调用到这个 onFulfilled
+                            // 也就是如果 newValue 是个promise，则 onFulfilled 一次后，会再 onFulfilled 一次
                             // 当再次 resolve 的时候, newValue 就不再是个promise了，就会进入到else, 走正常的 resolve流程
-                        }, resolve, reject);
+                        }, onFulfilled, onRejected);
                     } else {
-                        // 设置状态为完成
-                        state = true;
-                        value = newValue;
-                        doList();
+                        // 真正地解决了
+                        trueResolve(newValue)
                     }
 
                 } catch (e) {
-                    reject(e);
+                    onRejected(e);
                 }
             }
-
-            function reject(error) {
+            // 真正的 resolve
+            function trueResolve(newValue) {
+                // 设置状态为完成
+                state = true;
+                value = newValue;
+                doList();
+            }
+            function onRejected(error) {
                 // 设置状态为失败
                 state = false;
                 value = error;
@@ -121,13 +126,15 @@
 
 
             function doList() {
-                for (l = 0, ll = list.length; l < ll; l++) {
-                    execute(list[l]);
-                }
-                list = nul;
+                if (list.length) {
+                    for (l = 0, ll = list.length; l < ll; l++) {
+                        execute(list[l]);
+                    }
+                    // list = nul;
+                }                
             }
-            // 把构造函数内部生成的resolve与reject函数，传入doResolve
-            doResolve(resolver, resolve, reject);
+            // 当构造new Promise()时，就会立即调用doResolve，并把构造函数内部生成的resolve与reject函数，传入doResolve
+            doResolve(resolver, onFulfilled, onRejected);
         };
         _Promise.prototype['catch'] = function(onRejected) {
             // 切记return, 供后续调用
@@ -207,11 +214,12 @@
         };
 
         function doResolve(resolver, onFulfilled, onRejected) {
-            // done 确保 resolver里的resolve或reject只有一个会执行， 只执行一次
+            // done 确保 resolver里的resolve或reject只有一个会执行，且只执行一次
+            // 也就是在Promise里，多次 resolve 是不行的
             var done = false;
             try {
                 // 前面说了 resolver 接收两个函数做参数，此时就是在执行 resolver，并生成了两个函数传进去执行
-                // 传给 resolver 的 resolve, reject 两个函数，只是暂时传进去了，但并不会立即执行
+                // 传给 resolver 的 resolve, reject 两个函数，就是在这里创建的，只是暂时传进去了，但并不会立即执行
                 // 要在 resolver 内部，调用 resolve 或 reject，才会执行(如开头的例子)
                 resolver(function(value) {
                     // 第一个函数就是resolve

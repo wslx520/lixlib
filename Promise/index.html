@@ -25,17 +25,17 @@ function increment(value) {
 function output(value) {
  console.log(value);// => (1 + 1) * 2
 }
-var promise = Promise.resolve(1);
-promise
- .then(increment)
+// var promise = Promise.resolve(1);
+// promise
+//  .then(increment)
  // dobleUp 返回了一个promise, 原生Promise正常执行，但自实现的Promise就出问题了(已改进，resolve的问题)
- .then(doubleUp)
- .then(output)
- .catch(function(error){
- // promise chain中出现异常的时候会被调用
- console.error(error);
- });
-    /*var a = 100;
+//  .then(doubleUp)
+//  .then(output)
+//  .catch(function(error){
+//  // promise chain中出现异常的时候会被调用
+//  console.error(error);
+//  });
+    var a = 100;
 	var pm = new Promise(function aa (resolve, reject) {
         if(a<1000) {
             reject('太小了')
@@ -45,12 +45,8 @@ promise
             },1000)
         }
     });
-    console.log(pm)
-    pm.then(function (val) {
-        console.log(val);
-    }).catch(function (ee) {
-        console.log(ee)
-    });
+    console.log(pm);
+    /*
     // console.log(11111111111);
     var p1 = new Promise(function(resolve, reject) { 
 	  setTimeout(function () {
