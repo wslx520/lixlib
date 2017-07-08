@@ -87,7 +87,7 @@ var FormSet = function  () {
 		}
 		
 	}
-	function batch()
+	function batch(){}
 	setForm.prototype = {
 		each: function  (fn,elems) {
 			elems = elems && (elems.tagName ? [elems] : elems) || this.form.elements;
@@ -323,8 +323,8 @@ fs.set({
 	hidden:'You can\'t see me!'
 })
 console.log(fs.get('text1',true))
-fs.disable('a,radio,text,r'.split(','),false);
-fs.reset();
+// fs.disable('a,radio,text,r'.split(','),false);
+// fs.reset();
 // fs.set('radio',{value:3,disabled:true})
 // console.log(fs.get(['radio','select1','r','text1']))
 
