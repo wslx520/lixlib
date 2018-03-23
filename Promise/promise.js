@@ -9,11 +9,11 @@
 //     }
 // }
 // resolve供resolver成功的时候调用，reject则是resolver解决失败的时候调用
-(function(window, nul) {
+var APromise = (function(window, nul) {
     // 用变量保存nul值，可以在压缩代码时进一步减少字符
     var 
     Deferred, 
-    Promise = window.Promise = function () {
+    Promise = function () {
         var 
         isFunction = function (fn) {
             return typeof fn === 'function';
@@ -23,7 +23,7 @@
                 return newValue.then;
             }
         },
-        _Promise = window.Promise = function (resolver) {
+        _Promise = function (resolver) {
             // list: deferred对象集
             var list = [],
                 // value：用于传入下次调用的值
@@ -248,19 +248,6 @@
     }();
     // catch是关键字，在IE下会报语法错误，所以用fail代替
     Promise.prototype.fail = Promise.prototype['catch'];
-    window.Deferred = Deferred = function () {
-        var root = this;
-        this.promise = new Promise(function (resolve, reject) {
-            root._resolve = resolve;
-            root._reject = reject;
-        });
-    }
-    Deferred.prototype.resolve = function (newValue) {
-        this._resolve.call(this.promise, newValue);
-    }
-    Deferred.prototype.reject = function (err) {
-        this._reject.call(this.promise, err);
-    }
     // 此函数的作用就是返回一个对象，对象保存了传入的4个函数。
     // 在本实现中，此函数返回的对象我们称之为一个deferred对象，每个deferred对象就是包含了这4个函数
     // 为了省代码，去掉
@@ -272,4 +259,19 @@
             reject: reject
         }
     }*/
-}(window, null));
+    Promise.deferred = function () {
+        var defer = {};
+        defer.promise = new Promise((resolve, reject) => {
+            defer.resolve = resolve;
+            defer.reject = reject;
+        });
+        return defer;
+    };
+    return Promise;
+}(null));
+
+try {
+    module.exports = APromise;
+} catch(e) {
+
+}
